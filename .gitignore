@@ -22,3 +22,7 @@ __pycache__/
 *.key
 **/confidential/
 **/nda/
+
+# Older standalone demos and pages, kept locally only
+prototypes/
+graphics-library.html
