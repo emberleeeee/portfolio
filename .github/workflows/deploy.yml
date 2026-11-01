@@ -1,0 +1,87 @@
+# Publishes the portfolio to IONOS over SFTP whenever main changes.
+#
+# One-time setup, in GitHub: Settings > Secrets and variables > Actions > New repository secret
+#   IONOS_HOST      Server/Host from IONOS (Hosting > SFTP & SSH > your account), e.g. access123456789.webspace-data.io
+#   IONOS_USER      SFTP username, e.g. u75695278
+#   IONOS_PASSWORD  SFTP password
+#   IONOS_PATH      Folder on the webspace that design.emilyblackwell.com points to, e.g. design
+#
+# What it does: sets files to 644 and folders to 755, then uploads only the live site
+# (top-level .html pages, css/ and js/). It never deletes anything on the server,
+# and src/, tools/ and repo files stay in GitHub.
+#
+# Run it by hand any time: Actions tab > Deploy to IONOS > Run workflow.
+
+name: Deploy to IONOS
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "*.html"
+      - "css/**"
+      - "js/**"
+      - ".github/workflows/deploy.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the site
+        uses: actions/checkout@v4
+
+      - name: Check the secrets are set
+        env:
+          IONOS_HOST: ${{ secrets.IONOS_HOST }}
+          IONOS_USER: ${{ secrets.IONOS_USER }}
+          IONOS_PASSWORD: ${{ secrets.IONOS_PASSWORD }}
+          IONOS_PATH: ${{ secrets.IONOS_PATH }}
+        run: |
+          missing=""
+          for v in IONOS_HOST IONOS_USER IONOS_PASSWORD IONOS_PATH; do
+            [ -n "${!v}" ] || missing="$missing $v"
+          done
+          if [ -n "$missing" ]; then
+            echo "::error::Add these repository secrets first:$missing"
+            exit 1
+          fi
+
+      - name: Collect the live site with web-safe permissions
+        run: |
+          mkdir -p public
+          cp ./*.html public/
+          cp -r css js public/
+          find public -type d -exec chmod 755 {} +
+          find public -type f -exec chmod 644 {} +
+          echo "Uploading $(find public -type f | wc -l) files"
+
+      - name: Install lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+
+      - name: Upload over SFTP
+        env:
+          IONOS_HOST: ${{ secrets.IONOS_HOST }}
+          IONOS_USER: ${{ secrets.IONOS_USER }}
+          IONOS_PASSWORD: ${{ secrets.IONOS_PASSWORD }}
+          IONOS_PATH: ${{ secrets.IONOS_PATH }}
+        run: |
+          lftp -e "
+            set sftp:auto-confirm yes;
+            set net:max-retries 3;
+            set net:timeout 30;
+            open -u \"$IONOS_USER\",\"$IONOS_PASSWORD\" sftp://$IONOS_HOST;
+            mkdir -p -f \"$IONOS_PATH\";
+            mirror --reverse --only-newer --verbose --exclude-glob .DS_Store public/ \"$IONOS_PATH/\";
+            bye
+          "
+
+      - name: Check the site responds
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" https://design.emilyblackwell.com/css/terminal.css)
+          echo "css/terminal.css returned HTTP $code"
+          [ "$code" = "200" ] || echo "::warning::Upload finished but terminal.css returned $code. If it is 403, check folder permissions; if the site looks stale, purge the Cloudflare cache."
