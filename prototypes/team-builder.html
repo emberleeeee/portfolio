@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="mgmt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Team Builder · Interactive prototype · Emily Blackwell</title>
+<link rel="stylesheet" href="fieldhouse/tokens.css">
+<link rel="stylesheet" href="fieldhouse/bundle.css">
+<link rel="stylesheet" href="fieldhouse/proto.css">
+<style>
+  .tb { min-width: 1080px; padding: var(--spacing-06) var(--spacing-08) var(--spacing-12); background: var(--background-page-default); min-height: 100%; }
+  .tb-crumbs { display: flex; align-items: center; gap: var(--spacing-02); font-size: 14px; line-height: 20px; color: var(--text-secondary); margin-bottom: var(--spacing-02); }
+  .tb-head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--spacing-06); margin-bottom: var(--spacing-05); }
+  .tb-head h1 { font: 700 32px/40px var(--font-headline); }
+  .tb-head p { font-size: 14px; line-height: 20px; color: var(--text-secondary); margin-top: var(--spacing-01); }
+  .tb-actions { display: flex; align-items: center; gap: var(--spacing-03); }
+  .tb-draft { display: inline-flex; align-items: center; gap: var(--spacing-02); font-size: 14px; line-height: 20px; color: var(--text-secondary); }
+  .tb-draft b { color: var(--text-default); }
+  .tb-toolbar { display: flex; align-items: flex-end; gap: var(--spacing-03); margin-bottom: var(--spacing-04); flex-wrap: wrap; }
+  .tb-toolbar .fh-field { width: 280px; }
+  .tb-legend { display: flex; align-items: center; gap: var(--spacing-02); margin-left: auto; font-size: 12px; color: var(--text-secondary); }
+  .tb-grid { display: grid; grid-template-columns: 300px 1fr; gap: var(--spacing-05); align-items: start; }
+  .tb-pool { position: sticky; top: 68px; background: var(--background-surface); border: var(--border-width-1) solid var(--border-light); border-radius: var(--radius-small); display: flex; flex-direction: column; max-height: calc(100vh - 96px); }
+  .tb-pool__head { padding: var(--spacing-03) var(--spacing-04); border-bottom: var(--border-width-1) solid var(--border-light); background: var(--background-subtle); }
+  .tb-pool__head h2 { font: 600 20px/24px var(--font-headline); }
+  .tb-pool__head p { font-size: 12px; line-height: 16px; color: var(--text-secondary); margin-top: 2px; }
+  .tb-pool .fh-tabbar { padding: 0 var(--spacing-04); gap: var(--spacing-04); }
+  .tb-pool .fh-tab__content { font-size: 14px; }
+  .tb-pool__list { overflow-y: auto; padding: var(--spacing-02); display: flex; flex-direction: column; gap: var(--spacing-01); min-height: 120px; }
+  .tb-teams { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--spacing-04); }
+  .tb-team { background: var(--background-surface); border: var(--border-width-1) solid var(--border-light); border-radius: var(--radius-small); display: flex; flex-direction: column; transition: border-color var(--fh-d-fast) var(--fh-e-standard), box-shadow var(--fh-d-fast) var(--fh-e-standard); }
+  .tb-team.is-over { border-color: var(--border-warning); }
+  .tb-drop.is-target { box-shadow: 0 0 0 var(--border-width-2) var(--border-interactive); background-color: var(--background-selected); }
+  .tb-team__head { padding: var(--spacing-03) var(--spacing-04); border-bottom: var(--border-width-1) solid var(--border-light); display: flex; flex-direction: column; gap: var(--spacing-02); }
+  .tb-team__title { display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-02); }
+  .tb-team__title h3 { font: 600 18px/24px var(--font-headline); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tb-team__meta { display: flex; align-items: center; justify-content: space-between; font-size: 12px; line-height: 16px; color: var(--text-secondary); }
+  .tb-cap { height: var(--spacing-01); border-radius: var(--radius-round); background: var(--background-active); overflow: hidden; }
+  .tb-cap > span { display: block; height: 100%; background: var(--background-interactive); transition: width var(--fh-d-base) var(--fh-e-standard), background-color var(--fh-d-fast) var(--fh-e-standard); }
+  .tb-team.is-over .tb-cap > span { background: var(--icon-warning); }
+  .tb-team__list { padding: var(--spacing-02); display: flex; flex-direction: column; gap: var(--spacing-01); min-height: 72px; flex: 1; }
+  .tb-empty { padding: var(--spacing-04); text-align: center; font-size: 12px; line-height: 16px; color: var(--text-secondary); border: var(--border-width-1) dashed var(--border-secondary); border-radius: var(--radius-small); }
+  .tb-movehere { margin: 0 var(--spacing-02) var(--spacing-02); }
+  .tb-p { display: flex; align-items: center; gap: var(--spacing-02); padding: var(--spacing-02); border-radius: var(--radius-small); background: var(--background-surface); border: var(--border-width-1) solid transparent; cursor: grab; user-select: none;
+    transition: background-color var(--fh-d-fast) var(--fh-e-standard), border-color var(--fh-d-fast) var(--fh-e-standard), opacity var(--fh-d-fast) var(--fh-e-standard); animation: fh-fade-in var(--fh-d-moderate) var(--fh-e-enter); }
+  .tb-p:hover { background: var(--background-subtle); }
+  .tb-p.is-picked { border-color: var(--border-interactive); background: var(--background-selected); }
+  .tb-p.is-dragging { opacity: .4; }
+  .tb-p.is-draft { box-shadow: inset 3px 0 0 var(--border-interactive); }
+  .tb-p__grip { color: var(--icon-secondary); display: flex; }
+  .tb-p__main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  .tb-p__name { font-size: 14px; line-height: 20px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tb-p__sub { font-size: 12px; line-height: 16px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tb-p__pick { flex: none; border: 0; background: none; padding: var(--spacing-01); border-radius: var(--radius-small); color: var(--icon-default); cursor: pointer; display: flex; }
+  .tb-p__pick:hover { background: var(--background-active); }
+  .tb-p__pick:focus-visible { outline: var(--border-width-2) solid var(--interactive-universal-focus); outline-offset: 1px; }
+  .tb-more { margin-top: var(--spacing-04); font-size: 14px; color: var(--text-secondary); display: flex; align-items: center; gap: var(--spacing-03); }
+  .tb-op { display: flex; gap: var(--spacing-03); padding: var(--spacing-03) 0; border-bottom: var(--border-width-1) solid var(--border-light); }
+  .tb-op:last-child { border-bottom: 0; }
+  .tb-op__icon { flex: none; width: 32px; height: 32px; border-radius: var(--radius-round); display: flex; align-items: center; justify-content: center; background: var(--background-active); color: var(--icon-default); }
+  .tb-op__icon.is-invite { background: var(--background-warning); color: var(--icon-warning); }
+  .tb-op__icon.is-risk { background: var(--background-danger-subtle); color: var(--icon-danger); }
+  .tb-op__body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; font-size: 14px; line-height: 20px; }
+  .tb-op__body small { font-size: 12px; line-height: 16px; color: var(--text-secondary); }
+  .tb-op__now { display: inline-flex; align-items: center; gap: var(--spacing-01); font-size: 12px; line-height: 16px; color: var(--text-danger); font-weight: 700; }
+  .tb-sec h3 { font: 600 18px/24px var(--font-headline); margin-bottom: var(--spacing-01); display: flex; align-items: center; gap: var(--spacing-02); }
+  .tb-sec > p { font-size: 14px; line-height: 20px; color: var(--text-secondary); margin-bottom: var(--spacing-02); }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="fieldhouse/react.js"></script>
+<script src="fieldhouse/react-dom.js"></script>
+<script src="fieldhouse/bundle.js"></script>
+<script src="fieldhouse/proto.js"></script>
+<script>
+(function () {
+  var F = window.Fieldhouse, P = window.Proto, h = React.createElement, useState = React.useState, useMemo = React.useMemo, useEffect = React.useEffect;
+
+  /* ---------- Data (illustrative) ---------- */
+  var TEAMS = [
+    ['strikers', 'Strikers', 'Dana Reyes'], ['comets', 'Comets', 'Marcus Hill'], ['thunder', 'Thunder', 'Priya Nair'], ['rapids', 'Rapids', 'Tom Alvarez'],
+    ['falcons', 'Falcons', 'Jen Okafor'], ['storm', 'Storm', 'Luis Ortega'], ['blaze', 'Blaze', 'Kim Tran'], ['wolves', 'Wolves', 'Sam Brooks'],
+    ['united', 'United', 'Ava Cole'], ['galaxy', 'Galaxy', 'Ben Ward'], ['pioneers', 'Pioneers', 'Rita Gomez'], ['lions', 'Lions', 'Joe Park']
+  ].map(function (t) { return { id: t[0], name: t[1], coach: t[2], cap: 9 }; });
+  var POS = ['Forward', 'Midfield', 'Defense', 'Goalkeeper'], DAYS = ['Mon/Wed', 'Tue/Thu', 'Any'];
+  var FIRST = ['Ava','Leo','Mia','Noah','Zoe','Eli','Ivy','Owen','Nora','Theo','Ruby','Jack','Maya','Liam','Ella','Kai','Lucy','Finn','Iris','Gabe','Sara','Ezra','Lena','Max','June','Omar','Cleo','Ian','Rosa','Dev','Hana','Cole','Tess','Abe','Lila','Raj','Nell','Sid','Vera','Luca'];
+  var LAST = ['Thompson','Martinez','Chen','Patel','Okafor','Brooks','Nguyen','Kim','Rossi','Diaz','Shah','Ward','Lopez','Bell','Hughes','Ali','Moreno','Price','Kaur','Fox'];
+  function seedPlayers() {
+    var out = [], i = 0;
+    for (; i < 40; i++) {
+      var team = i < 26 ? TEAMS[i % 8].id : null; // 26 placed on 8 teams, 14 unassigned
+      out.push({ id: 'p' + i, name: FIRST[i] + ' ' + LAST[(i * 7) % LAST.length], age: 9 + (i % 2), pos: POS[i % 4], days: DAYS[i % 3],
+        source: 'this', status: 'registered', team: team });
+    }
+    // Players from other programs (past season, tryouts): assigning them means an invite
+    var other = [['Aria Bennett', 'Fall 2026 Rec'], ['Miles Carter', 'Fall 2026 Rec'], ['Sofia Reyes', '2027 Tryouts'], ['Jonah Wright', '2027 Tryouts'], ['Nina Park', 'Fall 2026 Rec'], ['Caleb Ross', '2027 Tryouts']];
+    other.forEach(function (o, j) { out.push({ id: 'o' + j, name: o[0], age: 9 + (j % 2), pos: POS[(j + 1) % 4], days: DAYS[j % 3], source: o[1], status: j === 4 ? 'pending' : 'none', team: j === 4 ? 'comets' : null }); });
+    // A duplicate registration (same child registered twice)
+    out.push({ id: 'dup', name: 'Leo Martinez', age: 10, pos: 'Midfield', days: 'Any', source: 'this', status: 'registered', team: null, duplicateOf: 'p1' });
+    return out;
+  }
+
+  var NOTES = [
+    { id: 'move', title: 'Move or invite is detected, not chosen', body: 'Admins think in terms of putting a player on a team. The system decides whether that is a move (same program) or an invite (another program), and the status pill carries the consequence.', tryIt: 'drag Sofia Reyes from Other programs onto a team. She becomes Invite needed, not Registered.' },
+    { id: 'draft', title: 'Draft first, irreversible last', body: 'Nothing commits while rosters are being shaped. Every change is a draft, marked with a rail, and counted beside Review changes.', tryIt: 'shuffle a few players, then watch the draft counter.' },
+    { id: 'review', title: 'Review in a slide-out, not inline', body: 'Consequences are listed once, in one place, instead of interrupting every drag. Actions that take effect immediately, like revoking a pending invite, are called out in red.', tryIt: 'move Nina Park (Pending on Comets) to another team, then open Review changes.' },
+    { id: 'undo', title: 'No inline undo in review', body: 'Undoing from the review surface would blur the true system state once invitations are involved. Corrections happen on the board, where state is visible.' },
+    { id: 'states', title: 'Invitation lifecycle', body: 'Every invited player shows one state: Invite needed (assigned, not invited), Pending (sent, awaiting response) or Registered (accepted). Reassigning a pending player invalidates the old invite automatically.' },
+    { id: 'recent', title: 'The ten most recent teams', body: 'Journey mapping showed admins create teams before opening Team Builder. Showing the ten newest gives Rec admins context without a wall of teams, and covers every team in a typical 3 to 5 team club.' },
+    { id: 'filters', title: 'Filter by custom form responses', body: 'Admins balance rosters by answers families gave at registration: position, practice days, a requested teammate.', tryIt: 'filter to Goalkeeper and spread them across teams.' },
+    { id: 'guard', title: 'A guard instead of autosave', body: 'Autosave was not feasible for the MVP, so leaving with unsaved drafts asks first. Autosave was proposed as a fast-follow.', tryIt: 'make a change, then click Program dashboard.' }
+  ];
+
+  function statusOf(p) {
+    if (p.source === 'this') return { label: 'Registered', intent: 'success' };
+    if (p.status === 'pending') return { label: 'Pending', intent: 'info' };
+    if (p.status === 'registered') return { label: 'Registered', intent: 'success' };
+    if (p.team) return { label: 'Invite needed', intent: 'warning' };
+    return { label: p.source, intent: 'neutral' };
+  }
+
+  function App() {
+    var seed = useMemo(seedPlayers, []);
+    var savedS = useState(seed), saved = savedS[0], setSaved = savedS[1];
+    var draftS = useState(seed), draft = draftS[0], setDraft = draftS[1];
+    var poolTab = useState('this'), tab = poolTab[0], setTab = poolTab[1];
+    var qS = useState(''), q = qS[0], setQ = qS[1];
+    var fS = useState({ pos: [], days: [] }), filt = fS[0], setFilt = fS[1];
+    var pickS = useState(null), picked = pickS[0], setPicked = pickS[1];
+    var dragS = useState(null), dragId = dragS[0], setDrag = dragS[1];
+    var overS = useState(null), over = overS[0], setOver = overS[1];
+    var allS = useState(false), showAll = allS[0], setShowAll = allS[1];
+    var revS = useState(false), reviewing = revS[0], setReviewing = revS[1];
+    var leaveS = useState(false), leaving = leaveS[0], setLeaving = leaveS[1];
+    var hotS = useState(null), hot = hotS[0], setHot = hotS[1];
+    var t = P.useToasts(), toastHost = t[0], toast = t[1];
+
+    var byId = {}; saved.forEach(function (p) { byId[p.id] = p; });
+    var ops = draft.filter(function (p) { return byId[p.id].team !== p.team; }).map(function (p) {
+      var was = byId[p.id], from = was.team, to = p.team;
+      var tn = function (id) { var tm = TEAMS.filter(function (x) { return x.id === id; })[0]; return tm ? tm.name : 'Unassigned'; };
+      if (p.source === 'this') return { p: p, kind: 'move', from: tn(from), to: tn(to), text: to ? (from ? 'Move to ' + tn(to) : 'Assign to ' + tn(to)) : 'Remove from ' + tn(from), note: to ? 'Same program; registration and invoice stay as they are.' : 'Returns to the unassigned pool; registration stays in the program.' };
+      if (was.status === 'pending') return { p: p, kind: 'risk', from: tn(from), to: tn(to), text: to ? 'Reassign to ' + tn(to) : 'Remove from ' + tn(from), note: 'Revokes the pending invite to ' + tn(from) + (to ? ' and creates a new invite for ' + tn(to) + '.' : '.'), now: true };
+      return { p: p, kind: 'invite', from: tn(from), to: tn(to), text: to ? 'Invite to join ' + tn(to) : 'Unassign', note: 'From ' + p.source + '. An invitation to register is sent when you confirm.' };
+    });
+    var dirty = ops.length > 0;
+    useEffect(function () {
+      function onBefore(e) { if (dirty) { e.preventDefault(); e.returnValue = ''; } }
+      window.addEventListener('beforeunload', onBefore); return function () { window.removeEventListener('beforeunload', onBefore); };
+    }, [dirty]);
+
+    function place(id, team) {
+      setDraft(function (d) { return d.map(function (p) { return p.id === id ? Object.assign({}, p, { team: team }) : p; }); });
+      setPicked(null);
+      var p = draft.filter(function (x) { return x.id === id; })[0];
+      if (p && p.source !== 'this') setHot('move'); else setHot('draft');
+    }
+    function matches(p) {
+      if (q && p.name.toLowerCase().indexOf(q.toLowerCase()) < 0) return false;
+      if (filt.pos.length && filt.pos.indexOf(p.pos) < 0) return false;
+      if (filt.days.length && filt.days.indexOf(p.days) < 0) return false;
+      return true;
+    }
+    function confirm() {
+      var inv = ops.filter(function (o) { return o.kind !== 'move' && o.p.team; }).length, mv = ops.filter(function (o) { return o.kind === 'move'; }).length, rv = ops.filter(function (o) { return o.now; }).length;
+      var next = draft.map(function (p) { var was = byId[p.id]; if (p.source !== 'this' && was.team !== p.team) return Object.assign({}, p, { status: p.team ? 'pending' : 'none' }); return p; });
+      setSaved(next); setDraft(next); setReviewing(false); setHot('states');
+      toast({ text: [inv ? inv + (inv === 1 ? ' invite' : ' invites') + ' sent' : null, mv ? mv + (mv === 1 ? ' player' : ' players') + ' moved' : null, rv ? rv + ' revoked' : null].filter(Boolean).join(', ') + '.' });
+    }
+
+    function Player(p) {
+      var st = statusOf(p), changed = byId[p.id].team !== p.team;
+      return h('div', {
+        key: p.id, className: 'tb-p' + (picked === p.id ? ' is-picked' : '') + (dragId === p.id ? ' is-dragging' : '') + (changed ? ' is-draft' : ''), draggable: true,
+        onDragStart: function (e) { setDrag(p.id); e.dataTransfer.setData('text/plain', p.id); e.dataTransfer.effectAllowed = 'move'; }, onDragEnd: function () { setDrag(null); setOver(null); }
+      },
+        h('span', { className: 'tb-p__grip', 'aria-hidden': 'true' }, h(F.Icon, { name: 'DotsSixVertical', size: 16 })),
+        h('span', { className: 'tb-p__main' },
+          h('span', { className: 'tb-p__name' }, p.name),
+          h('span', { className: 'tb-p__sub' }, 'Age ' + p.age + ' · ' + p.pos + ' · ' + p.days)),
+        p.duplicateOf ? h(F.Tooltip, { content: 'Matches Leo Martinez (same name and birth date). Review before assigning.', size: 'small', position: 'left' }, h('span', { tabIndex: 0 }, h(F.Tag, { intent: 'danger', icon: 'Warning' }, 'Duplicate'))) : h(F.Status, { intent: changed && p.source === 'this' ? 'neutral' : st.intent, size: 'small' }, changed && p.source === 'this' ? 'Draft' : (changed && p.source !== 'this' && p.team ? 'Invite needed' : st.label)),
+        h('button', { type: 'button', className: 'tb-p__pick', 'aria-pressed': picked === p.id, 'aria-label': (picked === p.id ? 'Cancel moving ' : 'Move ') + p.name, onClick: function () { setPicked(picked === p.id ? null : p.id); } }, h(F.Icon, { name: picked === p.id ? 'X' : 'ArrowsLeftRight', size: 16 })));
+    }
+    function dropProps(team) {
+      var key = team || 'pool';
+      return {
+        onDragOver: function (e) { e.preventDefault(); if (over !== key) setOver(key); },
+        onDragLeave: function (e) { if (!e.currentTarget.contains(e.relatedTarget)) setOver(null); },
+        onDrop: function (e) { e.preventDefault(); var id = e.dataTransfer.getData('text/plain') || dragId; setOver(null); setDrag(null); if (id) place(id, team); }
+      };
+    }
+
+    var pool = draft.filter(function (p) { return !p.team && (tab === 'this' ? p.source === 'this' : p.source !== 'this') && matches(p); });
+    var counts = { this: draft.filter(function (p) { return !p.team && p.source === 'this'; }).length, other: draft.filter(function (p) { return !p.team && p.source !== 'this'; }).length };
+    var shownTeams = showAll ? TEAMS : TEAMS.slice(0, 10);
+    var nFilters = filt.pos.length + filt.days.length;
+
+    var board = h('div', { className: 'tb' },
+      h('div', { className: 'tb-crumbs' }, h(F.Link, { href: '#', size: 'default', onClick: function (e) { e.preventDefault(); setHot('guard'); if (dirty) setLeaving(true); else toast({ status: 'info', text: 'This prototype stays in Team Builder.' }); } }, 'Program dashboard'), h(F.Icon, { name: 'CaretRight', size: 12 }), h('span', null, 'Team Builder')),
+      h('div', { className: 'tb-head' },
+        h('div', null, h('h1', null, 'Spring 2027 Rec Soccer · U10'), h('p', null, '40 registrations · 12 teams · Roster limit 9')),
+        h('div', { className: 'tb-actions' },
+          h('span', { className: 'tb-draft', 'aria-live': 'polite' }, dirty ? h(React.Fragment, null, h(F.Icon, { name: 'PencilSimpleLine', size: 16 }), h('b', null, ops.length + (ops.length === 1 ? ' draft change' : ' draft changes')), ' not yet saved') : h(React.Fragment, null, h(F.Icon, { name: 'CheckCircle', size: 16, color: 'var(--icon-success)' }), 'All changes saved')),
+          h(F.Button, { type: 'filled', size: 'large', leadingIcon: 'ListChecks', disabled: !dirty, onClick: function () { setReviewing(true); setHot('review'); } }, 'Review changes' + (dirty ? ' (' + ops.length + ')' : '')))),
+      h('div', { className: 'tb-toolbar' },
+        h(F.TextInput, { size: 'medium', label: 'Find a player', placeholder: 'Search by name', leadingIcon: 'MagnifyingGlass', value: q, onChange: setQ }),
+        h(F.Popover, { label: 'Filter by form responses', width: 300, trigger: h(F.Button, { type: 'outlined', leadingIcon: 'Funnel', onClick: function () { setHot('filters'); } }, nFilters ? 'Filters (' + nFilters + ')' : 'Filter by form responses') },
+          h('div', { style: { display: 'flex', flexDirection: 'column', gap: 16 } },
+            h(F.CheckboxGroup, { label: 'Preferred position', size: 'small', options: POS, value: filt.pos, onChange: function (v) { setFilt(Object.assign({}, filt, { pos: v })); } }),
+            h(F.CheckboxGroup, { label: 'Practice availability', size: 'small', options: DAYS, value: filt.days, onChange: function (v) { setFilt(Object.assign({}, filt, { days: v })); } }),
+            nFilters ? h(F.Button, { type: 'link', size: 'small', onClick: function () { setFilt({ pos: [], days: [] }); } }, 'Clear filters') : null)),
+        h('div', { className: 'tb-legend', 'aria-label': 'Status legend' }, h(F.Status, { intent: 'success', size: 'small' }, 'Registered'), h(F.Status, { intent: 'warning', size: 'small' }, 'Invite needed'), h(F.Status, { intent: 'info', size: 'small' }, 'Pending'), h(F.Status, { intent: 'neutral', size: 'small' }, 'Draft'))),
+      h('div', { className: 'tb-grid' },
+        h('section', Object.assign({ className: 'tb-pool tb-drop' + (over === 'pool' ? ' is-target' : ''), 'aria-label': 'Unassigned players' }, dropProps(null)),
+          h('div', { className: 'tb-pool__head' }, h('h2', null, 'Unassigned'), h('p', null, 'Drag onto a team, or use the arrows button to move by keyboard.')),
+          h(F.Tabs, { label: 'Player source', value: tab, onChange: function (v) { setTab(v); if (v === 'other') setHot('move'); }, items: [{ value: 'this', label: 'This program', count: counts.this }, { value: 'other', label: 'Other programs', count: counts.other }] }),
+          picked && draft.filter(function (p) { return p.id === picked; })[0].team ? h('div', { style: { padding: '8px 8px 0' } }, h(F.Button, { type: 'outlined', fullWidth: true, leadingIcon: 'ArrowLeft', onClick: function () { place(picked, null); } }, 'Unassign here')) : null,
+          h('div', { className: 'tb-pool__list' }, pool.length ? pool.map(Player) : h('div', { className: 'tb-empty' }, nFilters || q ? 'No players match these filters.' : 'Everyone here has a team.'))),
+        h('div', null,
+          h('div', { className: 'tb-teams' }, shownTeams.map(function (tm) {
+            var roster = draft.filter(function (p) { return p.team === tm.id && matches(p); });
+            var total = draft.filter(function (p) { return p.team === tm.id; }).length, isOver = total > tm.cap;
+            return h('section', Object.assign({ key: tm.id, className: 'tb-team tb-drop' + (isOver ? ' is-over' : '') + (over === tm.id ? ' is-target' : ''), 'aria-label': tm.name }, dropProps(tm.id)),
+              h('div', { className: 'tb-team__head' },
+                h('div', { className: 'tb-team__title' }, h('h3', null, tm.name), isOver ? h(F.Status, { intent: 'warning', size: 'small', icon: true }, 'Over limit') : null),
+                h('div', { className: 'tb-team__meta' }, h('span', null, 'Coach ' + tm.coach), h('span', null, total + ' / ' + tm.cap)),
+                h('div', { className: 'tb-cap', role: 'meter', 'aria-valuemin': 0, 'aria-valuemax': tm.cap, 'aria-valuenow': total, 'aria-label': tm.name + ' roster' }, h('span', { style: { width: Math.min(100, total / tm.cap * 100) + '%' } }))),
+              h('div', { className: 'tb-team__list' }, roster.length ? roster.map(Player) : h('div', { className: 'tb-empty' }, total ? 'No players match the filters.' : 'Drop players here')),
+              picked && draft.filter(function (p) { return p.id === picked; })[0].team !== tm.id ? h('div', { className: 'tb-movehere' }, h(F.Button, { type: 'outlined', fullWidth: true, leadingIcon: 'ArrowRight', onClick: function () { place(picked, tm.id); } }, 'Move here')) : null);
+          })),
+          h('div', { className: 'tb-more' }, showAll ? 'Showing all 12 teams.' : 'Showing the 10 most recently created teams.',
+            h(F.Button, { type: 'link', onClick: function () { setShowAll(!showAll); setHot('recent'); } }, showAll ? 'Show 10 most recent' : 'Show all 12')))));
+
+    var groups = [
+      ['risk', 'Takes effect immediately', 'These revoke invitations that families may already have opened.'],
+      ['invite', 'Invitations to send', 'Players from other programs. Each receives an invitation to register for their new team.'],
+      ['move', 'Moves within this program', 'Registrations and invoices are unchanged.']];
+    var review = h(P.Drawer, {
+      open: reviewing, title: 'Review changes', onClose: function () { setReviewing(false); },
+      footer: h(F.ActionGroup, { alignment: 'right', buttonSize: 'large', secondary: { label: 'Back to Team Builder', onClick: function () { setReviewing(false); } }, primary: { label: 'Confirm ' + ops.length + (ops.length === 1 ? ' change' : ' changes'), onClick: confirm } })
+    },
+      ops.some(function (o) { return o.now; }) ? h(F.PageBanner, { status: 'warning', size: 'small' }, 'Some changes revoke invitations as soon as you confirm. To undo a change, close this panel and adjust the board.') : h(F.PageBanner, { status: 'info', size: 'small' }, 'Nothing has been sent yet. To change something, close this panel and adjust the board.'),
+      groups.map(function (g) {
+        var list = ops.filter(function (o) { return o.kind === g[0]; }); if (!list.length) return null;
+        return h('div', { key: g[0], className: 'tb-sec' }, h('h3', null, g[1], h(F.Badge, { count: list.length })), h('p', null, g[2]),
+          list.map(function (o) {
+            return h('div', { key: o.p.id, className: 'tb-op' },
+              h('span', { className: 'tb-op__icon' + (o.kind === 'invite' ? ' is-invite' : o.kind === 'risk' ? ' is-risk' : '') }, h(F.Icon, { name: o.kind === 'invite' ? 'EnvelopeSimple' : o.kind === 'risk' ? 'Warning' : 'ArrowsLeftRight', size: 16 })),
+              h('div', { className: 'tb-op__body' }, h('span', null, h('b', null, o.p.name), ' · ', o.text), h('small', null, o.note), o.now ? h('span', { className: 'tb-op__now' }, h(F.Icon, { name: 'WarningOctagon', size: 12 }), 'Immediate: invite revoked on confirm') : null));
+          }));
+      }));
+
+    var leave = h(F.Modal, {
+      open: leaving, size: 'small', intent: 'destructive', title: 'Leave without saving?', onClose: function () { setLeaving(false); },
+      secondaryAction: { label: 'Keep editing', onClick: function () { setLeaving(false); } },
+      primaryAction: { label: 'Discard and leave', onClick: function () { setLeaving(false); setDraft(saved); toast({ status: 'info', text: ops.length + ' draft changes discarded.' }); } }
+    }, h('p', null, 'You have ' + ops.length + ' draft ' + (ops.length === 1 ? 'change' : 'changes') + ' that have not been reviewed. Leaving now discards them; no invitations have been sent.'));
+
+    return h(P.Shell, {
+      title: 'Team Builder', subtitle: 'LeagueApps Management Console · Rec league roster formation', backHref: '/#work-team-builder', hot: hot,
+      notesIntro: 'The case study decisions, working. Everything can be done by drag and drop or by keyboard.', notes: NOTES,
+      tools: h('button', { type: 'button', className: 'px-link', onClick: function () { setSaved(seed); setDraft(seed); setPicked(null); setFilt({ pos: [], days: [] }); setQ(''); toast({ status: 'info', text: 'Prototype reset.' }); } }, h(F.Icon, { name: 'ArrowCounterClockwise', size: 16 }), 'Reset')
+    }, board, review, leave, toastHost);
+  }
+  ReactDOM.createRoot(document.getElementById('app')).render(h(App));
+})();
+</script>
+</body>
+</html>

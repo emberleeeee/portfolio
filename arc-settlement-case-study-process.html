@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Process | ARC Settlement | Emily Blackwell</title>
+<meta name="description" content="Due to NDA constraints, I&amp;#x27;m describing the approach and decisions in general terms rather than showing screens.">
+<link rel="canonical" href="https://design.emilyblackwell.com/arc-settlement-case-study-process.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Process | ARC Settlement | Emily Blackwell">
+<meta property="og:description" content="Due to NDA constraints, I&amp;#x27;m describing the approach and decisions in general terms rather than showing screens.">
+<meta property="og:url" content="https://design.emilyblackwell.com/arc-settlement-case-study-process.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;family=VT323&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;family=Source+Sans+3:wght@400;600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/terminal.css">
+<script>document.documentElement.classList.add("js");try{var p=localStorage.getItem("bos-ph"),s=localStorage.getItem("bos-scan");if(p)document.documentElement.dataset.phosphor=p;if(s)document.documentElement.dataset.scanlines=s}catch(e){}</script>
+</head>
+<body class="crt" data-screen="WORK.ARC/PROCESS" data-parent="arc-settlement-case-study.html" data-kind="case" data-program="arc" data-prev="arc-settlement-case-study-problem.html" data-next="arc-settlement-case-study-outcome.html">
+<a class="skip" href="#screen">Skip to content</a>
+<div id="prog" role="dialog" aria-modal="true" aria-labelledby="prog-title" hidden>
+  <div class="prog-bar">
+    <span id="prog-title">RUNNING</span>
+    <span class="btns"><button type="button" id="prog-reset">RESET</button><button type="button" id="prog-exit">EXIT (ESC)</button></span>
+  </div>
+  <div class="prog-hint" id="prog-hint"></div>
+  <div class="prog-body">
+    <div class="prog-win" id="prog-win"></div>
+    <aside class="prog-notes" id="prog-notes" aria-label="Design notes"></aside>
+  </div>
+</div>
+<div class="frame">
+  <!-- chrome:top -->
+  <header class="bar top">
+    <span>BLACKWELL/OS 2.6</span>
+    <span id="where" class="hide-sm">WORK.ARC/PROCESS</span>
+    <span id="clock" aria-hidden="true"></span>
+  </header>
+  <!-- /chrome:top -->
+
+  <main id="screen" tabindex="-1">
+    <p class="crumb"><a href="arc-settlement-case-study.html">ARC SETTLEMENT</a> / SECTION 03 OF 05</p>
+    <section class="case-sec solo" id="process" aria-labelledby="process-h">
+      <h2 class="screen-title" id="process-h">PROCESS</h2>
+      
+<p>Due to NDA constraints, I'm describing the approach and decisions in general terms rather than showing screens. The interactive demo on this page is fictional and illustrative.</p>
+<h4 class="sub-h">Mapping the system before the screens</h4>
+<p>I mapped the full life cycle of a ticket as service blueprints: cash sales, credit sales, early credit billing, a change of payment method, and sales edited by the agency before the cycle closed. Each blueprint traced what the customer, agency, airline and ARC teams see at every step, which systems are involved, and when the data changes from <b>initial</b> (as the agency submitted it) to <b>settled</b> (final for the cycle).</p>
+<p>That timing turned out to explain most of the confusion. Users weren't missing data so much as looking in the wrong place for the stage a ticket was in.</p>
+<h4 class="sub-h">Document lookup</h4>
+<p>I designed a new tool for finding any ticket by its document number, built from task models for every document type: straight sales, refunds, voids, and one-to-one and one-to-many exchanges.</p>
+<ul class="lines">
+<li>One search by document number, refined by airline or agency depending on the user's permissions.</li>
+<li>Results default to settled data, with an option to see the initial data as the agency submitted it.</li>
+<li>A transaction history that follows the exchange chain, so one search shows the original ticket, the exchange and any refund together.</li>
+<li>Document details shaped to the transaction type, with the summary users need to verify or explain a transaction first and the full record one step away.</li>
+<li>Sign-in and session flows designed alongside the customer portal: bookmarked links, many open tabs, timeouts and logging out across apps.</li>
+</ul><p class="try"><a class="run-link" data-scene="lookup" href="#run-lookup"><span aria-hidden="true">&gt;&gt; </span>RUN DEMO: Look up a ticket and follow its exchange chain</a></p>
+<h4 class="sub-h">Editing refunds and exchanges</h4>
+<p>In the modernized reporting tool, agents choose which flight segments a refund or exchange covers, and that choice makes it full or partial. I defined what happens to their numbers when they go back and change segments after entering figures, so no one loses edits without being told:</p>
+<ul class="lines">
+<li>Full to partial: the figures stay as they are. If the agent never edited them, the confirmation step flags that a partial refund still matches the full amount.</li>
+<li>Partial to full: the full-document figures are filled in. If the agent had entered figures of their own, they are asked first, so nothing they typed is replaced without warning.</li>
+</ul><p class="try"><a class="run-link" data-scene="edit" href="#run-edit"><span aria-hidden="true">&gt;&gt; </span>RUN DEMO: Change segments on a refund</a></p>
+<p>I also mapped dependencies for a later release of the tool, sequencing sales reports, transaction edits, memos, payment features, configuration and permissions so each release stood on the one before it.</p>
+<h4 class="sub-h">Discovery for transaction file intake</h4>
+<p>I facilitated discovery with the teams who receive the daily transaction files. The workshop reframed a broad request ("we have problems with errors") into a problem statement, questioned its assumptions with the five whys, and planned the research to follow.</p>
+<p>An ecosystem map and current-state journey maps traced the work across booking systems, data center operations, production support, card operations and the settlement team. They surfaced the opportunities: notify partners automatically when files arrive late or fail, move invalid transactions to a holding area for review instead of dropping them, and replace hard-to-read legacy text reports with reporting partners can actually use.</p>
+<h4 class="sub-h">Design principles</h4>
+<div class="cards"><div class="card"><h5>Clarity over completeness</h5><span class="lbl">Principle</span><p>Surface the information users most frequently need to verify or explain transactions, not the full depth of the system by default. Progressive disclosure over information overload.</p><span class="lbl">Why it mattered</span><p>Agents under time pressure made more errors when confronted with dense, unfiltered data. Reducing cognitive load at the decision point directly reduced error rates.</p><p class="try"><a class="run-link" data-scene="clear" href="#run-clear"><span aria-hidden="true">&gt;&gt; </span>RUN DEMO: See the clarified record</a></p></div><div class="card"><h5>Terminology alignment</h5><span class="lbl">Principle</span><p>Audit, flag, and redesign ambiguous labels that caused misinterpretation across tools and teams. Language is part of the UX.</p><span class="lbl">Why it mattered</span><p>A single misunderstood status label could trigger incorrect downstream actions in a compliance-sensitive workflow. Getting terminology right was a risk-reduction strategy.</p><p class="try"><a class="run-link" data-scene="terms" href="#run-terms"><span aria-hidden="true">&gt;&gt; </span>RUN DEMO: See every code in plain language</a></p></div><div class="card"><h5>Shareable states</h5><span class="lbl">Principle</span><p>Design streamlined, readable views optimized for communication with end customers, reflecting how agents already worked in practice.</p><span class="lbl">Why it mattered</span><p>Agents were already creating screenshots and workarounds to share transaction status with customers. Designing for that reality eliminated shadow workflows.</p><p class="try"><a class="run-link" data-scene="share" href="#run-share"><span aria-hidden="true">&gt;&gt; </span>RUN DEMO: Copy a customer-ready summary</a></p></div></div>
+<h4 class="sub-h">Research &amp; Validation</h4>
+<p>One of the most significant contributions of this project was introducing a new testing model to ARC. I designed an <b>asynchronous usability testing approach</b> that allowed participants to explore interactive prototypes on their own schedule, reducing scheduling friction and producing more natural behavioral signals than traditional moderated sessions.</p>
+<div class="stats"><div class="stat"><b>200+</b><span>Airlines and travel agencies using these systems</span></div><div class="stat"><b>20+ yrs</b><span>Age of the legacy systems being modernized</span></div><div class="stat"><b>3</b><span>Workstreams I owned design for</span></div></div>
+<div class="cards"><div class="card"><span class="lbl">Testing Model</span><h5>Async Usability Approach</h5><ul class="lines"><li>Lightweight interactive prototypes</li><li>Behavioral observation without scheduling</li><li>Structured feedback collection</li><li>Later adopted org-wide</li></ul></div><div class="card"><span class="lbl">Discovery Methods</span><h5>Research Toolkit</h5><ul class="lines"><li>Stakeholder and discovery workshops</li><li>Ecosystem maps and current-state journeys</li><li>Service blueprints of the ticket life cycle</li><li>Task models for every document type</li><li>Terminology audits across systems</li></ul></div></div>
+<figure class="quote"><blockquote>The testing model proved effective enough that it was adopted more broadly within the organization, shifting how ARC teams approached discovery going forward.</blockquote><figcaption>Project Outcome, ARC Settlement Modernization</figcaption></figure>
+
+    </section>
+    <hr class="rule">
+    <ul class="menu">
+      <li><a class="opt" href="arc-settlement-case-study-outcome.html" data-key="N"><span class="key">[N]</span><span class="label">Next: Outcome</span><span class="lead" aria-hidden="true"></span><span class="meta">04/05</span></a></li>
+      <li><a class="opt" href="arc-settlement-case-study-problem.html" data-key="P"><span class="key">[P]</span><span class="label">Previous: Problem</span><span class="lead" aria-hidden="true"></span><span class="meta">02/05</span></a></li>
+      <li><a class="opt" href="arc-settlement-case-study.html" data-key="C"><span class="key">[C]</span><span class="label">Back to case file</span><span class="lead" aria-hidden="true"></span><span class="meta">ARC Settlement</span></a></li>
+      <li><button class="opt" type="button" data-key="R" data-act="run:arc"><span class="key">[R]</span><span class="label">Run interactive demo</span><span class="lead" aria-hidden="true"></span><span class="meta">Live</span></button></li>
+    </ul>
+  </main>
+
+  <!-- chrome:bottom -->
+  <div class="foot">
+  <form class="cmd" id="cmdform" autocomplete="off">
+    <label for="cmd">COMMAND ===&gt;</label>
+    <input id="cmd" name="cmd" spellcheck="false" aria-describedby="msg">
+    <span class="cursor" aria-hidden="true"></span>
+  </form>
+  <div class="msg" id="msg" role="status">PRESS / TO TYPE A COMMAND. TYPE HELP FOR A LIST.</div>
+  <nav class="bar bottom" aria-label="Function keys">
+    <span><a href="arc-settlement-case-study.html" data-back>ESC=BACK</a></span>
+    <span class="hide-sm keys-only">&uarr;&darr;=SELECT &nbsp;ENTER=OPEN</span>
+    <span><a href="index.html">H=HOME</a></span>
+    <span><a href="help.html">?=HELP</a></span>
+  </nav>
+  </div>
+  <!-- /chrome:bottom -->
+</div>
+<script src="js/demos.js"></script>
+<script src="js/terminal.js"></script>
+</body>
+</html>

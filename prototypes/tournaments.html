@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="mgmt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tournament Engine · Interactive prototype · Emily Blackwell</title>
+<link rel="stylesheet" href="fieldhouse/tokens.css">
+<link rel="stylesheet" href="fieldhouse/bundle.css">
+<link rel="stylesheet" href="fieldhouse/proto.css">
+<style>
+  /* Example partner: a navy club color (the system's red example clashes with error states; see the Fieldhouse prototype) */
+  [data-theme="member"].tr-stage { --mp-secondary-25: var(--mp-primary-25); --mp-secondary-35: var(--mp-primary-35); --mp-secondary-50: var(--mp-primary-50); --mp-secondary-100: var(--mp-primary-100); --mp-secondary-200: var(--mp-primary-200); --mp-secondary-300: var(--mp-primary-300); --mp-secondary-400: var(--mp-primary-400); --mp-secondary-500: var(--mp-primary-500); --mp-secondary-600: var(--mp-primary-600); --mp-secondary-700: var(--mp-primary-700); --mp-secondary-800: var(--mp-primary-800); --mp-secondary-900: var(--mp-primary-900); --mp-secondary-base: var(--mp-primary-base); --mp-secondary-hover: var(--mp-primary-hover); --mp-secondary-active: var(--mp-primary-active); }
+  .tr-stage { padding: var(--spacing-08) var(--spacing-06) var(--spacing-12); min-height: 100%; }
+  .tr-phone-stage { display: flex; justify-content: center; }
+  /* Registrant (Member Portal) */
+  .tr-app { min-height: 100%; display: flex; flex-direction: column; background: var(--background-page-default); }
+  .tr-top { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-02); padding: var(--spacing-03) var(--spacing-04); background: var(--background-brand-primary); color: var(--text-default-dark); }
+  .tr-top b { font: 700 16px/20px var(--font-headline); letter-spacing: .02em; }
+  .tr-cartbtn { position: relative; display: inline-flex; padding: var(--spacing-01); border: 0; border-radius: var(--radius-small); background: none; color: var(--text-default-dark); cursor: pointer; }
+  .tr-cartbtn:focus-visible { outline: var(--border-width-2) solid var(--text-default-dark); outline-offset: 1px; }
+  .tr-cartbtn .fh-badge-count { position: absolute; top: -4px; right: -6px; background: var(--background-surface); color: var(--text-default); animation: fh-drop-in var(--fh-d-moderate) var(--fh-e-enter); }
+  .tr-hero { padding: var(--spacing-05) var(--spacing-04) var(--spacing-04); background: var(--background-surface); border-bottom: var(--border-width-1) solid var(--border-light); }
+  .tr-hero h1 { font: 700 28px/36px var(--font-headline); }
+  .tr-hero ul { list-style: none; padding: 0; margin: var(--spacing-02) 0 0; display: flex; flex-direction: column; gap: var(--spacing-01); font-size: 14px; line-height: 20px; color: var(--text-secondary); }
+  .tr-hero li { display: flex; align-items: center; gap: var(--spacing-02); }
+  .tr-steps { display: flex; gap: var(--spacing-01); padding: var(--spacing-03) var(--spacing-04) 0; }
+  .tr-steps span { flex: 1; height: var(--spacing-01); border-radius: var(--radius-round); background: var(--background-active); transition: background-color var(--fh-d-base) var(--fh-e-standard); }
+  .tr-steps span.is-done { background: var(--background-brand-primary); }
+  .tr-steplbl { padding: var(--spacing-02) var(--spacing-04) 0; font-size: 12px; line-height: 16px; color: var(--text-secondary); }
+  .tr-body { flex: 1; padding: var(--spacing-04); display: flex; flex-direction: column; gap: var(--spacing-04); animation: fh-fade-in var(--fh-d-moderate) var(--fh-e-enter); }
+  .tr-body h2 { font: 600 20px/24px var(--font-headline); }
+  .tr-body > p { font-size: 14px; line-height: 20px; color: var(--text-secondary); margin-top: calc(-1 * var(--spacing-03)); }
+  .tr-team { display: flex; flex-direction: column; gap: var(--spacing-02); padding: var(--spacing-03) 0; border-bottom: var(--border-width-1) solid var(--border-light); }
+  .tr-team:last-child { border-bottom: 0; }
+  .tr-team__row { display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-03); }
+  .tr-team .fh-select { margin-left: 28px; width: calc(100% - 28px); }
+  .tr-team__div { display: flex; align-items: center; gap: var(--spacing-02); margin-left: 28px; font-size: 12px; line-height: 16px; color: var(--text-secondary); }
+  .tr-sticky { position: sticky; bottom: 0; z-index: 4; padding: var(--spacing-03) var(--spacing-04); background: var(--background-surface); border-top: var(--border-width-1) solid var(--border-light); box-shadow: var(--shadow-action-bar); display: flex; flex-direction: column; gap: var(--spacing-02); }
+  .tr-sticky__sum { display: flex; justify-content: space-between; font-size: 14px; line-height: 20px; }
+  .tr-line { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--spacing-03); padding: var(--spacing-03) 0; border-bottom: var(--border-width-1) solid var(--border-light); font-size: 14px; line-height: 20px; }
+  .tr-line b { display: block; font-size: 16px; line-height: 24px; }
+  .tr-line small { display: block; color: var(--text-secondary); font-size: 12px; line-height: 16px; }
+  .tr-line__end { text-align: right; flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: var(--spacing-01); }
+  .tr-total { display: flex; justify-content: space-between; align-items: baseline; padding-top: var(--spacing-02); font-size: 16px; }
+  .tr-total b { font: 700 24px/28px var(--font-headline); }
+  .tr-plan small { display: block; margin-top: var(--spacing-01); font-size: 12px; line-height: 16px; color: var(--text-secondary); }
+  .tr-done { align-items: center; text-align: center; padding-top: var(--spacing-10); }
+  .tr-done .tr-check { width: 64px; height: 64px; border-radius: var(--radius-round); display: flex; align-items: center; justify-content: center; background: var(--background-success); color: var(--icon-success); animation: fh-rise-in var(--fh-d-slow) var(--fh-e-enter); }
+  /* Organizer (Management Console) */
+  .tr-org { max-width: 1120px; margin: 0 auto; }
+  .tr-org__head { margin-bottom: var(--spacing-05); }
+  .tr-org__head h1 { font: 700 32px/40px var(--font-headline); }
+  .tr-org__head p { font-size: 14px; line-height: 20px; color: var(--text-secondary); margin-top: var(--spacing-01); }
+  .tr-org__grid { display: grid; grid-template-columns: 260px 1fr; gap: var(--spacing-06); align-items: start; }
+  .tr-org__nav { position: sticky; top: 76px; }
+  .tr-org__panel { display: flex; flex-direction: column; gap: var(--spacing-04); animation: fh-fade-in var(--fh-d-moderate) var(--fh-e-enter); }
+  .tr-org__panel > h2 { font: 700 24px/28px var(--font-headline); }
+  .tr-org__panel > p { font-size: 14px; line-height: 20px; color: var(--text-secondary); margin-top: calc(-1 * var(--spacing-03)); }
+  .tr-capcell { width: 120px; }
+  .tr-plans { display: flex; flex-direction: column; gap: var(--spacing-03); }
+  .tr-planrow { display: grid; grid-template-columns: 24px 1.6fr 1fr 1fr auto; gap: var(--spacing-03); align-items: end; padding: var(--spacing-03) var(--spacing-04); background: var(--background-surface); border: var(--border-width-1) solid var(--border-light); border-radius: var(--radius-small); animation: fh-drop-in var(--fh-d-moderate) var(--fh-e-enter); }
+  .tr-planrow.is-default { border-color: var(--border-interactive); }
+  .tr-planrow .fh-radio { margin-bottom: 10px; }
+  .tr-planmeta { grid-column: 2 / -1; font-size: 12px; line-height: 16px; color: var(--text-secondary); }
+  .tr-wl { display: flex; flex-direction: column; gap: var(--spacing-04); max-width: 560px; }
+  @media (max-width: 900px) { .tr-org__grid { grid-template-columns: 1fr; } .tr-org__nav { position: static; } .tr-planrow { grid-template-columns: 24px 1fr; } .tr-planrow > :nth-child(n+3) { grid-column: 2; } .tr-stage { padding: var(--spacing-04); } }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="fieldhouse/react.js"></script>
+<script src="fieldhouse/react-dom.js"></script>
+<script src="fieldhouse/bundle.js"></script>
+<script src="fieldhouse/proto.js"></script>
+<script>
+(function () {
+  var F = window.Fieldhouse, P = window.Proto, h = React.createElement, useState = React.useState, money = P.money;
+
+  /* ---------- Data (illustrative) ---------- */
+  var DIVS0 = [
+    { id: 'u10b', name: 'U10 Boys', fee: 695, cap: 24, reg: 18, wl: 0 },
+    { id: 'u11g', name: 'U11 Girls', fee: 695, cap: 20, reg: 20, wl: 2 },
+    { id: 'u12b', name: 'U12 Boys Gold', fee: 745, cap: 16, reg: 15, wl: 0 },
+    { id: 'u12g', name: 'U12 Girls', fee: 745, cap: 16, reg: 9, wl: 0 },
+    { id: 'u13b', name: 'U13 Boys', fee: 795, cap: 16, reg: 16, wl: 1 },
+    { id: 'u14g', name: 'U14 Girls', fee: 795, cap: 12, reg: 6, wl: 0 }
+  ];
+  var CLUB = [
+    ['t1', 'Strikers U10 Blue', 'u10b'], ['t2', 'Strikers U10 White', 'u10b'], ['t3', 'Strikers U11 Girls', 'u11g'], ['t4', 'Strikers U12 Boys', 'u12b'],
+    ['t5', 'Strikers U12 Girls Red', 'u12g'], ['t6', 'Strikers U12 Girls White', 'u12g'], ['t7', 'Strikers U13 Boys', 'u13b'], ['t8', 'Strikers U14 Girls', 'u14g']
+  ].map(function (t) { return { id: t[0], name: t[1], div: t[2] }; });
+  var PLANS0 = [
+    { id: 'full', name: 'Pay in full', deposit: 100, n: 0 },
+    { id: 'half', name: 'Deposit + balance', deposit: 50, n: 1 },
+    { id: 'three', name: 'Deposit + 2 monthly', deposit: 34, n: 2 }
+  ];
+  var DUE = ['Feb 1', 'Mar 1', 'Apr 1', 'May 1', 'Jun 1', 'Jul 1', 'Aug 1', 'Sep 1', 'Oct 1', 'Nov 1', 'Dec 1'];
+
+  function spots(d) { return d.cap - d.reg; }
+  function planText(pl, total) {
+    if (!total) return 'Nothing due today';
+    var today = Math.round(total * pl.deposit) / 100;
+    if (!pl.n) return money(total) + ' today';
+    var rest = total - today, each = Math.round(rest / pl.n * 100) / 100;
+    return money(today) + ' today, then ' + (pl.n === 1 ? money(rest) + ' on ' + DUE[0] : pl.n + ' payments of ' + money(each) + ' (' + DUE.slice(0, pl.n).join(', ') + ')');
+  }
+
+  /* ---------- Registrant: Member Portal, mobile ---------- */
+  function Registrant(p) {
+    var S = p.S, set = p.set;
+    var divById = {}; S.divs.forEach(function (d) { divById[d.id] = d; });
+    var stepIdx = { teams: 0, cart: 1, details: 2, pay: 3, done: 4 }[S.step];
+    var labels = ['Choose teams', 'Review cart', 'Team details', 'Payment', 'Done'];
+    var paid = S.cart.filter(function (c) { return !c.waitlist; });
+    var total = paid.reduce(function (a, c) { return a + divById[c.div].fee; }, 0);
+    var plan = S.plans.filter(function (x) { return x.id === S.planId; })[0] || S.plans.filter(function (x) { return x.id === S.defaultPlan; })[0] || S.plans[0];
+    function go(step) { set({ step: step }); var el = document.getElementById('tr-screen'); if (el) el.scrollTop = 0; }
+
+    var screen;
+    if (S.step === 'teams') {
+      var chosen = CLUB.filter(function (t) { return S.sel[t.id]; });
+      var inCart = {}; S.cart.forEach(function (c) { inCart[c.team] = true; });
+      screen = h(React.Fragment, null,
+        h('div', { className: 'tr-body' },
+          h('h2', null, 'Register your teams'), h('p', null, 'Pick every team you are bringing. Each one goes in the same cart.'),
+          h(F.Checkbox, { label: 'Select all ' + CLUB.length + ' teams', header: true, checked: chosen.length === CLUB.length, indeterminate: chosen.length > 0 && chosen.length < CLUB.length, onChange: function (on) { var s = {}; CLUB.forEach(function (t) { s[t.id] = on; }); set({ sel: s }); p.hot('cart'); } }),
+          h('div', null, CLUB.map(function (t) {
+            var div = S.teamDiv[t.id] || t.div, d = divById[div], full = spots(d) <= 0, isIn = inCart[t.id];
+            return h('div', { key: t.id, className: 'tr-team' },
+              h('div', { className: 'tr-team__row' }, h(F.Checkbox, { label: t.name, checked: !!S.sel[t.id], disabled: isIn, onChange: function (on) { var s = Object.assign({}, S.sel); s[t.id] = on; set({ sel: s }); p.hot('cart'); } }), isIn ? h(F.Status, { intent: 'info', size: 'small' }, 'In cart') : null),
+              S.sel[t.id] && !isIn ? h(F.Select, { size: 'medium', label: undefined, value: div, onChange: function (v) { var m = Object.assign({}, S.teamDiv); m[t.id] = v; set({ teamDiv: m }); if (spots(divById[v]) <= 0) p.hot('waitlist'); }, options: S.divs.map(function (x) { return { value: x.id, label: x.name + ' · ' + (spots(x) > 0 ? spots(x) + ' left' : 'Full, waitlist') }; }) }) : null,
+              h('div', { className: 'tr-team__div' }, h('span', null, d.name + ' · ' + money(d.fee)), full ? (S.waitlistOn ? h(F.Status, { intent: 'warning', size: 'small' }, 'Full · Waitlist') : h(F.Status, { intent: 'danger', size: 'small' }, 'Full')) : h(F.Status, { intent: spots(d) <= 2 ? 'warning' : 'success', size: 'small' }, spots(d) + (spots(d) === 1 ? ' spot left' : ' spots left'))));
+          }))),
+        h('div', { className: 'tr-sticky' },
+          h(F.Button, { type: 'filled', size: 'large', fullWidth: true, leadingIcon: 'ShoppingCart', disabled: !chosen.filter(function (t) { return !inCart[t.id]; }).length, onClick: function () {
+            var adds = chosen.filter(function (t) { return !inCart[t.id]; }).map(function (t) { var div = S.teamDiv[t.id] || t.div, d = divById[div]; return { team: t.id, name: t.name, div: div, waitlist: spots(d) <= 0 }; });
+            var blocked = adds.filter(function (a) { return a.waitlist && !S.waitlistOn; });
+            adds = adds.filter(function (a) { return !(a.waitlist && !S.waitlistOn); });
+            set({ cart: S.cart.concat(adds), sel: {} });
+            p.toast({ text: adds.length + (adds.length === 1 ? ' team' : ' teams') + ' added to cart' + (blocked.length ? '. ' + blocked.length + ' skipped: division full.' : '.'), status: blocked.length ? 'error' : 'success' });
+          } }, (function () { var n = chosen.filter(function (t) { return !inCart[t.id]; }).length; return n ? 'Add ' + n + (n === 1 ? ' team' : ' teams') + ' to cart' : 'Select teams to add'; })()),
+          S.cart.length ? h(F.Button, { type: 'outlined', size: 'large', fullWidth: true, onClick: function () { go('cart'); } }, 'Go to cart (' + S.cart.length + ')') : null));
+    } else if (S.step === 'cart') {
+      screen = h(React.Fragment, null,
+        h('div', { className: 'tr-body' },
+          h('h2', null, 'Your cart'), h('p', null, S.cart.length + (S.cart.length === 1 ? ' team' : ' teams') + ' in one checkout.'),
+          S.cart.some(function (c) { return c.waitlist; }) ? h(F.PageBanner, { status: 'info', size: 'small' }, 'Waitlisted teams are not charged. If a spot opens, you will have ' + S.claimHours + ' hours to claim it.') : null,
+          h('div', null, S.cart.map(function (c) {
+            var d = divById[c.div];
+            return h('div', { key: c.team, className: 'tr-line' }, h('div', null, h('b', null, c.name), h('small', null, d.name)),
+              h('div', { className: 'tr-line__end' }, c.waitlist ? h(F.Status, { intent: 'warning', size: 'small' }, 'Waitlist · no charge') : h('span', null, money(d.fee)),
+                h(F.Button, { type: 'link', size: 'small', onClick: function () { set({ cart: S.cart.filter(function (x) { return x.team !== c.team; }) }); } }, 'Remove')));
+          })),
+          h('div', { className: 'tr-total' }, h('span', null, 'Total'), h('b', null, money(total)))),
+        h('div', { className: 'tr-sticky' },
+          h(F.Button, { type: 'filled', size: 'large', fullWidth: true, disabled: !S.cart.length, onClick: function () { go('details'); p.hot('copy'); } }, 'Continue to team details'),
+          h(F.Button, { type: 'ghost', size: 'large', fullWidth: true, leadingIcon: 'PlusCircle', onClick: function () { go('teams'); } }, 'Add more teams')));
+    } else if (S.step === 'details') {
+      var label = S.oldLabel ? 'Name' : "Player's name (the athlete)";
+      screen = h(React.Fragment, null,
+        h('div', { className: 'tr-body' },
+          h('h2', null, 'Team details'), h('p', null, 'Add a coach for each team. Rosters can wait until after checkout.'),
+          h(F.AccordionGroup, { variant: 'padded', items: S.cart.map(function (c, i) {
+            return { title: c.name, subtitle: divById[c.div].name + (c.waitlist ? ' · Waitlist' : ''), content: h('div', { style: { display: 'flex', flexDirection: 'column', gap: 16 } },
+              h(F.TextInput, { label: 'Head coach', required: true, size: 'medium', defaultValue: i === 0 ? 'Dana Reyes' : '' , placeholder: 'Full name' }),
+              h(F.TextInput, { label: 'Coach email', size: 'medium', type: 'email', defaultValue: i === 0 ? 'dana@strikerssc.org' : '', placeholder: 'name@club.org' }),
+              i === 0 ? h(F.Accordion, { title: 'Add players now', subtitle: 'Optional. You can finish rosters later.', variant: 'condensed' },
+                h('div', { style: { display: 'flex', flexDirection: 'column', gap: 16 } },
+                  h(F.TextInput, { label: label, size: 'medium', placeholder: S.oldLabel ? '' : 'e.g. Ava Thompson', helperText: S.oldLabel ? undefined : 'The child playing, not a parent or guardian.' }),
+                  h(F.DateInput, { label: S.oldLabel ? 'Date of birth' : "Player's date of birth", size: 'medium' }))) : null) };
+          }) })),
+        h('div', { className: 'tr-sticky' }, h(F.Button, { type: 'filled', size: 'large', fullWidth: true, onClick: function () { go('pay'); p.hot('plans'); } }, 'Continue to payment')));
+    } else if (S.step === 'pay') {
+      var opts = S.plans.slice().sort(function (a, b) { return (b.id === S.defaultPlan) - (a.id === S.defaultPlan); });
+      screen = h(React.Fragment, null,
+        h('div', { className: 'tr-body' },
+          h('h2', null, 'How would you like to pay?'), h('p', null, 'Set by the organizer. Total ' + money(total) + (S.cart.some(function (c) { return c.waitlist; }) ? '; waitlisted teams are not included.' : '.')),
+          h('div', { style: { display: 'flex', flexDirection: 'column', gap: 12 } }, opts.map(function (pl) {
+            return h(F.Tile, { key: pl.id, name: 'plan', selection: 'single', size: 'condensed', selected: plan.id === pl.id, onChange: function () { set({ planId: pl.id }); }, label: pl.name, description: planText(pl, total), aside: pl.id === S.defaultPlan ? h(F.Badge, { size: 'small' }, 'Suggested') : null });
+          }))),
+        h('div', { className: 'tr-sticky' },
+          h('div', { className: 'tr-sticky__sum' }, h('span', null, 'Due today'), h('b', null, money(total ? Math.round(total * plan.deposit) / 100 : 0))),
+          h(F.Button, { type: 'filled', size: 'large', fullWidth: true, leadingIcon: 'Lock', onClick: function () {
+            var divs = S.divs.map(function (d) { var mine = S.cart.filter(function (c) { return c.div === d.id; }); return Object.assign({}, d, { reg: d.reg + mine.filter(function (c) { return !c.waitlist; }).length, wl: d.wl + mine.filter(function (c) { return c.waitlist; }).length }); });
+            set({ divs: divs, done: { teams: S.cart.length, wl: S.cart.filter(function (c) { return c.waitlist; }).length, today: total ? Math.round(total * plan.deposit) / 100 : 0, plan: plan.name }, step: 'done' });
+          } }, 'Pay and register')));
+    } else {
+      var dn = S.done;
+      screen = h('div', { className: 'tr-body tr-done' },
+        h('div', { className: 'tr-check' }, h(F.Icon, { name: 'CheckCircle', size: 36, weight: 'fill' })),
+        h('h2', null, dn.teams + (dn.teams === 1 ? ' team' : ' teams') + ' registered'),
+        h('p', { style: { margin: 0 } }, (dn.teams - dn.wl) + ' confirmed' + (dn.wl ? ', ' + dn.wl + ' on the waitlist' : '') + '. ' + money(dn.today) + ' paid today with ' + dn.plan + '.'),
+        h(F.Button, { type: 'outlined', size: 'large', onClick: function () { set({ cart: [], sel: {}, step: 'teams', planId: null }); } }, 'Register more teams'),
+        h(F.Link, { href: '#', onClick: function (e) { e.preventDefault(); p.setView('org'); p.hot('org'); } }, 'See it from the organizer side'));
+    }
+    return h('div', { className: 'tr-app' },
+      h('div', { className: 'tr-top' }, h('b', null, 'CAPITAL YOUTH SOCCER'), h('button', { type: 'button', className: 'tr-cartbtn', 'aria-label': 'Cart, ' + S.cart.length + ' teams', onClick: function () { if (S.cart.length && S.step !== 'done') go('cart'); } }, h(F.Icon, { name: 'ShoppingCart', size: 24 }), S.cart.length ? h(F.Badge, { key: S.cart.length, count: S.cart.length }) : null)),
+      S.step === 'teams' ? h('div', { className: 'tr-hero' }, h('h1', null, 'Capital Cup 2027'),
+        h('ul', null, h('li', null, h(F.Icon, { name: 'CalendarBlank', size: 16 }), 'Apr 17 to 19, 2027'), h('li', null, h(F.Icon, { name: 'MapPin', size: 16 }), 'Germantown, MD'), h('li', null, h(F.Icon, { name: 'UsersThree', size: 16 }), 'Registering as Silver Spring Strikers SC'))) : null,
+      h('div', { className: 'tr-steps', 'aria-hidden': 'true' }, [0, 1, 2, 3].map(function (i) { return h('span', { key: i, className: i <= stepIdx ? 'is-done' : '' }); })),
+      h('div', { className: 'tr-steplbl' }, S.step === 'done' ? 'Complete' : 'Step ' + (stepIdx + 1) + ' of 4 · ' + labels[stepIdx]),
+      screen);
+  }
+
+  /* ---------- Organizer: Management Console, desktop ---------- */
+  function Organizer(p) {
+    var S = p.S, set = p.set;
+    var secS = useState('divisions'), sec = secS[0], setSec = secS[1];
+    var panel;
+    if (sec === 'divisions') {
+      panel = h('div', { className: 'tr-org__panel' }, h('h2', null, 'Divisions and caps'), h('p', null, 'Cap each division by team count. When a division fills, new teams join the waitlist instead of failing at checkout.'),
+        h(F.Table, { caption: 'Divisions', rowKey: 'id', columns: [
+          { key: 'name', label: 'Division' },
+          { key: 'fee', label: 'Fee', align: 'right', render: function (r) { return money(r.fee); } },
+          { key: 'cap', label: 'Team cap', render: function (r) { return h('div', { className: 'tr-capcell' }, h(F.NumberInput, { size: 'medium', value: r.cap, min: 1, max: 64, onChange: function (v) { var n = parseInt(v, 10); if (isNaN(n)) return; set({ divs: S.divs.map(function (d) { return d.id === r.id ? Object.assign({}, d, { cap: n }) : d; }) }); p.hot('caps'); } })); } },
+          { key: 'reg', label: 'Registered', align: 'right' },
+          { key: 'wl', label: 'Waitlist', align: 'right' },
+          { key: 'st', label: 'Status', render: function (r) { var s = r.cap - r.reg; return s <= 0 ? h(F.Status, { intent: 'warning', size: 'small' }, 'Full') : h(F.Status, { intent: 'success', size: 'small' }, s + ' open'); } }
+        ], rows: S.divs }));
+    } else if (sec === 'plans') {
+      var canAdd = S.plans.length < 12;
+      panel = h('div', { className: 'tr-org__panel' }, h('h2', null, 'Payment plans'), h('p', null, 'Offer up to 12 plans. The suggested plan is preselected for clubs, which keeps checkout to one decision for most.'),
+        h('div', { className: 'tr-plans', role: 'radiogroup', 'aria-label': 'Suggested plan' }, S.plans.map(function (pl) {
+          function upd(k, v) { set({ plans: S.plans.map(function (x) { return x.id === pl.id ? Object.assign({}, x, (function () { var o = {}; o[k] = v; return o; })()) : x; }) }); }
+          return h('div', { key: pl.id, className: 'tr-planrow' + (S.defaultPlan === pl.id ? ' is-default' : '') },
+            h(F.Radio, { name: 'defplan', checked: S.defaultPlan === pl.id, onChange: function () { set({ defaultPlan: pl.id }); p.hot('plans'); }, label: undefined }),
+            h(F.TextInput, { size: 'medium', label: 'Plan name', value: pl.name, onChange: function (v) { upd('name', v); } }),
+            h(F.NumberInput, { size: 'medium', label: 'Due at checkout (%)', value: pl.deposit, min: 1, max: 100, step: 5, onChange: function (v) { var n = parseInt(v, 10); if (!isNaN(n)) upd('deposit', Math.min(100, Math.max(1, n))); } }),
+            h(F.NumberInput, { size: 'medium', label: 'Later payments', value: pl.n, min: 0, max: 11, onChange: function (v) { var n = parseInt(v, 10); if (!isNaN(n)) upd('n', Math.min(11, Math.max(0, n))); } }),
+            h(F.IconButton, { type: 'ghost', icon: 'Trash', label: 'Remove ' + pl.name, disabled: S.plans.length === 1, onClick: function () { var rest = S.plans.filter(function (x) { return x.id !== pl.id; }); set({ plans: rest, defaultPlan: S.defaultPlan === pl.id ? rest[0].id : S.defaultPlan }); } }),
+            h('div', { className: 'tr-planmeta' }, (S.defaultPlan === pl.id ? 'Suggested. ' : '') + 'For one ' + money(695) + ' team: ' + planText(pl, 695) + '.'));
+        })),
+        h('div', null, h(F.Button, { type: 'outlined', leadingIcon: 'PlusCircle', disabled: !canAdd, onClick: function () { var id = 'p' + Date.now(); set({ plans: S.plans.concat([{ id: id, name: 'New plan', deposit: 25, n: 3 }]) }); p.hot('plans'); } }, 'Add payment plan'),
+          h('div', { style: { marginTop: 8 } }, h(F.HelperText, { state: canAdd ? 'helper' : 'error', size: 'small' }, canAdd ? S.plans.length + ' of 12 plans' : 'You have reached the 12-plan limit. Remove a plan to add another.'))));
+    } else {
+      panel = h('div', { className: 'tr-org__panel' }, h('h2', null, 'Waitlist'), h('p', null, 'Replace the spreadsheets organizers kept by hand.'),
+        h('div', { className: 'tr-wl' },
+          h(F.Switch, { label: 'Let teams join a waitlist when a division is full', checked: S.waitlistOn, onChange: function (v) { set({ waitlistOn: v }); p.hot('waitlist'); } }),
+          h(F.Select, { label: 'When a spot opens', disabled: !S.waitlistOn, value: S.offerMode, onChange: function (v) { set({ offerMode: v }); }, options: [{ value: 'auto', label: 'Offer it to the next team automatically' }, { value: 'manual', label: 'Ask me to approve each offer' }] }),
+          h(F.NumberInput, { label: 'Hours a team has to claim the spot', value: S.claimHours, min: 1, max: 168, disabled: !S.waitlistOn, helperText: 'Shown to clubs in their cart.', onChange: function (v) { var n = parseInt(v, 10); if (!isNaN(n)) set({ claimHours: n }); } }),
+          h(F.PageBanner, { status: 'info', size: 'small', title: 'From post-launch feedback' }, 'Organizers said notification timing needs work for last-minute openings. A shorter claim window for spots that open within a week of the event is the next iteration.')));
+    }
+    return h('div', { className: 'tr-org' },
+      h('div', { className: 'tr-org__head' }, h('h1', null, 'Capital Cup 2027'), h('p', null, 'Program settings · Tournament · Apr 17 to 19, 2027')),
+      h('div', { className: 'tr-org__grid' },
+        h('div', { className: 'tr-org__nav' }, h(F.AnchorTabs, { label: 'Settings sections', value: sec, onChange: setSec, items: [{ value: 'divisions', label: 'Divisions and caps' }, { value: 'plans', label: 'Payment plans' }, { value: 'waitlist', label: 'Waitlist' }] })),
+        panel));
+  }
+
+  var NOTES = [
+    { id: 'cart', title: 'A bulk cart, not one team per checkout', body: 'Organizers often registered returning teams on behalf of busy coaches, one checkout at a time. A shared cart turned that into one session: after launch, one partner registered 96 teams in 30 minutes, down from over 8 hours.', tryIt: 'select all teams and add them in one tap.' },
+    { id: 'waitlist', title: 'Caps with a native waitlist', body: 'Full divisions stop silently failing. The team goes on the waitlist at no charge, and the organizer decides how spots are offered.', tryIt: 'add Strikers U11 Girls; its division is full.' },
+    { id: 'copy', title: 'One label fixed the most common error', body: 'In testing, registrants typed their own details where organizers expected the child’s. Renaming the field nearly eliminated the error.', tryIt: 'open Add players now on the Team details step, then flip the switch below.' },
+    { id: 'plans', title: 'Up to 12 plans, one suggested', body: 'Organizers wanted flexible installments; more choice risks paralysis. Plans are capped at 12 and the organizer’s suggested plan is preselected and listed first.', tryIt: 'switch to Organizer, mark a different plan as suggested, then come back to Payment.' },
+    { id: 'mobile', title: 'Mobile-first, open layout', body: 'Nearly every critical action happened on a phone at a field. The registrant flow is one column with a sticky action bar and no nested boxes; advanced details are disclosed only when needed.' },
+    { id: 'org', title: 'Two products, two themes', body: 'Clubs register in the Member Portal, in the partner’s colors. Organizers configure in the Management Console. Both run on Fieldhouse, so one change to caps or plans shows up on both sides.', tryIt: 'finish a registration, then switch to Organizer to see counts update.' }
+  ];
+
+  function App() {
+    var vS = useState('club'), view = vS[0], setView = vS[1];
+    var sS = useState({ step: 'teams', sel: {}, teamDiv: {}, cart: [], divs: DIVS0, plans: PLANS0, defaultPlan: 'full', planId: null, waitlistOn: true, offerMode: 'auto', claimHours: 48, oldLabel: false, done: null }), S = sS[0], setS = sS[1];
+    var hotS = useState(null), hot = hotS[0], setHot = hotS[1];
+    var t = P.useToasts(), host = t[0], toast = t[1];
+    function set(patch) { setS(function (s) { return Object.assign({}, s, patch); }); }
+    var notes = NOTES.map(function (n) { return n.id === 'copy' ? Object.assign({}, n, { extra: h(F.Switch, { label: 'Show the original label', checked: S.oldLabel, onChange: function (v) { set({ oldLabel: v }); setHot('copy'); } }) }) : n; });
+    var tools = h('div', { className: 'px-seg', role: 'group', 'aria-label': 'View as' },
+      h('button', { type: 'button', 'aria-pressed': view === 'club', onClick: function () { setView('club'); } }, 'Club director'),
+      h('button', { type: 'button', 'aria-pressed': view === 'org', onClick: function () { setView('org'); setHot('org'); } }, 'Organizer'));
+    var stage = view === 'club'
+      ? h('div', { className: 'tr-stage tr-phone-stage px-phone-stage', 'data-theme': 'member' }, h(P.Phone, { label: 'Club director registration, Member Portal', id: 'tr-screen' }, h(Registrant, { S: S, set: set, toast: toast, hot: setHot, setView: setView })))
+      : h('div', { className: 'tr-stage', 'data-theme': 'mgmt', style: { background: 'var(--background-page-default)' } }, h(Organizer, { S: S, set: set, hot: setHot }));
+    return h(P.Shell, { title: 'Tournament Engine', subtitle: 'Bulk registration, caps, waitlists and payment plans', backHref: '/#work-tournaments', hot: hot, tools: tools,
+      notesIntro: 'The case study decisions, working. Switch between the club director registering teams and the organizer configuring the tournament; both share one state.', notes: notes }, stage, host);
+  }
+  ReactDOM.createRoot(document.getElementById('app')).render(h(App));
+})();
+</script>
+</body>
+</html>

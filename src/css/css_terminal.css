@@ -1,0 +1,247 @@
+/* Blackwell/OS terminal portfolio: styles
+
+   TYPE SCALE: two families, five sizes, two weights. Nothing else.
+     Display  VT323          --fs-1  page titles
+                             --fs-2  section headings, ledes, figures
+                             --fs-3  subheadings, status bars
+     Text     IBM Plex Mono  --fs-body  all reading text (400, 600 for emphasis)
+                             --fs-small labels (uppercase), captions, notes
+   Demos are real product UI and use DM Sans inside their own window. */
+:root{
+  --ph:#3dff74;
+  --ph-rgb:61,255,116;
+  --bg:#020904;
+  --dim:rgba(var(--ph-rgb),.68);
+  --faint:rgba(var(--ph-rgb),.22);
+  --glow:0 0 1px rgba(var(--ph-rgb),.9),0 0 7px rgba(var(--ph-rgb),.38);
+  --display:"VT323",ui-monospace,monospace;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --fs-1:clamp(40px,5.4vw,60px);
+  --fs-2:30px;
+  --fs-3:22px;
+  --fs-body:15px;
+  --fs-small:13px;
+  --track:.08em;
+  --measure:70ch;
+}
+html[data-phosphor="amber"]{--ph:#ffb22e;--ph-rgb:255,178,46;--bg:#0a0602}
+html[data-phosphor="white"]{--ph:#e4efe7;--ph-rgb:228,239,231;--bg:#07090a}
+/* Retro "Weather Channel" theme: deep-blue broadcast panels, gold header bars,
+   white type with a hard drop shadow, yellow highlight for the current item. */
+html[data-phosphor="weather"]{--ph:#ffffff;--ph-rgb:255,255,255;--bg:#1b2478;--wx-gold:#ffd23f;--wx-panel:#24309a;--wx-edge:#8c9cff;
+  --dim:#c7d0ff;--faint:rgba(170,184,255,.45);--glow:2px 2px 0 rgba(4,6,40,.9)}
+html[data-phosphor="weather"] body{background:linear-gradient(180deg,#121a5c 0,#1b2478 40%,#2a2a8f 100%) fixed}
+html[data-phosphor="weather"] .bar{background:linear-gradient(180deg,#ffb12e 0%,#e07a0c 55%,#a94c00 100%);color:#fff;text-shadow:2px 2px 0 #4a1e00;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 0 rgba(0,0,0,.25)}
+html[data-phosphor="weather"] .bar a:hover,html[data-phosphor="weather"] .bar a:focus-visible,html[data-phosphor="weather"] .bar button:hover,html[data-phosphor="weather"] .bar button:focus-visible{background:#1b2478;color:var(--wx-gold);text-shadow:none}
+html[data-phosphor="weather"] .top{border-top-color:#121a5c}
+html[data-phosphor="weather"] .foot{background:#26288c}
+html[data-phosphor="weather"] .name,html[data-phosphor="weather"] .screen-title,html[data-phosphor="weather"] h3,html[data-phosphor="weather"] .lede{color:var(--wx-gold)}
+html[data-phosphor="weather"] .opt.sel,html[data-phosphor="weather"] .opt.sel:hover{background:var(--wx-gold);color:#121a5c;text-shadow:none}
+html[data-phosphor="weather"] .opt.sel .meta,html[data-phosphor="weather"] .opt.sel .lead{color:#121a5c}
+html[data-phosphor="weather"] .card,html[data-phosphor="weather"] .callout{background:linear-gradient(180deg,#2c3aa8,#1f2a86);border:2px solid var(--wx-edge);
+  box-shadow:inset 1px 1px 0 rgba(255,255,255,.25),3px 3px 0 rgba(4,6,40,.6)}
+html[data-phosphor="weather"] .crt::after{background:radial-gradient(ellipse at center,rgba(0,0,0,0) 62%,rgba(0,0,20,.45) 100%)}
+html[data-phosphor="weather"] .cmd .cursor{background:var(--wx-gold);box-shadow:none}
+html[data-phosphor="weather"] ::selection{background:var(--wx-gold);color:#121a5c}
+
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg)}
+body{color:var(--ph);font:400 var(--fs-body)/1.6 var(--mono);text-shadow:var(--glow);-webkit-font-smoothing:antialiased}
+::selection{background:var(--ph);color:var(--bg);text-shadow:none}
+b,strong{font-weight:600}
+em,i{font-style:normal}
+
+/* ---------- CRT layers ---------- */
+.crt::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:20;
+  background:repeating-linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,0) 2px,rgba(0,0,0,.28) 3px)}
+.crt::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:21;
+  background:radial-gradient(ellipse at center,rgba(0,0,0,0) 58%,rgba(0,0,0,.55) 100%)}
+.crt .frame{animation:flicker 6s infinite steps(1)}
+@keyframes flicker{0%,100%{opacity:1}47%{opacity:.985}48%{opacity:.96}49%{opacity:1}}
+@keyframes blink{50%{opacity:0}}
+html[data-scanlines="off"] .crt::before,html[data-scanlines="off"] .crt::after{display:none}
+html[data-scanlines="off"] .crt .frame{animation:none}
+@media (prefers-reduced-motion:reduce){.crt .frame{animation:none}.cursor,.boot-cursor{animation:none!important}}
+
+/* ---------- layout ---------- */
+.frame{min-height:100vh;display:flex;flex-direction:column;max-width:1080px;margin:0 auto;padding:0 28px}
+main{flex:1;padding:34px 12px 24px;outline:none}
+.skip{position:absolute;left:-9999px;top:8px;z-index:40;background:var(--ph);color:var(--bg);padding:8px 12px;text-shadow:none}
+.skip:focus{left:8px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- display type ---------- */
+h1,h2,h3,h4,h5{margin:0;font-weight:400}
+.name,.screen-title{font:400 var(--fs-1)/.95 var(--display);letter-spacing:.02em}
+.name{margin:0 0 22px;max-width:24ch}
+.screen-title{margin:0 0 8px}
+h3,.lede{font:400 var(--fs-2)/1.05 var(--display);letter-spacing:.03em}
+h3{margin:34px 0 12px}
+.lede{margin:0 0 18px}
+.case-lede{max-width:32ch}
+@media (min-width:641px){.lede:not(.case-lede){white-space:nowrap}}
+.sub-h{font:400 var(--fs-3)/1.1 var(--display);letter-spacing:.04em;text-transform:uppercase;margin:28px 0 10px}
+
+/* ---------- text ---------- */
+p{margin:0 0 14px;max-width:var(--measure)}
+.sub{color:var(--dim);margin:0 0 26px;max-width:68ch}
+.dim{color:var(--dim)}
+a{color:var(--ph)}
+a:hover{background:var(--ph);color:var(--bg);text-shadow:none}
+code{font-family:var(--mono);background:rgba(var(--ph-rgb),.12);padding:0 4px}
+.rule{border:0;border-top:1px dashed var(--faint);margin:28px 0}
+
+/* small text: one size; labels add uppercase + tracking */
+.lbl,.crumb,.case-tags,.record dt,.jobs th,.jobs .org,.quote figcaption,.hint,.msg,.opt .meta{
+  font-size:var(--fs-small);letter-spacing:var(--track);text-transform:uppercase;color:var(--dim)}
+.opt-desc,.fig figcaption,.fig-cap,.stat span,.dm-small{font-size:var(--fs-small);color:var(--dim);line-height:1.5}
+.lbl{display:block;margin:0 0 6px}
+.case-tags{margin:0 0 24px}
+.hint{margin:10px 0 0}
+.crumb{margin:0 0 10px}
+.crumb a{color:inherit}
+.menu-h{margin:30px 0 4px}
+.menu-h + .hint{margin:0 0 10px}
+.case-sec.solo{margin-bottom:0}
+.case-sec.solo > .screen-title{margin-bottom:18px}
+
+/* ---------- menu rows ---------- */
+.menu{list-style:none;margin:0;padding:0;max-width:820px}
+.menu li{margin:0}
+.opt{all:unset;box-sizing:border-box;display:flex;align-items:baseline;gap:14px;width:100%;padding:9px 12px;min-height:44px;cursor:pointer;
+  font:400 var(--fs-body)/1.5 var(--mono);color:var(--ph);text-shadow:var(--glow)}
+a.opt{text-decoration:none}
+.opt .key{font-weight:600;flex:none;width:3.2ch}
+.opt .label{flex:none;letter-spacing:var(--track);text-transform:uppercase}
+.opt .lead{flex:1;overflow:hidden;white-space:nowrap;color:var(--faint);min-width:2ch}
+.opt .lead::before{content:"........................................................................................................................................"}
+.opt .meta{flex:none}
+.opt .meta.raw{text-transform:none;letter-spacing:0}
+.opt:focus{outline:none}
+.opt:hover{background:transparent;color:var(--ph);text-shadow:var(--glow)}
+.opt.sel,.opt.sel:hover,html:not(.js) .opt:hover{background:var(--ph);color:var(--bg);text-shadow:none}
+.opt.sel .meta,.opt.sel .lead,html:not(.js) .opt:hover .meta,html:not(.js) .opt:hover .lead{color:var(--bg)}
+.opt-desc{display:block;padding:0 12px 10px calc(12px + 3.2ch + 14px);max-width:75ch}
+
+/* ---------- records and lists ---------- */
+.record{display:grid;grid-template-columns:max-content 1fr;gap:6px 24px;margin:0 0 8px;max-width:820px}
+.record dt{padding-top:2px}
+.record dd{margin:0}
+/* titled items (principles, problem lists, states): title over text, never two columns */
+.record.wide{display:block;margin:0 0 18px}
+.record.wide dt{font-size:var(--fs-body);letter-spacing:0;text-transform:none;color:var(--ph);font-weight:600;padding:0}
+.record.wide dd{margin:0 0 14px;max-width:var(--measure)}
+.lines{list-style:none;margin:0 0 16px;padding:0;max-width:72ch}
+.lines li{padding-left:2.4ch;text-indent:-2.4ch;margin-bottom:6px}
+.lines li::before{content:"> ";color:var(--dim)}
+.lines li > *{text-indent:0}
+
+/* ---------- case files ---------- */
+.case-sec{max-width:880px;margin-bottom:8px;outline:none;scroll-margin-top:24px}
+.case-sec:focus-visible > h3{background:var(--ph);color:var(--bg);text-shadow:none;box-shadow:-8px 0 0 var(--ph),8px 0 0 var(--ph)}
+.callout{border:1px solid var(--faint);padding:14px 18px 2px;margin:0 0 18px;max-width:76ch}
+.cards{display:grid;grid-template-columns:1fr;gap:14px;margin:0 0 18px;max-width:880px}
+.card{border:1px dashed var(--faint);padding:14px 18px 2px;margin:0 0 14px;min-width:0}
+.cards .card{margin:0}
+.card h5{font:600 var(--fs-body)/1.4 var(--mono);text-transform:uppercase;letter-spacing:var(--track);margin:0 0 8px}
+.card .fig{margin:-4px -8px 12px}
+.quote{margin:0 0 18px;max-width:72ch}
+.quote blockquote{margin:0;padding-left:2ch;text-indent:-1ch}
+.quote blockquote::before{content:"\201C"}
+.quote blockquote::after{content:"\201D"}
+.quote figcaption{margin-top:6px;padding-left:2ch}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px 22px;margin:0 0 22px}
+.stat b{display:block;font:400 var(--fs-2)/1 var(--display);letter-spacing:.02em;margin-bottom:4px}
+.stat span{display:block}
+/* "Run demo" actions: open the demo at the moment the text describes */
+.try{margin:2px 0 16px;max-width:none}
+.card .try{margin:4px 0 14px}
+.run-link{display:inline-block;font-size:var(--fs-small);font-weight:600;letter-spacing:var(--track);text-transform:uppercase;
+  text-decoration:none;border:1px solid var(--ph);padding:7px 12px;min-height:32px;line-height:1.4}
+.run-link:hover,.run-link:focus-visible{background:var(--ph);color:var(--bg);text-shadow:none;outline:none}
+
+/* ---------- figures: the work keeps its real colors ---------- */
+.fig{margin:0 0 20px}
+.fig a.zoom{display:block;cursor:zoom-in;background:none}
+.fig a.zoom:hover{background:none}
+.fig img{display:block;width:100%;height:auto;border:1px solid var(--faint);background:#fff}
+.fig a.zoom:hover img,.fig a.zoom:focus-visible img{border-color:var(--ph)}
+.fig a.zoom:focus-visible{outline:2px solid var(--ph);outline-offset:3px}
+.fig figcaption{margin-top:8px;text-shadow:none}
+.fig-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:0 0 8px}
+.fig-grid .fig{margin:0}
+.fig-cap{margin:0 0 20px}
+.case-hero{margin-bottom:26px}
+#viewer{position:fixed;inset:0;z-index:26;background:rgba(0,0,0,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:56px 24px 24px;cursor:zoom-out}
+#viewer[hidden]{display:none}
+#viewer figure{margin:0;max-width:100%;text-align:center}
+#viewer img{max-width:min(1400px,94vw);max-height:80vh;width:auto;height:auto;display:block;margin:0 auto;border:1px solid var(--faint);background:#fff}
+#viewer figcaption{margin-top:12px;font-size:var(--fs-small);color:var(--dim)}
+.viewer-close{all:unset;position:absolute;top:16px;right:20px;cursor:pointer;font:400 var(--fs-3)/1 var(--display);color:var(--bg);background:var(--ph);padding:6px 10px;text-shadow:none}
+.viewer-close:focus-visible{outline:2px solid var(--ph);outline-offset:3px}
+
+/* ---------- resume ---------- */
+.jobs{width:100%;max-width:880px;border-collapse:collapse;margin:0 0 10px}
+.jobs th{text-align:left;font-weight:400;padding:0 0 8px;border-bottom:1px dashed var(--faint)}
+.jobs th:last-child,.jobs td.dates{text-align:right}
+.jobs td{padding:12px 0;border-bottom:1px dashed var(--faint);vertical-align:top}
+.jobs b{display:block}
+.jobs td.dates{white-space:nowrap;padding-left:20px;color:var(--dim)}
+
+/* ---------- status bars, command line ---------- */
+.bar{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font:400 var(--fs-3)/1 var(--display);letter-spacing:.04em;
+  padding:10px 12px 8px;background:var(--ph);color:var(--bg);text-shadow:none}
+.bar span{white-space:nowrap}
+.bar a,.bar button{color:inherit;text-decoration:none;padding:0 2px;font:inherit;letter-spacing:inherit;background:none;border:0;cursor:pointer}
+.bar a:hover,.bar a:focus-visible,.bar button:hover,.bar button:focus-visible{background:var(--bg);color:var(--ph);outline:none}
+/* sticky frame: status bar on top, command line + function keys on the bottom */
+.top{position:sticky;top:0;z-index:10;border-top:20px solid var(--bg);background-clip:padding-box}
+.foot{position:sticky;bottom:0;z-index:10;background:var(--bg);padding-bottom:20px}
+html{scroll-padding:84px 0 150px}
+.cmd{display:flex;align-items:center;gap:10px;padding:14px 12px;border-top:1px solid var(--faint)}
+.cmd label{flex:none;font-weight:600}
+.cmd input{all:unset;width:1ch;max-width:70%;color:var(--ph);text-shadow:var(--glow);caret-color:transparent;text-transform:uppercase;font:400 var(--fs-body) var(--mono)}
+.cmd .cursor{display:inline-block;width:.6em;height:1.1em;background:var(--ph);box-shadow:var(--glow);animation:blink 1.05s steps(1) infinite;margin-left:-6px}
+.cmd input:not(:focus) + .cursor{opacity:.35;animation:none}
+.msg{padding:0 12px 10px;min-height:1.6em}
+html:not(.js) .cmd,html:not(.js) .msg,html:not(.js) .keys-only{display:none}
+
+/* ---------- start screen ---------- */
+#boot{position:fixed;inset:0;background:var(--bg);z-index:19;padding:40px;overflow:hidden;cursor:pointer}
+#boot[hidden]{display:none}
+#boot-log{margin:0;font:inherit;white-space:pre-wrap}
+#boot-go{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:8px;margin-top:6px;padding:6px 0;min-height:44px;
+  font:400 var(--fs-2)/1 var(--display);color:var(--ph);text-shadow:var(--glow);letter-spacing:.04em}
+#boot-go:focus-visible{outline:none}
+#boot-go[hidden]{display:none}
+.boot-cursor{display:inline-block;width:.5em;height:.8em;background:var(--ph);box-shadow:var(--glow);animation:blink 1.05s steps(1) infinite}
+
+/* ---------- small screens ---------- */
+@media (max-width:640px){
+  :root{--fs-1:40px;--fs-2:26px;--fs-3:18px;--fs-body:14px;--fs-small:12px}
+  .frame{padding:0 10px}
+  .bar .hide-sm{display:none}
+  .opt{flex-wrap:wrap;gap:4px 10px}
+  .opt .lead{display:none}
+  .opt .meta{width:100%;padding-left:calc(3.2ch + 10px)}
+  .opt-desc{padding-left:12px}
+  .record{grid-template-columns:1fr;gap:0}
+  .record dd{margin-bottom:10px}
+  .fig-grid{grid-template-columns:1fr}
+  .cards{grid-template-columns:1fr}
+  .jobs td.dates{white-space:normal}
+}
+
+/* persona cards: portrait as a small thumbnail beside the role */
+.card > .fig:first-child{width:72px;margin:0 0 10px}
+.card > .fig:first-child img{aspect-ratio:1;object-fit:cover}
+@media (max-width:640px){
+  .top{border-top-width:10px}
+  .top #clock{display:none}
+  .foot{padding-bottom:10px}
+  .foot .cmd{padding:8px 12px}
+  .foot .msg{padding-bottom:6px}
+  html{scroll-padding:60px 0 130px}
+}
+.screen-title + .jobs{margin-top:26px}

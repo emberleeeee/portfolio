@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Background | Tournament Engine | Emily Blackwell</title>
+<meta name="description" content="When LeagueApps underwent a company-wide reduction in force, I inherited leadership of two major product squads: Payments and Program Registration.">
+<link rel="canonical" href="https://design.emilyblackwell.com/tournaments-case-study-background.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Background | Tournament Engine | Emily Blackwell">
+<meta property="og:description" content="When LeagueApps underwent a company-wide reduction in force, I inherited leadership of two major product squads: Payments and Program Registration.">
+<meta property="og:url" content="https://design.emilyblackwell.com/tournaments-case-study-background.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;family=VT323&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/terminal.css">
+<script>document.documentElement.classList.add("js");try{var p=localStorage.getItem("bos-ph"),s=localStorage.getItem("bos-scan");if(p)document.documentElement.dataset.phosphor=p;if(s)document.documentElement.dataset.scanlines=s}catch(e){}</script>
+</head>
+<body class="crt" data-screen="WORK.TOURNAMENTS/BACKGROUND" data-parent="tournaments-case-study.html" data-kind="case" data-program="tournaments" data-prev="tournaments-case-study.html" data-next="tournaments-case-study-users-context.html">
+<a class="skip" href="#screen">Skip to content</a>
+<div id="prog" role="dialog" aria-modal="true" aria-labelledby="prog-title" hidden>
+  <div class="prog-bar">
+    <span id="prog-title">RUNNING</span>
+    <span class="btns"><button type="button" id="prog-reset">RESET</button><button type="button" id="prog-exit">EXIT (ESC)</button></span>
+  </div>
+  <div class="prog-hint" id="prog-hint"></div>
+  <div class="prog-body">
+    <div class="prog-win" id="prog-win"></div>
+    <aside class="prog-notes" id="prog-notes" aria-label="Design notes"></aside>
+  </div>
+</div>
+<div class="frame">
+  <!-- chrome:top -->
+  <header class="bar top">
+    <span>BLACKWELL/OS 2.6</span>
+    <span id="where" class="hide-sm">WORK.TOURNAMENTS/BACKGROUND</span>
+    <span id="clock" aria-hidden="true"></span>
+  </header>
+  <!-- /chrome:top -->
+
+  <main id="screen" tabindex="-1">
+    <p class="crumb"><a href="tournaments-case-study.html">TOURNAMENT ENGINE</a> / SECTION 01 OF 06</p>
+    <section class="case-sec solo" id="background" aria-labelledby="background-h">
+      <h2 class="screen-title" id="background-h">BACKGROUND</h2>
+      <p>When LeagueApps underwent a company-wide reduction in force, I inherited leadership of two major product squads: <b>Payments</b> and <b>Program Registration</b>. My focus quickly shifted to the tournaments initiative — the highest-priority opportunity to capture share in the competitive youth sports market.</p><p>At the time, the platform only supported completing one team registration at a time and lacked mobile optimization. We needed to reimagine the system from the ground up: a scalable, mobile-first experience supporting bulk team registration, complex pricing logic, and seamless payments.</p><div class="callout"><span class="lbl">Technical Context: OG → NG Migration</span><p>LeagueApps was mid-transition between its legacy (OG) and Next-Gen (NG) platform architectures. Data synchronization between the two environments introduced real complexity — requiring surgical precision in both design and engineering decisions at every step.</p></div>
+    </section>
+    <hr class="rule">
+    <ul class="menu">
+      <li><a class="opt" href="tournaments-case-study-users-context.html" data-key="N"><span class="key">[N]</span><span class="label">Next: Users & Context</span><span class="lead" aria-hidden="true"></span><span class="meta">02/06</span></a></li>
+      <li><a class="opt" href="tournaments-case-study.html" data-key="C"><span class="key">[C]</span><span class="label">Back to case file</span><span class="lead" aria-hidden="true"></span><span class="meta">Tournament Engine</span></a></li>
+      <li><button class="opt" type="button" data-key="R" data-act="run:tournaments"><span class="key">[R]</span><span class="label">Run interactive demo</span><span class="lead" aria-hidden="true"></span><span class="meta">Live</span></button></li>
+    </ul>
+  </main>
+
+  <!-- chrome:bottom -->
+  <div class="foot">
+  <form class="cmd" id="cmdform" autocomplete="off">
+    <label for="cmd">COMMAND ===&gt;</label>
+    <input id="cmd" name="cmd" spellcheck="false" aria-describedby="msg">
+    <span class="cursor" aria-hidden="true"></span>
+  </form>
+  <div class="msg" id="msg" role="status">PRESS / TO TYPE A COMMAND. TYPE HELP FOR A LIST.</div>
+  <nav class="bar bottom" aria-label="Function keys">
+    <span><a href="tournaments-case-study.html" data-back>ESC=BACK</a></span>
+    <span class="hide-sm keys-only">&uarr;&darr;=SELECT &nbsp;ENTER=OPEN</span>
+    <span><a href="index.html">H=HOME</a></span>
+    <span><a href="help.html">?=HELP</a></span>
+  </nav>
+  </div>
+  <!-- /chrome:bottom -->
+</div>
+<script src="js/demos.js"></script>
+<script src="js/terminal.js"></script>
+</body>
+</html>

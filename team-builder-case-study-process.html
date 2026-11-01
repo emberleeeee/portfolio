@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Process | Team Builder | Emily Blackwell</title>
+<meta name="description" content="Defining the key mental models.">
+<link rel="canonical" href="https://design.emilyblackwell.com/team-builder-case-study-process.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Process | Team Builder | Emily Blackwell">
+<meta property="og:description" content="Defining the key mental models.">
+<meta property="og:url" content="https://design.emilyblackwell.com/team-builder-case-study-process.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;family=VT323&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;family=IBM+Plex+Sans+Condensed:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/terminal.css">
+<script>document.documentElement.classList.add("js");try{var p=localStorage.getItem("bos-ph"),s=localStorage.getItem("bos-scan");if(p)document.documentElement.dataset.phosphor=p;if(s)document.documentElement.dataset.scanlines=s}catch(e){}</script>
+</head>
+<body class="crt" data-screen="WORK.TEAM-BUILDER/PROCESS" data-parent="team-builder-case-study.html" data-kind="case" data-program="team-builder" data-prev="team-builder-case-study-key-constraints-system-reality.html" data-next="team-builder-case-study-outcome.html">
+<a class="skip" href="#screen">Skip to content</a>
+<div id="prog" role="dialog" aria-modal="true" aria-labelledby="prog-title" hidden>
+  <div class="prog-bar">
+    <span id="prog-title">RUNNING</span>
+    <span class="btns"><button type="button" id="prog-reset">RESET</button><button type="button" id="prog-exit">EXIT (ESC)</button></span>
+  </div>
+  <div class="prog-hint" id="prog-hint"></div>
+  <div class="prog-body">
+    <div class="prog-win" id="prog-win"></div>
+    <aside class="prog-notes" id="prog-notes" aria-label="Design notes"></aside>
+  </div>
+</div>
+<div class="frame">
+  <!-- chrome:top -->
+  <header class="bar top">
+    <span>BLACKWELL/OS 2.6</span>
+    <span id="where" class="hide-sm">WORK.TEAM-BUILDER/PROCESS</span>
+    <span id="clock" aria-hidden="true"></span>
+  </header>
+  <!-- /chrome:top -->
+
+  <main id="screen" tabindex="-1">
+    <p class="crumb"><a href="team-builder-case-study.html">TEAM BUILDER</a> / SECTION 04 OF 06</p>
+    <section class="case-sec solo" id="process" aria-labelledby="process-h">
+      <h2 class="screen-title" id="process-h">PROCESS</h2>
+      <h4 class="sub-h">Design Philosophies</h4><dl class="record wide"><dt>Design for real-world complexity</dt><dd>Team formation is inherently messy. We prioritized flexibility, partial progress, and reversibility over rigid, idealized workflows.</dd><dt>Reduce cognitive load at critical moments</dt><dd>High-stakes actions — invites, role assignment, finalization — were designed to be clear, focused, and time-efficient through progressive disclosure.</dd><dt>Favor adaptable systems over one-off flows</dt><dd>Rather than optimize for a single club model, we designed shared primitives that could support multiple organizational structures and evolve over time.</dd><dt>Make system state explicit</dt><dd>Draft vs. saved states, permissions, and visibility were treated as first-class concerns to reduce uncertainty and support confident action.</dd><dt>Build trust at business/user intersections</dt><dd>Monetization-adjacent moments were designed to feel predictable and fair, reinforcing user confidence while supporting completion and revenue outcomes.</dd><dt>Design with delivery in mind</dt><dd>Close collaboration with engineering ensured solutions were feasible, maintainable, and scalable — without compromising core UX intent.</dd></dl><p><b>Defining the key mental models.</b> Through discovery and ongoing feedback, it became clear that admins approach roster building with different mental models — often within the same session:</p><ul class="lines"><li>"I'm just rearranging players on teams."</li><li>"I'm assigning players but will invite them later."</li><li>"I'm finalizing rosters and sending offers now."</li></ul><p>The system, however, must distinguish between moves (same-program changes), invites (cross-program actions), and draft assignments vs. committed actions. A major design goal was to make the system's interpretation of admin intent visible and predictable — without forcing admins to think in system terms.</p><p><b>Defining the MVP.</b> I collaborated with my product manager and engineering manager to phase the rollout:</p><div class="cards"><div class="card"><span class="lbl">Phase 1 · MVP</span><h5>Recreational League Roster Formation</h5><ul class="lines"><li>Launch directly from the program dashboard</li><li>Drag-and-drop players between multiple teams</li><li>View roster capacities and duplicate warnings inline</li><li>Filter by custom form responses</li></ul><p class="try"><a class="run-link" data-scene="capacity" href="#run-capacity"><span aria-hidden="true">&gt;&gt; </span>RUN DEMO: Overfill a team and see the inline warning</a></p></div><div class="card"><span class="lbl">Phase 2</span><h5>Club-Level Team Management</h5><ul class="lines"><li>Create new teams from scratch</li><li>Import players from past seasons</li><li>Invite players to join new teams</li><li>Autofill rosters using AI suggestions and bulk messaging</li></ul></div></div><h4 class="sub-h">Key Design Decisions &amp; Tradeoffs</h4><div class="cards"><div class="card"><h5>Auto-detect "Move" vs. "Invite"</h5><span class="lbl">Why</span><p>Admins should not have to decide the technical difference between moving a registration and inviting a player.</p><span class="lbl">Tradeoff</span><p>Required extremely clear status indicators and review steps so admins understood the consequences of each assignment.</p><p class="try"><a class="run-link" data-scene="move-invite" href="#run-move-invite"><span aria-hidden="true">&gt;&gt; </span>RUN DEMO: See a move and an invite detected for you</a></p></div><div class="card"><h5>Draft-first, irreversible-last</h5><span class="lbl">Why</span><p>Roster formation is iterative, and premature execution would cause confusion and player churn.</p><span class="lbl">Tradeoff</span><p>Created complexity in how draft states interact with the legacy Invite-to-Join tool, which does not support drafts.</p><p class="try"><a class="run-link" data-scene="" href="#run"><span aria-hidden="true">&gt;&gt; </span>RUN DEMO: Draft rosters without sending anything</a></p></div><div class="card"><h5>Review actions in a slide-out, not inline</h5><span class="lbl">Why</span><p>Inline warnings would overwhelm the primary task and interrupt flow.</p><span class="lbl">Tradeoff</span><p>Had to carefully communicate that some actions (like revoking an invite) still have immediate consequences even from the review surface.</p><p class="try"><a class="run-link" data-scene="review" href="#run-review"><span aria-hidden="true">&gt;&gt; </span>RUN DEMO: Review moves, invitations and sent invites before finalizing</a></p></div><div class="card"><h5>No inline undo in the review surface</h5><span class="lbl">Why</span><p>Undoing actions at the review stage risks obscuring the true system state, especially when registrations or invitations are involved.</p><span class="lbl">Tradeoff</span><p>Slightly higher friction, but significantly reduced risk of silent errors. Admins must correct mistakes directly in Team Builder.</p></div></div><p><b>Invitation Lifecycle &amp; Guardrails.</b> To reduce ambiguity, players in Team Builder clearly surface one of several states:</p><dl class="record wide"><dt>Invite Needed</dt><dd>Assigned to a team but not yet invited</dd><dt>Pending</dt><dd>Invitation sent, awaiting response</dd><dt>Registered</dt><dd>Invitation accepted and registration completed</dd></dl><p class="try"><a class="run-link" data-scene="statuses" href="#run-statuses"><span aria-hidden="true">&gt;&gt; </span>RUN DEMO: See every invitation state on one board</a></p><ul class="lines"><li>Automatic invalidation of invitations when players are reassigned</li><li>Visual warnings when actions will revoke invites or cancel registrations</li><li>Clear separation between draft assignments and sent invitations</li></ul><div class="callout"><p>This approach prioritizes transparency over cleverness — ensuring admins understand what the system will do before it happens.</p></div><p><b>Collaboration &amp; Implementation.</b> We maintained a cadence of biweekly feedback sessions tailored to different audiences: design, engineering, customer success, and leadership. A key internal debate emerged around the default state of Team Builder: should users start with an empty interface or a populated set of teams?</p><p>I facilitated a journey mapping exercise that revealed admins typically created teams before entering Team Builder. This led to the final decision: display the ten most recently created teams by default, giving Rec admin users immediate context without overwhelming them. Club programs only ever created 3–5 teams, so they'd only see what they needed.</p><p>Engineering collaboration was close and constant. We conducted "boxing" sessions to create detailed mappings of design elements to backend APIs, annotating every prototype for handoff. Auto-save wasn't feasible for MVP, so I introduced a destructive modal to prevent accidental data loss when navigating away — and proposed auto-save as a fast-follow enhancement.</p>
+    </section>
+    <hr class="rule">
+    <ul class="menu">
+      <li><a class="opt" href="team-builder-case-study-outcome.html" data-key="N"><span class="key">[N]</span><span class="label">Next: Outcome</span><span class="lead" aria-hidden="true"></span><span class="meta">05/06</span></a></li>
+      <li><a class="opt" href="team-builder-case-study-key-constraints-system-reality.html" data-key="P"><span class="key">[P]</span><span class="label">Previous: Key Constraints & System Reality</span><span class="lead" aria-hidden="true"></span><span class="meta">03/06</span></a></li>
+      <li><a class="opt" href="team-builder-case-study.html" data-key="C"><span class="key">[C]</span><span class="label">Back to case file</span><span class="lead" aria-hidden="true"></span><span class="meta">Team Builder</span></a></li>
+      <li><button class="opt" type="button" data-key="R" data-act="run:team-builder"><span class="key">[R]</span><span class="label">Run interactive demo</span><span class="lead" aria-hidden="true"></span><span class="meta">Live</span></button></li>
+    </ul>
+  </main>
+
+  <!-- chrome:bottom -->
+  <div class="foot">
+  <form class="cmd" id="cmdform" autocomplete="off">
+    <label for="cmd">COMMAND ===&gt;</label>
+    <input id="cmd" name="cmd" spellcheck="false" aria-describedby="msg">
+    <span class="cursor" aria-hidden="true"></span>
+  </form>
+  <div class="msg" id="msg" role="status">PRESS / TO TYPE A COMMAND. TYPE HELP FOR A LIST.</div>
+  <nav class="bar bottom" aria-label="Function keys">
+    <span><a href="team-builder-case-study.html" data-back>ESC=BACK</a></span>
+    <span class="hide-sm keys-only">&uarr;&darr;=SELECT &nbsp;ENTER=OPEN</span>
+    <span><a href="index.html">H=HOME</a></span>
+    <span><a href="help.html">?=HELP</a></span>
+  </nav>
+  </div>
+  <!-- /chrome:bottom -->
+</div>
+<script src="js/demos.js"></script>
+<script src="js/terminal.js"></script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Display Settings | Emily Blackwell</title>
+<meta name="description" content="Adjust the terminal&#x27;s phosphor color and scanlines.">
+<link rel="canonical" href="https://design.emilyblackwell.com/display.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Display Settings | Emily Blackwell">
+<meta property="og:description" content="Adjust the terminal&#x27;s phosphor color and scanlines.">
+<meta property="og:url" content="https://design.emilyblackwell.com/display.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;family=VT323&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/terminal.css">
+<script>document.documentElement.classList.add("js");try{var p=localStorage.getItem("bos-ph"),s=localStorage.getItem("bos-scan");if(p)document.documentElement.dataset.phosphor=p;if(s)document.documentElement.dataset.scanlines=s}catch(e){}</script>
+</head>
+<body class="crt" data-screen="SYS.DISPLAY" data-parent="index.html" data-kind="menu">
+<a class="skip" href="#screen">Skip to content</a>
+<div class="frame">
+  <!-- chrome:top -->
+  <header class="bar top">
+    <span>BLACKWELL/OS 2.6</span>
+    <span id="where" class="hide-sm">SYS.DISPLAY</span>
+    <span id="clock" aria-hidden="true"></span>
+  </header>
+  <!-- /chrome:top -->
+
+  <main id="screen" tabindex="-1">
+    <h2 class="screen-title">DISPLAY</h2>
+    <p class="sub">ADJUST THE TERMINAL. SETTINGS PERSIST ON THIS DEVICE.</p>
+    <ul class="menu">
+      <li><button class="opt" type="button" data-key="G" data-act="ph:green"><span class="key">[G]</span><span class="label">Green phosphor</span><span class="lead" aria-hidden="true"></span><span class="meta"><span data-state="ph:green"></span></span></button></li>
+      <li><button class="opt" type="button" data-key="A" data-act="ph:amber"><span class="key">[A]</span><span class="label">Amber phosphor</span><span class="lead" aria-hidden="true"></span><span class="meta"><span data-state="ph:amber"></span></span></button></li>
+      <li><button class="opt" type="button" data-key="W" data-act="ph:white"><span class="key">[W]</span><span class="label">White phosphor</span><span class="lead" aria-hidden="true"></span><span class="meta"><span data-state="ph:white"></span></span></button></li>
+      <li><button class="opt" type="button" data-key="C" data-act="ph:weather"><span class="key">[C]</span><span class="label">Weather Channel</span><span class="lead" aria-hidden="true"></span><span class="meta"><span data-state="ph:weather"></span></span></button></li>
+      <li><button class="opt" type="button" data-key="S" data-act="scan"><span class="key">[S]</span><span class="label">Scanlines and flicker</span><span class="lead" aria-hidden="true"></span><span class="meta"><span data-state="scan"></span></span></button></li>
+    </ul>
+    <noscript><p class="dim">Display settings need JavaScript.</p></noscript>
+  </main>
+
+  <!-- chrome:bottom -->
+  <div class="foot">
+  <form class="cmd" id="cmdform" autocomplete="off">
+    <label for="cmd">COMMAND ===&gt;</label>
+    <input id="cmd" name="cmd" spellcheck="false" aria-describedby="msg">
+    <span class="cursor" aria-hidden="true"></span>
+  </form>
+  <div class="msg" id="msg" role="status">PRESS / TO TYPE A COMMAND. TYPE HELP FOR A LIST.</div>
+  <nav class="bar bottom" aria-label="Function keys">
+    <span><a href="index.html" data-back>ESC=BACK</a></span>
+    <span class="hide-sm keys-only">&uarr;&darr;=SELECT &nbsp;ENTER=OPEN</span>
+    <span><a href="index.html">H=HOME</a></span>
+    <span><a href="help.html">?=HELP</a></span>
+  </nav>
+  </div>
+  <!-- /chrome:bottom -->
+</div>
+<script src="js/terminal.js"></script>
+</body>
+</html>

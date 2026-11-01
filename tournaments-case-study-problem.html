@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Problem | Tournament Engine | Emily Blackwell</title>
+<meta name="description" content="How do we transform a fragmented, one-at-a-time registration system into a scalable tournament engine — without disrupting the ongoing OG-to-NG platform…">
+<link rel="canonical" href="https://design.emilyblackwell.com/tournaments-case-study-problem.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Problem | Tournament Engine | Emily Blackwell">
+<meta property="og:description" content="How do we transform a fragmented, one-at-a-time registration system into a scalable tournament engine — without disrupting the ongoing OG-to-NG platform…">
+<meta property="og:url" content="https://design.emilyblackwell.com/tournaments-case-study-problem.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;family=VT323&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/terminal.css">
+<script>document.documentElement.classList.add("js");try{var p=localStorage.getItem("bos-ph"),s=localStorage.getItem("bos-scan");if(p)document.documentElement.dataset.phosphor=p;if(s)document.documentElement.dataset.scanlines=s}catch(e){}</script>
+</head>
+<body class="crt" data-screen="WORK.TOURNAMENTS/PROBLEM" data-parent="tournaments-case-study.html" data-kind="case" data-program="tournaments" data-prev="tournaments-case-study-users-context.html" data-next="tournaments-case-study-process.html">
+<a class="skip" href="#screen">Skip to content</a>
+<div id="prog" role="dialog" aria-modal="true" aria-labelledby="prog-title" hidden>
+  <div class="prog-bar">
+    <span id="prog-title">RUNNING</span>
+    <span class="btns"><button type="button" id="prog-reset">RESET</button><button type="button" id="prog-exit">EXIT (ESC)</button></span>
+  </div>
+  <div class="prog-hint" id="prog-hint"></div>
+  <div class="prog-body">
+    <div class="prog-win" id="prog-win"></div>
+    <aside class="prog-notes" id="prog-notes" aria-label="Design notes"></aside>
+  </div>
+</div>
+<div class="frame">
+  <!-- chrome:top -->
+  <header class="bar top">
+    <span>BLACKWELL/OS 2.6</span>
+    <span id="where" class="hide-sm">WORK.TOURNAMENTS/PROBLEM</span>
+    <span id="clock" aria-hidden="true"></span>
+  </header>
+  <!-- /chrome:top -->
+
+  <main id="screen" tabindex="-1">
+    <p class="crumb"><a href="tournaments-case-study.html">TOURNAMENT ENGINE</a> / SECTION 03 OF 06</p>
+    <section class="case-sec solo" id="problem" aria-labelledby="problem-h">
+      <h2 class="screen-title" id="problem-h">PROBLEM</h2>
+      <div class="callout"><span class="lbl">Core Question</span><p>How do we transform a fragmented, one-at-a-time registration system into a scalable tournament engine — without disrupting the ongoing OG-to-NG platform migration?</p></div><p>Tournament organizers and registrants alike struggled with a fragmented and inefficient registration process. The pain points fell into five categories:</p><dl class="record wide"><dt>Registration Efficiency</dt><dd>Each team, player, and staff member had to be registered and paid for separately — even when multiple registration types were needed in a single session.</dd><dt>Manual Organizer Workflows</dt><dd>Organizers manually handled tasks that should have been automated: adding players, managing waitlists, and enforcing roster caps.</dd><dt>Pricing Rigidity</dt><dd>No tools existed to vary registration costs by player position, role, or form response. A single flat price was the only option.</dd><dt>Poor Mobile Usability</dt><dd>Most users interacted with the system in the field and on the go, yet the interface wasn't optimized for mobile at all.</dd><dt>Inherited NG Debt</dt><dd>The in-progress NG system I inherited had its own usability and scalability gaps — addressed incrementally sprint over sprint to avoid derailing core work.</dd></dl><p>From a business standpoint, these shortcomings limited LeagueApps' ability to compete in the tournament software market — a space dominated by mobile-optimized, streamlined platforms.</p>
+    </section>
+    <hr class="rule">
+    <ul class="menu">
+      <li><a class="opt" href="tournaments-case-study-process.html" data-key="N"><span class="key">[N]</span><span class="label">Next: Process</span><span class="lead" aria-hidden="true"></span><span class="meta">04/06</span></a></li>
+      <li><a class="opt" href="tournaments-case-study-users-context.html" data-key="P"><span class="key">[P]</span><span class="label">Previous: Users & Context</span><span class="lead" aria-hidden="true"></span><span class="meta">02/06</span></a></li>
+      <li><a class="opt" href="tournaments-case-study.html" data-key="C"><span class="key">[C]</span><span class="label">Back to case file</span><span class="lead" aria-hidden="true"></span><span class="meta">Tournament Engine</span></a></li>
+      <li><button class="opt" type="button" data-key="R" data-act="run:tournaments"><span class="key">[R]</span><span class="label">Run interactive demo</span><span class="lead" aria-hidden="true"></span><span class="meta">Live</span></button></li>
+    </ul>
+  </main>
+
+  <!-- chrome:bottom -->
+  <div class="foot">
+  <form class="cmd" id="cmdform" autocomplete="off">
+    <label for="cmd">COMMAND ===&gt;</label>
+    <input id="cmd" name="cmd" spellcheck="false" aria-describedby="msg">
+    <span class="cursor" aria-hidden="true"></span>
+  </form>
+  <div class="msg" id="msg" role="status">PRESS / TO TYPE A COMMAND. TYPE HELP FOR A LIST.</div>
+  <nav class="bar bottom" aria-label="Function keys">
+    <span><a href="tournaments-case-study.html" data-back>ESC=BACK</a></span>
+    <span class="hide-sm keys-only">&uarr;&darr;=SELECT &nbsp;ENTER=OPEN</span>
+    <span><a href="index.html">H=HOME</a></span>
+    <span><a href="help.html">?=HELP</a></span>
+  </nav>
+  </div>
+  <!-- /chrome:bottom -->
+</div>
+<script src="js/demos.js"></script>
+<script src="js/terminal.js"></script>
+</body>
+</html>

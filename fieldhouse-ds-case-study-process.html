@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Process | Fieldhouse Design System | Emily Blackwell</title>
+<meta name="description" content="I collaborated with product and engineering to audit every customization in use across the platform.">
+<link rel="canonical" href="https://design.emilyblackwell.com/fieldhouse-ds-case-study-process.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Process | Fieldhouse Design System | Emily Blackwell">
+<meta property="og:description" content="I collaborated with product and engineering to audit every customization in use across the platform.">
+<meta property="og:url" content="https://design.emilyblackwell.com/fieldhouse-ds-case-study-process.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;family=VT323&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;family=IBM+Plex+Sans+Condensed:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/terminal.css">
+<script>document.documentElement.classList.add("js");try{var p=localStorage.getItem("bos-ph"),s=localStorage.getItem("bos-scan");if(p)document.documentElement.dataset.phosphor=p;if(s)document.documentElement.dataset.scanlines=s}catch(e){}</script>
+</head>
+<body class="crt" data-screen="WORK.FIELDHOUSE/PROCESS" data-parent="fieldhouse-ds-case-study.html" data-kind="case" data-program="fieldhouse" data-prev="fieldhouse-ds-case-study-problem.html" data-next="fieldhouse-ds-case-study-outcome.html">
+<a class="skip" href="#screen">Skip to content</a>
+<div id="prog" role="dialog" aria-modal="true" aria-labelledby="prog-title" hidden>
+  <div class="prog-bar">
+    <span id="prog-title">RUNNING</span>
+    <span class="btns"><button type="button" id="prog-reset">RESET</button><button type="button" id="prog-exit">EXIT (ESC)</button></span>
+  </div>
+  <div class="prog-hint" id="prog-hint"></div>
+  <div class="prog-body">
+    <div class="prog-win" id="prog-win"></div>
+    <aside class="prog-notes" id="prog-notes" aria-label="Design notes"></aside>
+  </div>
+</div>
+<div class="frame">
+  <!-- chrome:top -->
+  <header class="bar top">
+    <span>BLACKWELL/OS 2.6</span>
+    <span id="where" class="hide-sm">WORK.FIELDHOUSE/PROCESS</span>
+    <span id="clock" aria-hidden="true"></span>
+  </header>
+  <!-- /chrome:top -->
+
+  <main id="screen" tabindex="-1">
+    <p class="crumb"><a href="fieldhouse-ds-case-study.html">FIELDHOUSE DESIGN SYSTEM</a> / SECTION 04 OF 06</p>
+    <section class="case-sec solo" id="process" aria-labelledby="process-h">
+      <h2 class="screen-title" id="process-h">PROCESS</h2>
+      <div class="cards"><div class="card"><h5>Data-Driven Prioritization</h5><p>I collaborated with product and engineering to audit every customization in use across the platform. Partnering with customer success and support, we analyzed which customizations truly mattered to users versus those that introduced risk. This identified redundant options we could sunset, standardize, or reimagine for scalability.</p></div><div class="card"><h5>Internal Empathy Building</h5><p>I ran internal focus groups with customer-facing teams to understand the pressures partners faced — sponsorship demands, brand loyalty, and local recognition. These insights ensured the redesign protected accessibility while preserving partner trust.</p></div><div class="card"><h5>External Research &amp; Competitive Benchmarking</h5><p>Qualitative research with both organizers and members surfaced a key tension: organizers valued strong brand presence and customization, while members prioritized clarity, legibility, and trust.</p><p>I also audited theming models from major e-commerce platforms — Shopify, Squarespace, and Etsy — studying how they handled color systems, accessibility defaults, and brand flexibility at scale. Shopify's logic-driven color framework became our north star.</p></div><div class="card"><h5>Solving the Color Problem</h5><p>The most complex design challenge was color. Sports organizations often use red as a brand color — which conflicted with our system's red error states and failed WCAG contrast requirements.</p><p>To solve this, I introduced a neutral base theme for UI components. Partner-selected brand colors were then layered on top strategically, ensuring sufficient contrast and brand expression without sacrificing usability.</p><p>We implemented a <b>two-color theming system</b>: partners defined a primary and secondary color, while the system dynamically generated accessible shades and tints based on luminosity. Every experience became compliant by default — without requiring users to understand accessibility guidelines.</p><div class="callout"><span class="lbl">Dynamic shade generation from partner brand color</span><p>Shades and tints are generated dynamically from luminosity logic, keeping interactive and error states accessible regardless of partner brand color.</p><p class="try"><a class="run-link" data-scene="" href="#run"><span aria-hidden="true">&gt;&gt; </span>RUN DEMO: Try the shade generator with any brand color</a></p></div><p class="try"><a class="run-link" data-scene="red" href="#run-red"><span aria-hidden="true">&gt;&gt; </span>RUN DEMO: Generate accessible shades from a red brand color</a></p></div><div class="card"><h5>Rebuilding Governance After Reduction in Force</h5><p>After a reduction in the design system team, I partnered with our engineering lead to establish a lean governance model for ongoing maintenance. We restructured the ticket triaging process, documentation, and prioritization to enable a democratized and sustainable system evolution — avoiding bottlenecks or single-contributor dependencies.</p></div><div class="card"><h5>Implementation &amp; Rollout</h5><p>The MVP for the new Fieldhouse system included dynamic two-color theming with accessible shade logic, WCAG 2.1 AA–compliant components across both themes, and a new theme editor that balanced flexibility with platform stability.</p><p>We sunset the legacy editor, rolled out Fieldhouse across all three LeagueApps product environments, and reintroduced the LeagueApps brand identity across partner portals.</p></div></div>
+    </section>
+    <hr class="rule">
+    <ul class="menu">
+      <li><a class="opt" href="fieldhouse-ds-case-study-outcome.html" data-key="N"><span class="key">[N]</span><span class="label">Next: Outcome</span><span class="lead" aria-hidden="true"></span><span class="meta">05/06</span></a></li>
+      <li><a class="opt" href="fieldhouse-ds-case-study-problem.html" data-key="P"><span class="key">[P]</span><span class="label">Previous: Problem</span><span class="lead" aria-hidden="true"></span><span class="meta">03/06</span></a></li>
+      <li><a class="opt" href="fieldhouse-ds-case-study.html" data-key="C"><span class="key">[C]</span><span class="label">Back to case file</span><span class="lead" aria-hidden="true"></span><span class="meta">Fieldhouse Design System</span></a></li>
+      <li><button class="opt" type="button" data-key="R" data-act="run:fieldhouse"><span class="key">[R]</span><span class="label">Run interactive demo</span><span class="lead" aria-hidden="true"></span><span class="meta">Live</span></button></li>
+    </ul>
+  </main>
+
+  <!-- chrome:bottom -->
+  <div class="foot">
+  <form class="cmd" id="cmdform" autocomplete="off">
+    <label for="cmd">COMMAND ===&gt;</label>
+    <input id="cmd" name="cmd" spellcheck="false" aria-describedby="msg">
+    <span class="cursor" aria-hidden="true"></span>
+  </form>
+  <div class="msg" id="msg" role="status">PRESS / TO TYPE A COMMAND. TYPE HELP FOR A LIST.</div>
+  <nav class="bar bottom" aria-label="Function keys">
+    <span><a href="fieldhouse-ds-case-study.html" data-back>ESC=BACK</a></span>
+    <span class="hide-sm keys-only">&uarr;&darr;=SELECT &nbsp;ENTER=OPEN</span>
+    <span><a href="index.html">H=HOME</a></span>
+    <span><a href="help.html">?=HELP</a></span>
+  </nav>
+  </div>
+  <!-- /chrome:bottom -->
+</div>
+<script src="js/demos.js"></script>
+<script src="js/terminal.js"></script>
+</body>
+</html>

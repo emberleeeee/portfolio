@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="mgmt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fieldhouse Design System · Interactive prototype · Emily Blackwell</title>
+<link rel="stylesheet" href="fieldhouse/tokens.css">
+<link rel="stylesheet" href="fieldhouse/bundle.css">
+<link rel="stylesheet" href="fieldhouse/proto.css">
+<style>
+  .fx { display: grid; grid-template-columns: 340px 1fr; min-height: 100%; }
+  .fx-ctl { background: var(--background-surface); border-right: var(--border-width-1) solid var(--border-light); padding: var(--spacing-06) var(--spacing-05); display: flex; flex-direction: column; gap: var(--spacing-06); }
+  .fx-ctl h2 { font: 600 18px/24px var(--font-headline); margin-bottom: var(--spacing-02); }
+  .fx-ctl > section > p { font-size: 12px; line-height: 16px; color: var(--text-secondary); margin-bottom: var(--spacing-03); }
+  .fx-pick { display: grid; grid-template-columns: 40px 1fr; gap: var(--spacing-02); align-items: end; margin-bottom: var(--spacing-03); }
+  .fx-pick input[type=color] { width: 40px; height: 40px; padding: 0; border: var(--border-width-1) solid var(--border-neutral); border-radius: var(--radius-small); background: none; cursor: pointer; }
+  .fx-pick input[type=color]:focus-visible { outline: var(--border-width-2) solid var(--interactive-universal-focus); outline-offset: 2px; }
+  .fx-presets { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-02); }
+  .fx-preset { display: flex; align-items: center; gap: var(--spacing-02); padding: var(--spacing-02); border: var(--border-width-1) solid var(--border-neutral); border-radius: var(--radius-small); background: var(--background-surface); font: 400 13px/18px var(--font-ui); color: var(--text-default); cursor: pointer; text-align: left;
+    transition: border-color var(--fh-d-fast) var(--fh-e-standard), background-color var(--fh-d-fast) var(--fh-e-standard); }
+  .fx-preset:hover { background: var(--background-subtle); }
+  .fx-preset[aria-pressed="true"] { border: var(--border-width-2) solid var(--border-interactive); padding: calc(var(--spacing-02) - 1px); }
+  .fx-preset:focus-visible { outline: var(--border-width-2) solid var(--interactive-universal-focus); outline-offset: 2px; }
+  .fx-preset i { width: 20px; height: 20px; border-radius: var(--radius-round); flex: none; }
+  .fx-ramp { display: grid; grid-template-columns: repeat(14, 1fr); border-radius: var(--radius-small); overflow: hidden; height: 28px; margin-bottom: var(--spacing-01); }
+  .fx-ramp span { transition: background-color var(--fh-d-base) var(--fh-e-standard); }
+  .fx-rampcap { display: flex; justify-content: space-between; font-size: 11px; line-height: 14px; color: var(--text-secondary); margin-bottom: var(--spacing-03); }
+  .fx-checks { display: flex; flex-direction: column; }
+  .fx-check { display: grid; grid-template-columns: 36px 1fr auto; gap: var(--spacing-03); align-items: center; padding: var(--spacing-02) 0; border-bottom: var(--border-width-1) solid var(--border-light); font-size: 13px; line-height: 18px; }
+  .fx-check:last-child { border-bottom: 0; }
+  .fx-aa { width: 36px; height: 28px; border-radius: var(--radius-small); display: flex; align-items: center; justify-content: center; font: 700 14px/1 var(--font-ui); transition: background-color var(--fh-d-base) var(--fh-e-standard), color var(--fh-d-base) var(--fh-e-standard); }
+  .fx-check small { display: block; color: var(--text-secondary); font-size: 12px; }
+  .fx-log { margin: 0; padding-left: var(--spacing-04); font-size: 12px; line-height: 18px; color: var(--text-secondary); }
+  .fx-canvas { padding: var(--spacing-06); display: flex; flex-direction: column; gap: var(--spacing-05); min-width: 0; }
+  .fx-frames { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: var(--spacing-05); align-items: start; }
+  .fx-frame { border-radius: var(--radius-small); overflow: hidden; border: var(--border-width-1) solid var(--border-light); background: var(--background-page-default); box-shadow: 0 8px 24px #2632381a; animation: fh-fade-in var(--fh-d-moderate) var(--fh-e-enter); }
+  .fx-label { display: flex; justify-content: space-between; align-items: baseline; padding: var(--spacing-02) var(--spacing-04); background: var(--background-surface); border-bottom: var(--border-width-1) solid var(--border-light); font-size: 12px; line-height: 16px; color: var(--text-secondary); }
+  .fx-label b { color: var(--text-default); font-size: 13px; }
+  /* Member portal screen */
+  .mp-top { display: flex; align-items: center; justify-content: space-between; padding: var(--spacing-03) var(--spacing-05); background: var(--background-brand-primary); color: var(--fx-on-brand); transition: background-color var(--fh-d-base) var(--fh-e-standard), color var(--fh-d-base) var(--fh-e-standard); }
+  .mp-top b { font: 700 18px/24px var(--font-headline); letter-spacing: .02em; }
+  .mp-top nav { display: flex; gap: var(--spacing-04); font-size: 14px; }
+  .mp-strip { height: var(--spacing-02); background: var(--fx-accent); transition: background-color var(--fh-d-base) var(--fh-e-standard); }
+  .mp-body { padding: var(--spacing-05); display: flex; flex-direction: column; gap: var(--spacing-04); }
+  .mp-body h3 { font: 700 24px/28px var(--font-headline); }
+  .mp-body > p { font-size: 14px; line-height: 20px; color: var(--text-secondary); margin-top: calc(-1 * var(--spacing-03)); }
+  [data-theme="member"] .fh-btn--filled:not(:disabled):not(.fh-btn--danger) { color: var(--fx-on-brand); }
+  .mp-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-03); }
+  .mp-chips { display: flex; gap: var(--spacing-02); flex-wrap: wrap; }
+  .mp-accent { display: inline-flex; align-items: center; height: 28px; padding: 0 var(--spacing-02); border-radius: var(--radius-small); background: var(--fx-accent); color: var(--fx-on-accent); font-size: 14px; }
+  /* Console screen */
+  .mc { display: grid; grid-template-columns: 150px 1fr; min-height: 420px; }
+  .mc-side { background: var(--background-surface-dark); color: var(--text-default-dark); padding: var(--spacing-04) var(--spacing-03); display: flex; flex-direction: column; gap: var(--spacing-03); font-size: 14px; }
+  .mc-org { display: flex; align-items: center; gap: var(--spacing-02); font-weight: 700; }
+  .mc-org i { width: 28px; height: 28px; border-radius: var(--radius-small); display: flex; align-items: center; justify-content: center; font-style: normal; font-size: 12px; background: var(--fx-partner); color: var(--fx-on-partner); }
+  .mc-side span.is-on { color: var(--text-default-dark); font-weight: 700; } .mc-side span { color: var(--blue-grey-200); }
+  .mc-main { padding: var(--spacing-05); display: flex; flex-direction: column; gap: var(--spacing-04); }
+  .mc-main h3 { font: 700 24px/28px var(--font-headline); }
+  .mc-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-03); }
+  .mc-stat { padding: var(--spacing-03); background: var(--background-surface); border: var(--border-width-1) solid var(--border-light); border-radius: var(--radius-small); }
+  .mc-stat small { display: block; font-size: 12px; color: var(--text-secondary); } .mc-stat b { font: 700 24px/28px var(--font-headline); }
+  .fx-callout { display: flex; gap: var(--spacing-03); align-items: flex-start; padding: var(--spacing-04); background: var(--background-surface); border: var(--border-width-1) solid var(--border-light); border-radius: var(--radius-small); font-size: 14px; line-height: 20px; animation: fh-fade-in var(--fh-d-moderate) var(--fh-e-enter); }
+  .fx-callout b { display: block; }
+  @media (max-width: 900px) { .fx { grid-template-columns: 1fr; } .fx-ctl { border-right: 0; border-bottom: var(--border-width-1) solid var(--border-light); } .fx-frames { grid-template-columns: 1fr; } .fx-canvas { padding: var(--spacing-04); } .mp-row { grid-template-columns: 1fr; } .mc { grid-template-columns: 1fr; } .mc-side { flex-direction: row; flex-wrap: wrap; } }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="fieldhouse/react.js"></script>
+<script src="fieldhouse/react-dom.js"></script>
+<script src="fieldhouse/bundle.js"></script>
+<script src="fieldhouse/proto.js"></script>
+<script>
+(function () {
+  var F = window.Fieldhouse, P = window.Proto, h = React.createElement, useState = React.useState;
+
+  /* ---------- Fieldhouse partner color generator ----------
+     Ported unchanged from the site's Fieldhouse program (itself ported from color-generator-core.ts):
+     each partner color becomes 14 HSL shades, hover/active states and a luminance-based text color. */
+  var WHITE = '#FFFFFF', DS_DARK = '#263238';
+  var SHADE_NAMES = [25, 35, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950, 975];
+  var LIGHT_CURVE = [98, 96, 94, 86, 73, 62, 54, 46, 40, 33, 26, 18, 15, 12];
+  var STD_CURVE = [98, 95, 88, 80, 72, 64, 56, 46, 40, 33, 26, 18, 15, 12];
+  function hexToRgb(hx) { hx = hx.replace('#', ''); if (hx.length === 3) hx = hx.split('').map(function (c) { return c + c; }).join(''); var n = parseInt(hx, 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; }
+  function chan(v) { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }
+  function lum(hx) { var c = hexToRgb(hx); return 0.2126 * chan(c[0]) + 0.7152 * chan(c[1]) + 0.0722 * chan(c[2]); }
+  function contrast(a, b) { var A = lum(a), B = lum(b); return (Math.max(A, B) + 0.05) / (Math.min(A, B) + 0.05); }
+  function fmt(r) { return (Math.floor(r * 10) / 10).toFixed(1) + ':1'; }
+  function hexToHsl(hx) {
+    var c = hexToRgb(hx).map(function (v) { return v / 255; }), r = c[0], g = c[1], b = c[2];
+    var mx = Math.max(r, g, b), mn = Math.min(r, g, b), hh = 0, s = 0, l = (mx + mn) / 2;
+    if (mx !== mn) { var d = mx - mn; s = l > .5 ? d / (2 - mx - mn) : d / (mx + mn); hh = mx === r ? (g - b) / d + (g < b ? 6 : 0) : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; hh /= 6; }
+    return { h: Math.round(hh * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
+  }
+  function hslToHex(hh, s, l) {
+    l /= 100; var a = s * Math.min(l, 1 - l) / 100;
+    function f(n) { var k = (n + hh / 30) % 12; return Math.round(255 * (l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1))).toString(16).padStart(2, '0'); }
+    return ('#' + f(0) + f(8) + f(4)).toUpperCase();
+  }
+  function smartText(hx) { return lum(hx) > 0.24 ? DS_DARK : WHITE; }
+  function textOn(c) { return contrast(c, WHITE) >= contrast(c, DS_DARK) ? WHITE : DS_DARK; }
+  function generatePalette(hx) {
+    var x = hexToHsl(hx), hh = x.h, s = x.s, l = x.l;
+    var light = hh >= 55 && hh <= 185, sat = s > 90 ? 90 : s, curve = light ? LIGHT_CURVE : STD_CURVE;
+    var steps = curve.map(function (L) { return hslToHex(hh, sat, L); });
+    var hv, ac, rule;
+    if (l > 65) { hv = l - 10; ac = l - 15; rule = 'Light color: hover and pressed go darker'; }
+    else if (hh >= 7 && hh <= 215 && l > 30) { hv = l + 10; ac = l + 15; rule = 'Mid-range hue: hover and pressed go lighter'; }
+    else { hv = l - 10; ac = l - 15; rule = 'Hover and pressed go darker'; }
+    hv = Math.max(5, Math.min(95, hv)); ac = Math.max(5, Math.min(95, ac));
+    return { h: hh, s: s, l: l, light: light, sat: sat, steps: steps, base: hx.toUpperCase(), hover: hslToHex(hh, sat, hv), active: hslToHex(hh, sat, ac), text: smartText(hx), rule: rule, L: lum(hx) };
+  }
+  var PRESETS = [['Crimson & Gold', '#C8102E', '#FFC72C'], ['Gold & Black', '#FFC72C', '#111111'], ['Kelly & Navy', '#4CBB17', '#0B2D5B'], ['Sky & Navy', '#6CACE4', '#0B2D5B'], ['Orange & Teal', '#FF6A13', '#00778B'], ['Purple & Gold', '#5B2C83', '#FFC72C']];
+
+  /* Partner palette -> Fieldhouse Member Portal tokens (mp-secondary-* carries brand roles) */
+  function themeVars(Pp, Ss, smart) {
+    var v = {}, map = { 25: 0, 35: 1, 50: 2, 100: 3, 200: 4, 300: 5, 400: 6, 500: 7, 600: 8, 700: 9, 800: 10, 900: 11 };
+    Object.keys(map).forEach(function (k) { v['--mp-secondary-' + k] = Pp.steps[map[k]]; });
+    v['--mp-secondary-150'] = hslToHex(Pp.h, Pp.sat, ((Pp.light ? LIGHT_CURVE : STD_CURVE)[3] + (Pp.light ? LIGHT_CURVE : STD_CURVE)[4]) / 2);
+    v['--mp-secondary-base'] = Pp.base; v['--mp-secondary-hover'] = Pp.hover; v['--mp-secondary-active'] = Pp.active;
+    v['--fx-on-brand'] = smart ? Pp.text : WHITE;
+    v['--fx-accent'] = Ss.base; v['--fx-on-accent'] = smart ? Ss.text : WHITE;
+    v['--fx-partner'] = Pp.base; v['--fx-on-partner'] = smart ? Pp.text : WHITE;
+    return v;
+  }
+
+  function MemberScreen(p) {
+    var errS = useState(false), err = errS[0], setErr = errS[1];
+    return h('div', { className: 'fx-frame', 'data-theme': 'member', style: p.vars },
+      h('div', { className: 'fx-label' }, h('b', null, 'Member Portal'), h('span', null, 'Partner brand leads')),
+      h('div', { className: 'mp-top' }, h('b', null, p.name.toUpperCase()), h('nav', null, h('span', null, 'Programs'), h('span', null, 'Schedule'), h('span', null, 'Account'))),
+      h('div', { className: 'mp-strip' }),
+      h('div', { className: 'mp-body' },
+        h('h3', null, 'Spring Travel Tryouts'), h('p', null, 'Ages 9 to 14. Three evenings in March at North Field.'),
+        h('div', { className: 'mp-chips' }, h('span', { className: 'mp-accent' }, 'U12'), h(F.Tag, { selectable: true, defaultSelected: true }, 'U13'), h(F.Tag, { selectable: true }, 'U14'), h(F.Status, { intent: 'success', icon: true, size: 'small' }, 'Open')),
+        h(F.Tabs, { label: 'Program', items: [{ value: 'a', label: 'Details' }, { value: 'b', label: 'Schedule' }, { value: 'c', label: 'Fees' }] }),
+        h('div', { className: 'mp-row' },
+          h(F.TextInput, { size: 'medium', label: "Player's name", required: true, defaultValue: 'Ava Thompson' }),
+          h(F.TextInput, { size: 'medium', label: 'Guardian email', required: true, defaultValue: err ? 'ava.parent@' : 'parent@example.com', key: err ? 'e' : 'n', error: err ? 'Enter a complete email address.' : undefined })),
+        h(F.RadioGroup, { label: 'Session', inline: true, defaultValue: 'tue', options: [{ value: 'tue', label: 'Tuesday' }, { value: 'thu', label: 'Thursday' }] }),
+        h(F.Tile, { selection: 'multiple', size: 'condensed', defaultSelected: true, label: 'Add registration protection', description: 'Refund if your player cannot attend.', aside: '$12.00' }),
+        h(F.ActionGroup, { alignment: 'left', primary: { label: 'Register', onClick: function () { setErr(true); p.onError(); } }, secondary: { label: 'Add a sibling' } }),
+        err ? h(F.PageBanner, { status: 'error', size: 'small' }, '1 field needs attention before you can register.') : null));
+  }
+  function ConsoleScreen(p) {
+    return h('div', { className: 'fx-frame', 'data-theme': 'mgmt', style: p.vars },
+      h('div', { className: 'fx-label' }, h('b', null, 'Management Console'), h('span', null, 'LeagueApps brand leads')),
+      h('div', { className: 'mc' },
+        h('div', { className: 'mc-side' }, h('span', { className: 'mc-org' }, h('i', null, p.name.split(' ').map(function (w) { return w[0]; }).join('').slice(0, 2)), p.name), h('span', { className: 'is-on' }, 'Programs'), h('span', null, 'Rosters'), h('span', null, 'Payments')),
+        h('div', { className: 'mc-main' },
+          h('h3', null, 'Spring Travel Tryouts'),
+          h('div', { className: 'mc-stats' }, h('div', { className: 'mc-stat' }, h('small', null, 'Registrations'), h('b', null, '128')), h('div', { className: 'mc-stat' }, h('small', null, 'Open spots'), h('b', null, '12')), h('div', { className: 'mc-stat' }, h('small', null, 'Waitlist'), h('b', null, '5'))),
+          h(F.Switch, { label: 'Registration open', defaultChecked: true }),
+          h(F.Checkbox, { label: 'Email families when a spot opens', defaultChecked: true }),
+          h(F.ActionGroup, { alignment: 'right', tertiary: { label: 'Preview page' }, secondary: { label: 'Edit' }, primary: { label: 'Publish changes' } }))));
+  }
+
+  var NOTES = [
+    { id: 'themes', title: 'Two themes, one system', body: 'The Member Portal flexes to each partner’s brand; the Management Console stays LeagueApps green for every admin. The same components run in both; only the token mode changes.', tryIt: 'pick any partner colors. The console barely moves; only the org badge takes the partner color.' },
+    { id: 'ramp', title: 'Two colors in, a full theme out', body: 'Partners choose a primary and a secondary. Each becomes fourteen shades at fixed lightness steps, with a lighter curve for yellow-to-cyan hues and saturation capped at 90%. The shades feed the Member Portal brand tokens directly.' },
+    { id: 'smart', title: 'Readable by default', body: 'Text on any brand fill flips between white and dark by luminance, so partners get accessible buttons without learning the guidelines.', tryIt: 'choose Gold & Black, then turn Smart text color off and watch the checks fail.' },
+    { id: 'red', title: 'Red is a brand color and an error color', body: 'Red is the most common sports color, and it collides with error states. Errors always carry the octagon icon and a message, and resting borders stay neutral. One gap remains: selected tiles and checked radios still take the brand color, so on a red partner they sit visually close to an error. Moving selection to the neutral interactive tokens is the proposed next step.', tryIt: 'choose Crimson & Gold, press Register, and compare the error field with the selected tile.' },
+    { id: 'neutral', title: 'Neutral where it matters', body: 'Checked boxes, switches, radio dots and focus rings use neutral blue-grey in the Member Portal, so a partner color never has to carry interaction state at an unknown contrast.' },
+    { id: 'aa', title: 'Accessible by default', body: 'Every color combination is checked against WCAG 2.1 AA as it is generated. All core components met AA in both themes at rollout across 2,800+ organizations.' }
+  ];
+
+  function App() {
+    var pS = useState('#C8102E'), pc = pS[0], setP = pS[1];
+    var sS = useState('#FFC72C'), sc = sS[0], setSc = sS[1];
+    var nS = useState('Riverside FC'), name = nS[0], setName = nS[1];
+    var smS = useState(true), smart = smS[0], setSmart = smS[1];
+    var vS = useState('both'), view = vS[0], setView = vS[1];
+    var hotS = useState(null), hot = hotS[0], setHot = hotS[1];
+    var preset = PRESETS.findIndex(function (x) { return x[1] === pc && x[2] === sc; });
+    var Pp = generatePalette(pc), Ss = generatePalette(sc), vars = themeVars(Pp, Ss, smart);
+    var tP = smart ? Pp.text : WHITE, tS = smart ? Ss.text : WHITE;
+    var checks = [['Primary fill', tP, Pp.base], ['Primary hover', tP, Pp.hover], ['Primary pressed', tP, Pp.active], ['Secondary fill', tS, Ss.base], ['Secondary hover', tS, Ss.hover]].map(function (c) { return { label: c[0], fg: c[1], bg: c[2], ratio: contrast(c[1], c[2]) }; });
+    var passN = checks.filter(function (c) { return c.ratio >= 4.5; }).length;
+    var reddish = (Pp.h <= 15 || Pp.h >= 345) && Pp.s > 40 && Pp.l > 20 && Pp.l < 70;
+
+    function picker(label, val, set, which) {
+      var t = useState(val), txt = t[0], setTxt = t[1];
+      React.useEffect(function () { setTxt(val); }, [val]);
+      return h('div', { className: 'fx-pick' },
+        h('input', { type: 'color', value: val, 'aria-label': label + ' color picker', onChange: function (e) { set(e.target.value.toUpperCase()); setHot('ramp'); } }),
+        h(F.TextInput, { size: 'medium', label: label, value: txt, onChange: function (v) { setTxt(v); var x = v.trim(); if (x[0] !== '#') x = '#' + x; if (/^#[0-9a-f]{6}$/i.test(x)) { set(x.toUpperCase()); setHot('ramp'); } } }));
+    }
+    var ctl = h('aside', { className: 'fx-ctl', 'aria-label': 'Partner theme controls' },
+      h('section', null, h('h2', null, 'Partner colors'), h('p', null, 'What a club sets in its branding settings.'),
+        h('div', { style: { marginBottom: 12 } }, h(F.TextInput, { size: 'medium', label: 'Club name', value: name, onChange: function (v) { setName(v || 'Riverside FC'); } })),
+        picker('Primary', pc, setP, 'p'), picker('Secondary', sc, setSc, 's'),
+        h('div', { className: 'fx-presets', role: 'group', 'aria-label': 'Try a partner' }, PRESETS.map(function (x, i) {
+          return h('button', { key: x[0], type: 'button', className: 'fx-preset', 'aria-pressed': preset === i, onClick: function () { setP(x[1]); setSc(x[2]); setHot(i === 0 ? 'red' : i === 1 ? 'smart' : 'ramp'); } }, h('i', { style: { background: 'linear-gradient(135deg,' + x[1] + ' 50%,' + x[2] + ' 50%)' } }), x[0]);
+        }))),
+      h('section', null, h('h2', null, 'Generated shades'),
+        [['Primary', Pp], ['Secondary', Ss]].map(function (r) {
+          return h('div', { key: r[0] }, h('div', { className: 'fx-ramp', role: 'img', 'aria-label': r[0] + ': fourteen shades from lightest to darkest' }, r[1].steps.map(function (c, i) { return h('span', { key: i, style: { background: c }, title: SHADE_NAMES[i] + ' ' + c }); })),
+            h('div', { className: 'fx-rampcap' }, h('span', null, r[0]), h('span', null, (r[1].light ? 'Light curve' : 'Standard curve') + ' · sat ' + r[1].sat + '%')));
+        })),
+      h('section', null, h('h2', null, 'Text contrast'), h('p', null, passN + ' of ' + checks.length + ' pass WCAG 2.1 AA (4.5:1).'),
+        h('div', { style: { marginBottom: 12 } }, h(F.Switch, { label: 'Smart text color', checked: smart, onChange: function (v) { setSmart(v); setHot('smart'); } })),
+        h('div', { className: 'fx-checks' }, checks.map(function (c) {
+          var ok = c.ratio >= 4.5;
+          return h('div', { key: c.label, className: 'fx-check' }, h('span', { className: 'fx-aa', style: { background: c.bg, color: c.fg }, 'aria-hidden': 'true' }, 'Aa'), h('span', null, c.label, h('small', null, fmt(c.ratio))), h(F.Status, { intent: ok ? 'success' : 'danger', size: 'small', icon: true }, ok ? 'Pass' : 'Fail'));
+        }))),
+      h('section', null, h('h2', null, 'Logic log'),
+        h('ul', { className: 'fx-log' }, [['Primary', Pp], ['Secondary', Ss]].map(function (r) {
+          return [h('li', { key: r[0] + 'c' }, r[0] + ' hue ' + r[1].h + '°: ' + (r[1].light ? 'light curve (hue 55 to 185)' : 'standard curve') + (r[1].s > 90 ? '; saturation capped at 90%' : '')),
+            h('li', { key: r[0] + 't' }, smart ? r[0] + ' luminance ' + r[1].L.toFixed(2) + (r[1].L > 0.24 ? ' > 0.24: dark text' : ' ≤ 0.24: white text') : r[0] + ': white text forced'),
+            h('li', { key: r[0] + 'r' }, r[0] + ': ' + r[1].rule.toLowerCase())];
+        }))));
+
+    var canvas = h('div', { className: 'fx-canvas' },
+      reddish ? h('div', { className: 'fx-callout', role: 'note' }, h(F.Icon, { name: 'WarningOctagon', size: 24, color: 'var(--icon-danger)' }), h('div', null, h('b', null, 'A red partner color'), 'Red brands collide with error states. Press Register: errors carry the octagon icon and a message, not color alone. Compare the selected tile, which still takes the brand red; that is the open issue.')) : null,
+      h('div', { className: 'fx-frames' },
+        view !== 'mgmt' ? h(MemberScreen, { vars: vars, name: name, onError: function () { setHot('red'); } }) : null,
+        view !== 'member' ? h(ConsoleScreen, { vars: vars, name: name }) : null));
+
+    var tools = h('div', { className: 'px-seg', role: 'group', 'aria-label': 'Show' },
+      [['both', 'Both themes', 'Both'], ['member', 'Member Portal', 'Member'], ['mgmt', 'Console', 'Console']].map(function (x) { return h('button', { key: x[0], type: 'button', 'aria-pressed': view === x[0], 'aria-label': x[1], onClick: function () { setView(x[0]); setHot('themes'); } }, h('span', { className: 'px-hide-sm' }, x[1]), h('span', { className: 'px-show-sm', 'aria-hidden': 'true' }, x[2])); }));
+    return h(P.Shell, { title: 'Fieldhouse Design System', subtitle: 'Partner theming across two products', backHref: '/#work-fieldhouse', hot: hot, tools: tools,
+      notesIntro: 'Set a club’s colors and watch real Fieldhouse components re-theme through the token layer, with accessibility checked as you go.', notes: NOTES },
+      h('div', { className: 'fx' }, ctl, canvas));
+  }
+  ReactDOM.createRoot(document.getElementById('app')).render(h(App));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tournament Engine | Emily Blackwell</title>
+<meta name="description" content="A systems-level redesign of high-volume tournament registration, bulk checkout, and payment architecture across regional and national youth sports leagues.">
+<link rel="canonical" href="https://design.emilyblackwell.com/tournaments-case-study.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Tournament Engine | Emily Blackwell">
+<meta property="og:description" content="A systems-level redesign of high-volume tournament registration, bulk checkout, and payment architecture across regional and national youth sports leagues.">
+<meta property="og:url" content="https://design.emilyblackwell.com/tournaments-case-study.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;family=VT323&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/terminal.css">
+<script>document.documentElement.classList.add("js");try{var p=localStorage.getItem("bos-ph"),s=localStorage.getItem("bos-scan");if(p)document.documentElement.dataset.phosphor=p;if(s)document.documentElement.dataset.scanlines=s}catch(e){}</script>
+</head>
+<body class="crt" data-screen="WORK.TOURNAMENTS" data-parent="work.html" data-kind="menu" data-program="tournaments" data-sections="background users-context problem process outcome reflection">
+<a class="skip" href="#screen">Skip to content</a>
+<div id="prog" role="dialog" aria-modal="true" aria-labelledby="prog-title" hidden>
+  <div class="prog-bar">
+    <span id="prog-title">RUNNING</span>
+    <span class="btns"><button type="button" id="prog-reset">RESET</button><button type="button" id="prog-exit">EXIT (ESC)</button></span>
+  </div>
+  <div class="prog-hint" id="prog-hint"></div>
+  <div class="prog-body">
+    <div class="prog-win" id="prog-win"></div>
+    <aside class="prog-notes" id="prog-notes" aria-label="Design notes"></aside>
+  </div>
+</div>
+<div class="frame">
+  <!-- chrome:top -->
+  <header class="bar top">
+    <span>BLACKWELL/OS 2.6</span>
+    <span id="where" class="hide-sm">WORK.TOURNAMENTS</span>
+    <span id="clock" aria-hidden="true"></span>
+  </header>
+  <!-- /chrome:top -->
+
+  <main id="screen" tabindex="-1">
+    <h2 class="screen-title">TOURNAMENT ENGINE</h2>
+    <p class="lede case-lede">THE TOURNAMENT ENGINE FOR YOUTH SPORTS</p>
+    <p class="sub">A systems-level redesign of high-volume tournament registration, bulk checkout, and payment architecture across regional and national youth sports leagues.</p>
+    <dl class="record"><dt>Role</dt><dd>Lead Product Designer<br><span class="dim">Payments &amp; Registration Squads</span></dd><dt>Company</dt><dd>LeagueApps, New York City</dd><dt>Timeline</dt><dd>2024, Q1 – Q4</dd><dt>Focus</dt><dd>Payments / Registration / Mobile-First</dd><dt>Methods</dt><dd>Discovery, Systems Design, Gong, Dovetail, Figma</dd></dl>
+    <ul class="menu" style="margin-top:26px">
+      <li><button class="opt" type="button" data-key="R" data-act="run:tournaments"><span class="key">[R]</span><span class="label">Run interactive demo</span><span class="lead" aria-hidden="true"></span><span class="meta">Live</span></button></li>
+    </ul>
+    <hr class="rule">
+    <ul class="menu">
+      <li><a class="opt" href="tournaments-case-study-background.html" data-key="1"><span class="key caret" aria-hidden="true">&gt;</span><span class="label">Background</span><span class="lead" aria-hidden="true"></span><span class="meta"></span></a></li>
+      <li><a class="opt" href="tournaments-case-study-users-context.html" data-key="2"><span class="key caret" aria-hidden="true">&gt;</span><span class="label">Users & Context</span><span class="lead" aria-hidden="true"></span><span class="meta"></span></a></li>
+      <li><a class="opt" href="tournaments-case-study-problem.html" data-key="3"><span class="key caret" aria-hidden="true">&gt;</span><span class="label">Problem</span><span class="lead" aria-hidden="true"></span><span class="meta"></span></a></li>
+      <li><a class="opt" href="tournaments-case-study-process.html" data-key="4"><span class="key caret" aria-hidden="true">&gt;</span><span class="label">Process</span><span class="lead" aria-hidden="true"></span><span class="meta"></span></a></li>
+      <li><a class="opt" href="tournaments-case-study-outcome.html" data-key="5"><span class="key caret" aria-hidden="true">&gt;</span><span class="label">Outcome</span><span class="lead" aria-hidden="true"></span><span class="meta"></span></a></li>
+      <li><a class="opt" href="tournaments-case-study-reflection.html" data-key="6"><span class="key caret" aria-hidden="true">&gt;</span><span class="label">Reflection</span><span class="lead" aria-hidden="true"></span><span class="meta"></span></a></li>
+    </ul>
+    <hr class="rule">
+    <ul class="menu">
+      <li><a class="opt" href="work.html" data-key="I"><span class="key">[I]</span><span class="label">Work index</span><span class="lead" aria-hidden="true"></span><span class="meta"></span></a></li>
+    </ul>
+  </main>
+
+  <!-- chrome:bottom -->
+  <div class="foot">
+  <form class="cmd" id="cmdform" autocomplete="off">
+    <label for="cmd">COMMAND ===&gt;</label>
+    <input id="cmd" name="cmd" spellcheck="false" aria-describedby="msg">
+    <span class="cursor" aria-hidden="true"></span>
+  </form>
+  <div class="msg" id="msg" role="status">PRESS / TO TYPE A COMMAND. TYPE HELP FOR A LIST.</div>
+  <nav class="bar bottom" aria-label="Function keys">
+    <span><a href="work.html" data-back>ESC=BACK</a></span>
+    <span class="hide-sm keys-only">&uarr;&darr;=SELECT &nbsp;ENTER=OPEN</span>
+    <span><a href="index.html">H=HOME</a></span>
+    <span><a href="help.html">?=HELP</a></span>
+  </nav>
+  </div>
+  <!-- /chrome:bottom -->
+</div>
+<script src="js/demos.js"></script>
+<script src="js/terminal.js"></script>
+</body>
+</html>

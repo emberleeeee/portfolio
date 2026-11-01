@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Help | Emily Blackwell</title>
+<meta name="description" content="Keyboard shortcuts and commands for this portfolio.">
+<link rel="canonical" href="https://design.emilyblackwell.com/help.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Help | Emily Blackwell">
+<meta property="og:description" content="Keyboard shortcuts and commands for this portfolio.">
+<meta property="og:url" content="https://design.emilyblackwell.com/help.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;family=VT323&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/terminal.css">
+<script>document.documentElement.classList.add("js");try{var p=localStorage.getItem("bos-ph"),s=localStorage.getItem("bos-scan");if(p)document.documentElement.dataset.phosphor=p;if(s)document.documentElement.dataset.scanlines=s}catch(e){}</script>
+</head>
+<body class="crt" data-screen="SYS.HELP" data-parent="index.html" data-kind="doc">
+<a class="skip" href="#screen">Skip to content</a>
+<div class="frame">
+  <!-- chrome:top -->
+  <header class="bar top">
+    <span>BLACKWELL/OS 2.6</span>
+    <span id="where" class="hide-sm">SYS.HELP</span>
+    <span id="clock" aria-hidden="true"></span>
+  </header>
+  <!-- /chrome:top -->
+
+  <main id="screen" tabindex="-1">
+    <h2 class="screen-title">HELP</h2>
+    <dl class="record">
+      <dt>Letter and number keys</dt><dd>Jump to the bracketed option, e.g. [W] or [3]</dd>
+      <dt>&uarr; &darr;</dt><dd>Move the selection</dd>
+      <dt>Enter</dt><dd>Open the selection</dd>
+      <dt>&larr; &rarr;</dt><dd>Previous or next section, inside a case study</dd>
+      <dt>Esc</dt><dd>Back one level (or select ESC=BACK)</dd>
+      <dt>H</dt><dd>Main menu</dd>
+      <dt>/</dt><dd>Type a command</dd>
+    </dl>
+    <hr class="rule">
+    <h3>COMMANDS</h3>
+    <dl class="record">
+      <dt>WORK, ABOUT, RESUME, LAB, CONTACT</dt><dd>Go to a section</dd>
+      <dt>OPEN &lt;NAME&gt;</dt><dd>Open a case, e.g. OPEN FIELDHOUSE</dd>
+      <dt>RUN &lt;NAME&gt;</dt><dd>Launch a live prototype, e.g. RUN FIELDHOUSE</dd>
+      <dt>GREEN, AMBER, WHITE, WEATHER</dt><dd>Change the display theme</dd>
+      <dt>SCANLINES</dt><dd>Toggle the CRT effect</dd>
+      <dt>HOME, BACK, HELP</dt><dd>Navigate</dd>
+    </dl>
+    <p class="dim">Everything is also clickable and tappable.</p>
+  </main>
+
+  <!-- chrome:bottom -->
+  <div class="foot">
+  <form class="cmd" id="cmdform" autocomplete="off">
+    <label for="cmd">COMMAND ===&gt;</label>
+    <input id="cmd" name="cmd" spellcheck="false" aria-describedby="msg">
+    <span class="cursor" aria-hidden="true"></span>
+  </form>
+  <div class="msg" id="msg" role="status">PRESS / TO TYPE A COMMAND. TYPE HELP FOR A LIST.</div>
+  <nav class="bar bottom" aria-label="Function keys">
+    <span><a href="index.html" data-back>ESC=BACK</a></span>
+    <span class="hide-sm keys-only">&uarr;&darr;=SELECT &nbsp;ENTER=OPEN</span>
+    <span><a href="index.html">H=HOME</a></span>
+    <span><a href="help.html">?=HELP</a></span>
+  </nav>
+  </div>
+  <!-- /chrome:bottom -->
+</div>
+<script src="js/terminal.js"></script>
+</body>
+</html>

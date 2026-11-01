@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Process | Tournament Engine | Emily Blackwell</title>
+<meta name="description" content="Research began by analyzing feedback from recorded customer success and sales calls in Gong, then synthesizing insights in Dovetail.">
+<link rel="canonical" href="https://design.emilyblackwell.com/tournaments-case-study-process.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Process | Tournament Engine | Emily Blackwell">
+<meta property="og:description" content="Research began by analyzing feedback from recorded customer success and sales calls in Gong, then synthesizing insights in Dovetail.">
+<meta property="og:url" content="https://design.emilyblackwell.com/tournaments-case-study-process.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;family=VT323&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/terminal.css">
+<script>document.documentElement.classList.add("js");try{var p=localStorage.getItem("bos-ph"),s=localStorage.getItem("bos-scan");if(p)document.documentElement.dataset.phosphor=p;if(s)document.documentElement.dataset.scanlines=s}catch(e){}</script>
+</head>
+<body class="crt" data-screen="WORK.TOURNAMENTS/PROCESS" data-parent="tournaments-case-study.html" data-kind="case" data-program="tournaments" data-prev="tournaments-case-study-problem.html" data-next="tournaments-case-study-outcome.html">
+<a class="skip" href="#screen">Skip to content</a>
+<div id="prog" role="dialog" aria-modal="true" aria-labelledby="prog-title" hidden>
+  <div class="prog-bar">
+    <span id="prog-title">RUNNING</span>
+    <span class="btns"><button type="button" id="prog-reset">RESET</button><button type="button" id="prog-exit">EXIT (ESC)</button></span>
+  </div>
+  <div class="prog-hint" id="prog-hint"></div>
+  <div class="prog-body">
+    <div class="prog-win" id="prog-win"></div>
+    <aside class="prog-notes" id="prog-notes" aria-label="Design notes"></aside>
+  </div>
+</div>
+<div class="frame">
+  <!-- chrome:top -->
+  <header class="bar top">
+    <span>BLACKWELL/OS 2.6</span>
+    <span id="where" class="hide-sm">WORK.TOURNAMENTS/PROCESS</span>
+    <span id="clock" aria-hidden="true"></span>
+  </header>
+  <!-- /chrome:top -->
+
+  <main id="screen" tabindex="-1">
+    <p class="crumb"><a href="tournaments-case-study.html">TOURNAMENT ENGINE</a> / SECTION 04 OF 06</p>
+    <section class="case-sec solo" id="process" aria-labelledby="process-h">
+      <h2 class="screen-title" id="process-h">PROCESS</h2>
+      <h4 class="sub-h">Discovery</h4><p>Research began by analyzing feedback from recorded customer success and sales calls in <b>Gong</b>, then synthesizing insights in <b>Dovetail</b>. I facilitated assumption-mapping workshops and prioritization exercises to validate what we believed we knew about our users.</p><p>We interviewed over <b>20 tournament organizers</b> plus a handful of parents and coaches. One surprising insight: organizers frequently registered returning teams on their behalf — a clear signal that the registration flow was too time-consuming for busy coaches and staff.</p><div class="stats"><div class="stat"><b>20+</b><span>Organizer interviews conducted</span></div><div class="stat"><b>5</b><span>Core friction themes identified</span></div><div class="stat"><b>2</b><span>Product squads aligned under one vision</span></div></div><h4 class="sub-h">Key Insights</h4><ul class="lines"><li><b>Bulk registration</b> was the single highest-impact capability missing from the platform</li><li><b>Flexible pricing models</b> and payment plans were requested by nearly every organizer interviewed</li><li><b>A native waitlist system</b> was missing but highly requested — most partners had built manual workarounds</li><li><b>Tournament caps</b> (by team or player count) needed to be configurable at the program level</li><li><b>Mobile-first</b> was non-negotiable — nearly every critical action happened on a phone, on a field</li></ul><h4 class="sub-h">Design &amp; Strategy</h4><p>With these insights, I restructured the experience around <b>scalability and reuse</b> — not just patching existing flows, but rearchitecting the registration model.</p><div class="cards"><div class="card"><h5>Introduce a bulk registration cart and simplified checkout</h5><span class="lbl">Why</span><p>Organizers needed to register dozens of teams in a single session. One-at-a-time checkout created compounding friction and payment errors.</p><span class="lbl">Tradeoff</span><p>Cart architecture added backend complexity and required coordination across Payments and Registration squads during an already fragile migration window.</p><p class="try"><a class="run-link" data-scene="cart" href="#run-cart"><span aria-hidden="true">&gt;&gt; </span>RUN DEMO: Register several teams in one checkout</a></p></div><div class="card"><h5>Dynamic payment plan entry — up to 12 configurable options</h5><span class="lbl">Why</span><p>The original structure offered a single fixed payment option. Partners needed granular control over installment schedules to serve different budget situations.</p><span class="lbl">Tradeoff</span><p>More options risk decision paralysis. We capped at 12 and added smart defaults to reduce cognitive load for both organizers and registrants.</p><p class="try"><a class="run-link" data-scene="plan" href="#run-plan"><span aria-hidden="true">&gt;&gt; </span>RUN DEMO: Build a payment plan</a></p></div><div class="card"><h5>Apply Fieldhouse DS for accessibility and consistency</h5><span class="lbl">Why</span><p>Fieldhouse enforced WCAG 2.1 compliance across the platform. Tournaments needed to meet the same baseline — especially for mobile and form-heavy flows.</p><span class="lbl">Tradeoff</span><p>Some component constraints required custom pattern work. We contributed back to the system rather than working around it.</p></div><div class="card"><h5>Reduce visual clutter — open layouts over box-heavy UI</h5><span class="lbl">Why</span><p>The existing NG interface was dense and overwhelming. Tournament registration involves many steps and high-stakes decisions — clarity reduces error rates.</p><span class="lbl">Tradeoff</span><p>Open layouts can feel less structured to power users. We used progressive disclosure to keep advanced controls accessible without surfacing them by default.</p></div></div><h4 class="sub-h">Collaboration &amp; Handoff</h4><p>I led design reviews across both squads, presenting work <b>twice monthly to leadership</b> and <b>weekly to engineering</b>. During handoff, we used boxing exercises — structured working sessions mapping each UI element to its backend endpoint — to catch mismatches early and keep velocity high.</p><p>Feedback loops were tight: constant iteration between Figma prototypes, Jira tickets, and in-progress demos kept all parties aligned without heavy documentation overhead.</p><h4 class="sub-h">Testing &amp; Iteration</h4><p>I moderated prototype walkthroughs at key decision points. The most significant early win came from a single microcopy change.</p><figure class="quote"><blockquote>Registrants were entering parent information where tournament administrators expected child information. One field label update nearly eliminated the error entirely.</blockquote><figcaption>Usability Test Finding, Tournament Registration Flow</figcaption></figure><p class="try"><a class="run-link" data-scene="copy" href="#run-copy"><span aria-hidden="true">&gt;&gt; </span>RUN DEMO: Compare the original and updated labels</a></p><p>These iterative test-and-learn cycles transformed stakeholder understanding of user testing's value — leading to broader adoption of <b>unmoderated usability testing company-wide</b>.</p><div class="cards"><div class="card"><span class="lbl">Phase 1 — Foundation</span><h5>Bulk Cart &amp; Core Registration</h5><ul class="lines"><li>Bulk team registration cart</li><li>Mobile-optimized checkout</li><li>Roster cap configuration</li><li>Fieldhouse DS application</li></ul></div><div class="card"><span class="lbl">Phase 2 — Advanced Tooling</span><h5>Pricing, Waitlists &amp; Compliance</h5><ul class="lines"><li>Dynamic payment plan builder</li><li>Native waitlist management</li><li>Position-based pricing logic</li><li>Automated compliance flows</li></ul></div></div>
+    </section>
+    <hr class="rule">
+    <ul class="menu">
+      <li><a class="opt" href="tournaments-case-study-outcome.html" data-key="N"><span class="key">[N]</span><span class="label">Next: Outcome</span><span class="lead" aria-hidden="true"></span><span class="meta">05/06</span></a></li>
+      <li><a class="opt" href="tournaments-case-study-problem.html" data-key="P"><span class="key">[P]</span><span class="label">Previous: Problem</span><span class="lead" aria-hidden="true"></span><span class="meta">03/06</span></a></li>
+      <li><a class="opt" href="tournaments-case-study.html" data-key="C"><span class="key">[C]</span><span class="label">Back to case file</span><span class="lead" aria-hidden="true"></span><span class="meta">Tournament Engine</span></a></li>
+      <li><button class="opt" type="button" data-key="R" data-act="run:tournaments"><span class="key">[R]</span><span class="label">Run interactive demo</span><span class="lead" aria-hidden="true"></span><span class="meta">Live</span></button></li>
+    </ul>
+  </main>
+
+  <!-- chrome:bottom -->
+  <div class="foot">
+  <form class="cmd" id="cmdform" autocomplete="off">
+    <label for="cmd">COMMAND ===&gt;</label>
+    <input id="cmd" name="cmd" spellcheck="false" aria-describedby="msg">
+    <span class="cursor" aria-hidden="true"></span>
+  </form>
+  <div class="msg" id="msg" role="status">PRESS / TO TYPE A COMMAND. TYPE HELP FOR A LIST.</div>
+  <nav class="bar bottom" aria-label="Function keys">
+    <span><a href="tournaments-case-study.html" data-back>ESC=BACK</a></span>
+    <span class="hide-sm keys-only">&uarr;&darr;=SELECT &nbsp;ENTER=OPEN</span>
+    <span><a href="index.html">H=HOME</a></span>
+    <span><a href="help.html">?=HELP</a></span>
+  </nav>
+  </div>
+  <!-- /chrome:bottom -->
+</div>
+<script src="js/demos.js"></script>
+<script src="js/terminal.js"></script>
+</body>
+</html>

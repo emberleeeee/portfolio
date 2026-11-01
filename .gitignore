@@ -1,0 +1,24 @@
+# macOS
+.DS_Store
+._*
+
+# Large design files (they live in Figma)
+*.fig
+
+# Retired pages and working material, kept locally only
+archive/
+
+# Old case-study images (201 MB). The terminal site no longer uses any of them,
+# and they include ARC screens. Remove this line only to publish specific images.
+assets/
+
+# Python
+__pycache__/
+*.pyc
+
+# Never commit credentials or confidential source material
+.env
+*.pem
+*.key
+**/confidential/
+**/nda/
