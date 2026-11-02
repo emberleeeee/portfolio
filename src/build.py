@@ -267,7 +267,7 @@ SUBPAGES = {}
 for i,(cid,key,label,meta,url,desc) in enumerate(WORK):
     c = CASES[cid]
     prev = WORK[(i-1) % len(WORK)]; nxt = WORK[(i+1) % len(WORK)]
-    fonts = "&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700" + ("&amp;family=Source+Sans+3:wght@400;600;700" if cid == "arc" else "") + ("&amp;family=IBM+Plex+Sans+Condensed:wght@600;700" if cid in ("fieldhouse", "team-builder") else "") + ("&amp;family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400" if cid == "merit-america" else "")
+    fonts = "&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700" + ("&amp;family=Source+Sans+3:wght@400;600;700" if cid == "arc" else "") + ("&amp;family=IBM+Plex+Sans+Condensed:wght@600;700" if cid in ("fieldhouse", "team-builder", "tournaments") else "") + ("&amp;family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400" if cid == "merit-america" else "")
     for s in c["sections"]:   # stray line breaks left between bold text and its punctuation
         s["html"] = re.sub(r"<br\s*/?>\s*(?=[.,;:!?])", "", s["html"])
     secs = c["sections"]; total = len(secs)
