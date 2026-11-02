@@ -67,16 +67,22 @@ jobs:
         env:
           IONOS_HOST: ${{ secrets.IONOS_HOST }}
           IONOS_USER: ${{ secrets.IONOS_USER }}
-          IONOS_PASSWORD: ${{ secrets.IONOS_PASSWORD }}
+          LFTP_PASSWORD: ${{ secrets.IONOS_PASSWORD }}
           IONOS_PATH: ${{ secrets.IONOS_PATH }}
         run: |
-          lftp -e "
+          # Clean up pasted values: drop line breaks, surrounding spaces, an sftp:// prefix and slashes.
+          clean() { printf '%s' "$1" | tr -d '\r\n' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'; }
+          HOST=$(clean "$IONOS_HOST" | sed -e 's#^sftp://##' -e 's#/*$##')
+          USER_NAME=$(clean "$IONOS_USER")
+          DEST=$(clean "$IONOS_PATH" | sed -e 's#^/*##' -e 's#/*$##')
+          export LFTP_PASSWORD="$(printf '%s' "$LFTP_PASSWORD" | tr -d '\r\n')"
+          # The password never enters the command line: lftp reads it from LFTP_PASSWORD.
+          lftp --env-password -u "$USER_NAME" "sftp://$HOST" -e "
             set sftp:auto-confirm yes;
             set net:max-retries 3;
             set net:timeout 30;
-            open -u \"$IONOS_USER\",\"$IONOS_PASSWORD\" sftp://$IONOS_HOST;
-            mkdir -p -f \"$IONOS_PATH\";
-            mirror --reverse --only-newer --verbose --exclude-glob .DS_Store public/ \"$IONOS_PATH/\";
+            mkdir -p -f '$DEST';
+            mirror --reverse --only-newer --verbose --exclude-glob .DS_Store public/ '$DEST/';
             bye
           "
 
