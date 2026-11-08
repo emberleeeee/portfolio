@@ -111,17 +111,13 @@ for _cid, _c in CASES.items():
         _s["html"], n = contextualize(_cid, _s["html"])
         TRY_COUNT[_cid] = TRY_COUNT.get(_cid, 0) + n
 
+# Each record's description on the Work page is its case file's subhead (BRIEF), so the two match.
 WORK = [
-  ("team-builder","B","Team Builder","LeagueApps","team-builder-case-study.html",
-   "Cognitive efficiency in complex roster systems. A drag-and-drop roster tool that replaced spreadsheets and weekend-long data entry."),
-  ("tournaments","T","Tournament Engine","LeagueApps","tournaments-case-study.html",
-   "The tournament engine for youth sports, reimagined. Bulk registration, dynamic payment plans and waitlists, designed mobile-first for organizers in the field."),
-  ("fieldhouse","F","Fieldhouse Design System","LeagueApps","fieldhouse-ds-case-study.html",
-   "A modular framework for multi-domain design integrity. Rebuilt from the ground up: accessible by default, two themes, partner branding without the breakage."),
-  ("arc","A","ARC Settlement","Airlines Reporting Corp.","arc-settlement-case-study.html",
-   "Airline settlement interfaces for accuracy and speed. A UX-led overhaul of reconciliation tools used by 200+ airlines and travel agencies."),
-  ("merit-america","M","Merit America Portal","Merit America","merit-america-case-study.html",
-   "A learning experience for career transitions. A mobile-first learner portal that replaced spreadsheets and manual tracking."),
+  ("team-builder","B","Team Builder","LeagueApps","team-builder-case-study.html"),
+  ("tournaments","T","Tournament Engine","LeagueApps","tournaments-case-study.html"),
+  ("fieldhouse","F","Fieldhouse Design System","LeagueApps","fieldhouse-ds-case-study.html"),
+  ("arc","A","ARC Settlement","Airlines Reporting Corp.","arc-settlement-case-study.html"),
+  ("merit-america","M","Merit America Portal","Merit America","merit-america-case-study.html"),
 ]
 LAB = [
   ("L","L'Expedition","Etymology","https://etymology.emilyblackwell.com/","An etymology education platform built on a 225-entry database."),
@@ -255,7 +251,7 @@ pages["work.html"] = page("work.html", "Selected Work | Emily Blackwell",
   "Case studies: Team Builder, Tournament Engine, Fieldhouse Design System, ARC Settlement and Merit America Portal.",
   "WORK.INDEX", "index.html", f'''    <h2 class="screen-title">Selected work</h2>
     <p class="sub caps">Select a record to open the case file.</p>
-{menu([opt(k,l,m,u,desc=d) for (_,k,l,m,u,d) in WORK])}''')
+{menu([opt(k,l,m,u,desc=BRIEF[cid]) for (cid,k,l,m,u) in WORK])}''')
 
 # Case metadata is the same five rows everywhere: Role, Company, Timeline, Focus, Methods.
 # Values here fill the gaps, drawn from each case study's own text and former Tools/Standards rows.
@@ -279,7 +275,7 @@ def excerpt(h, n=110):
     t = re.split(r"(?<=[.!?])\s", t)[0]
     return html.escape(t if len(t) <= n else t[:n].rsplit(" ", 1)[0] + "\u2026")
 SUBPAGES = {}
-for i,(cid,key,label,meta,url,desc) in enumerate(WORK):
+for i,(cid,key,label,meta,url) in enumerate(WORK):
     c = CASES[cid]
     prev = WORK[(i-1) % len(WORK)]; nxt = WORK[(i+1) % len(WORK)]
     fonts = "&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700" + ("&amp;family=Source+Sans+3:wght@400;600;700" if cid == "arc" else "") + ("&amp;family=IBM+Plex+Sans+Condensed:wght@600;700" if cid in ("fieldhouse", "team-builder", "tournaments") else "") + ("&amp;family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400" if cid == "merit-america" else "")
