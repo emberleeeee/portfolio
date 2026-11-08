@@ -260,6 +260,15 @@
 
   P.arc = {
     title:"SETTLEMENT.TOOLS",
+    cases:[
+      ["reconcile", "Answer a customer question across two tools", [""]],
+      ["lookup", "Look up a ticket and follow its exchange chain"],
+      ["edit", "Change segments on a refund"],
+      ["legacy", "Read a raw settlement record"],
+      ["clear", "See the clarified record"],
+      ["terms", "See every code in plain language"],
+      ["share", "Copy a customer-ready summary"]
+    ],
     hint:"ANSWER THE CUSTOMER USING BOTH TOOLS. THEN TRY IT WITH ONE LOOKUP.",
     hints:{
       reconcile:"FIND THE CUSTOMER'S TICKET IN THE ARCHIVE, FOLLOW THE EXCHANGE INTO THE CURRENT CYCLE, THEN ANSWER. STEPS ARE COUNTED.",

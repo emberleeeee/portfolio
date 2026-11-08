@@ -141,24 +141,39 @@
     $("#cmdform").addEventListener("submit", e => { e.preventDefault(); const v = cmd.value; cmd.value = ""; fit(); cmd.blur(); runCommand(v); });
   }
 
-  const progEl = $("#prog"), progWin = $("#prog-win"), progNotes = $("#prog-notes");
+  const progEl = $("#prog"), progWin = $("#prog-win"), progNotes = $("#prog-notes"), progCases = $("#prog-cases");
 
   // ---------- program layer (only on pages that include #prog) ----------
   const prog = { open:null, scene:"", returnFocus:null };
   const PROGRAMS = (progEl && window.BOS_PROGRAMS) || {};
+  // A demo lists its use cases as p.cases: [[scene, label, [other scenes that open the same thing]], ...].
+  // The list shows beside the notes; a launch from a link in the case study highlights its case.
+  const caseFor = (p, scene) => (p.cases || []).find(c => c[0] === scene || (c[2] || []).includes(scene));
+  function renderCases(p, scene){
+    if(!progCases) return;
+    if(!p.cases || !p.cases.length){ progCases.hidden = true; progCases.innerHTML = ""; return; }
+    const cur = caseFor(p, scene) || p.cases[0];
+    progCases.hidden = false;
+    progCases.innerHTML = `<h4>USE CASES</h4><ol>${p.cases.map(c =>
+      `<li><button type="button" data-case="${c[0]}" aria-current="${c === cur}">${c[1]}</button></li>`).join("")}</ol>`;
+  }
+  function startCase(p, scene){
+    p.init(scene); p.render(progWin, progNotes);
+    $("#prog-hint").textContent = (p.hints && p.hints[scene]) || p.hint;
+    renderCases(p, scene);
+    const h = scene ? "#run-" + scene : "#run";
+    if(location.hash !== h) history.replaceState(null, "", h);
+  }
   // scene: optional starting point, so a link in the case study opens the demo at that moment
   function openProgram(id, scene=""){
     const p = PROGRAMS[id]; if(!p || prog.open === id) return;
     prog.open = id; prog.scene = scene; prog.returnFocus = document.activeElement;
     $("#prog-title").textContent = "RUNNING: " + p.title;
-    $("#prog-hint").textContent = (p.hints && p.hints[scene]) || p.hint;
-    p.init(scene); p.render(progWin, progNotes);
+    startCase(p, scene);
     progEl.hidden = false;
     body.style.overflow = "hidden";
     $(".frame").setAttribute("inert","");
     $("#prog-exit").focus();
-    const h = scene ? "#run-" + scene : "#run";
-    if(location.hash !== h) history.replaceState(null, "", h);
   }
   function closeProgram(){
     if(!prog.open) return;
@@ -176,7 +191,12 @@
     progWin.addEventListener("input", onInput);
     progWin.addEventListener("change", e => { if(e.target.type === "file" || e.target.type === "checkbox") onInput(e); });
     $("#prog-exit").addEventListener("click", closeProgram);
-    $("#prog-reset").addEventListener("click", () => { const p = PROGRAMS[prog.open]; p.init(prog.scene); p.render(progWin, progNotes); say("PROGRAM RESET."); });
+    $("#prog-reset").addEventListener("click", () => { startCase(PROGRAMS[prog.open], prog.scene); say("PROGRAM RESET."); });
+    if(progCases) progCases.addEventListener("click", e => {
+      const b = e.target.closest("[data-case]"); if(!b || !prog.open) return;
+      prog.scene = b.dataset.case; startCase(PROGRAMS[prog.open], prog.scene);
+      const f = progCases.querySelector(`[data-case="${prog.scene}"]`); if(f) f.focus();
+    });
     progEl.addEventListener("keydown", e => {
       if(e.key !== "Tab") return;
       const f = [...progEl.querySelectorAll("button:not([disabled]),[href],input,[tabindex]:not([tabindex='-1'])")].filter(x => x.offsetParent !== null);

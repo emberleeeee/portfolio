@@ -308,6 +308,9 @@ html[data-phosphor="minimal"] .run-link{border-radius:6px}
 html[data-phosphor="minimal"] .run-link:hover,html[data-phosphor="minimal"] .run-link:focus-visible{background:var(--ph);color:var(--bg)}
 html[data-phosphor="minimal"] .case-sec:focus-visible > h3{box-shadow:none;background:none;color:var(--ph);text-decoration:underline}
 html[data-phosphor="minimal"] .prog-hint{color:var(--dim)}
+html[data-phosphor="minimal"] .prog-cases button{border-radius:6px}
+html[data-phosphor="minimal"] .prog-cases button[aria-current="true"]{background:var(--wash);color:var(--ph);font-weight:600}
+html[data-phosphor="minimal"] .prog-cases button:hover{background:var(--wash)}
 /* Minimal keeps capitals for the status bars only */
 html[data-phosphor="minimal"] .name,html[data-phosphor="minimal"] .screen-title,html[data-phosphor="minimal"] .lede,html[data-phosphor="minimal"] .caps,
 html[data-phosphor="minimal"] .lbl,html[data-phosphor="minimal"] .crumb,html[data-phosphor="minimal"] .case-tags,html[data-phosphor="minimal"] .record dt,

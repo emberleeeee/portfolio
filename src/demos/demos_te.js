@@ -481,6 +481,14 @@
 
   P.tournaments = {
     title:"TOURNAMENT.REGISTRATION",
+    cases:[
+      ["cart", "Register several teams in one checkout", [""]],
+      ["review", "Review a team registration before checkout"],
+      ["plan", "Build a payment plan and apply discount codes"],
+      ["addons", "Choose required and optional add-ons as a player or staff member"],
+      ["admin", "Set which add-ons are available or required"],
+      ["copy", "Compare the original and updated labels"]
+    ],
     hint:"TRY: PICK TEAMS IN A DIVISION, CHOOSE ADD-ONS, THEN CHECK OUT WITH A PAYMENT PLAN AND THE CODE SPRING10.",
     hints:{
       cart:"OPEN A DIVISION'S TEAM PICKER AND SELECT ALL TEAMS. THE SUMMARY TOTALS THE BENCH.",

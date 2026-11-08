@@ -13,6 +13,13 @@
   };
   P["merit-america"] = {
     title:"LEARNER.PORTAL",
+    cases:[
+      ["status", "See the weekly status a learner starts with", [""]],
+      ["nudge", "See a mid-week nudge go out"],
+      ["proof", "Submit proof and verify it as the coach"],
+      ["coach", "See the coach count a learner's proof"],
+      ["close", "Close out the week"]
+    ],
     hint:"STEP THROUGH THE WEEK. UPLOAD A SCREENSHOT AS THE LEARNER, THEN COUNT IT AS THE COACH.",
     hints:{
       status:"MONDAY: ONE WEEKLY STATUS INSTEAD OF A PERCENTAGE. USE NEXT STEP TO MOVE THROUGH THE WEEK.",

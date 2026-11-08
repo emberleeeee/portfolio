@@ -289,6 +289,11 @@
 
   P.fieldhouse = {
     title:"FIELDHOUSE.COLOR",
+    cases:[
+      ["red", "Generate accessible shades from a brand color", [""]],
+      ["off", "See the same colors without the luminance rule"],
+      ["console", "Run the admin theme that stays consistent for every partner"]
+    ],
     hint:"TRY: PICK GOLD & BLACK, THEN TURN SMART TEXT COLOR OFF.",
     hints:{
       red:"RED IS THE MOST COMMON SPORTS COLOR. TRY TYPING YOUR OWN RED INTO THE PRIMARY FIELD.",
@@ -544,6 +549,15 @@
 
   P["team-builder"] = {
     title:"TEAMBUILDER.BOARD",
+    cases:[
+      ["", "Draft rosters without sending anything"],
+      ["move-invite", "See a move and an invite detected for you"],
+      ["capacity", "Overfill a team and see the inline warning"],
+      ["review", "Review moves, invitations and sent invites before finalizing"],
+      ["statuses", "See every invitation state on one board"],
+      ["drawer", "Compare tryout scores in the player drawer"],
+      ["autosave", "Keep drafting when the connection drops"]
+    ],
     hint:"DRAG A TRYOUT PLAYER ONTO A TEAM, MOVE A REGISTERED PLAYER, THEN REVIEW & FINALIZE ROSTERS.",
     hints:{
       "move-invite":"MAYA WAS ALREADY REGISTERED, SO SHE'S A DRAFT MOVE. RILEY CAME FROM TRYOUTS, SO SHE NEEDS AN INVITATION.",
@@ -1088,6 +1102,14 @@
 
   P.tournaments = {
     title:"TOURNAMENT.REGISTRATION",
+    cases:[
+      ["cart", "Register several teams in one checkout", [""]],
+      ["review", "Review a team registration before checkout"],
+      ["plan", "Build a payment plan and apply discount codes"],
+      ["addons", "Choose required and optional add-ons as a player or staff member"],
+      ["admin", "Set which add-ons are available or required"],
+      ["copy", "Compare the original and updated labels"]
+    ],
     hint:"TRY: PICK TEAMS IN A DIVISION, CHOOSE ADD-ONS, THEN CHECK OUT WITH A PAYMENT PLAN AND THE CODE SPRING10.",
     hints:{
       cart:"OPEN A DIVISION'S TEAM PICKER AND SELECT ALL TEAMS. THE SUMMARY TOTALS THE BENCH.",
@@ -1458,6 +1480,15 @@
 
   P.arc = {
     title:"SETTLEMENT.TOOLS",
+    cases:[
+      ["reconcile", "Answer a customer question across two tools", [""]],
+      ["lookup", "Look up a ticket and follow its exchange chain"],
+      ["edit", "Change segments on a refund"],
+      ["legacy", "Read a raw settlement record"],
+      ["clear", "See the clarified record"],
+      ["terms", "See every code in plain language"],
+      ["share", "Copy a customer-ready summary"]
+    ],
     hint:"ANSWER THE CUSTOMER USING BOTH TOOLS. THEN TRY IT WITH ONE LOOKUP.",
     hints:{
       reconcile:"FIND THE CUSTOMER'S TICKET IN THE ARCHIVE, FOLLOW THE EXCHANGE INTO THE CURRENT CYCLE, THEN ANSWER. STEPS ARE COUNTED.",
@@ -1536,6 +1567,13 @@
   };
   P["merit-america"] = {
     title:"LEARNER.PORTAL",
+    cases:[
+      ["status", "See the weekly status a learner starts with", [""]],
+      ["nudge", "See a mid-week nudge go out"],
+      ["proof", "Submit proof and verify it as the coach"],
+      ["coach", "See the coach count a learner's proof"],
+      ["close", "Close out the week"]
+    ],
     hint:"STEP THROUGH THE WEEK. UPLOAD A SCREENSHOT AS THE LEARNER, THEN COUNT IT AS THE COACH.",
     hints:{
       status:"MONDAY: ONE WEEKLY STATUS INSTEAD OF A PERCENTAGE. USE NEXT STEP TO MOVE THROUGH THE WEEK.",

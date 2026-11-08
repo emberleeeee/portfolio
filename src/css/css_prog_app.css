@@ -9,7 +9,17 @@
 .prog-hint{font-size:var(--fs-small);letter-spacing:var(--track);color:var(--ph);padding:0 2px}
 .prog-body{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px}
 .prog-win{background:#fff;border-radius:6px;overflow:auto;min-height:0;box-shadow:0 0 0 1px rgba(var(--ph-rgb),.35),0 0 24px rgba(var(--ph-rgb),.12)}
-.prog-notes{overflow:auto;border-left:1px dashed var(--faint);padding:2px 0 0 18px}
+.prog-side{overflow:auto;border-left:1px dashed var(--faint);padding:2px 0 0 18px}
+/* use cases: every starting point the demo offers; the current one is highlighted */
+.prog-cases{margin:0 0 22px}
+.prog-cases h4{font:400 var(--fs-2)/1 var(--display);margin:0 0 10px;letter-spacing:.03em}
+.prog-cases ol{list-style:none;margin:0;padding:0;counter-reset:uc}
+.prog-cases button{all:unset;box-sizing:border-box;display:flex;gap:10px;width:100%;padding:7px 8px;cursor:pointer;font-size:var(--fs-small);line-height:1.4;color:var(--ph);counter-increment:uc}
+.prog-cases button::before{content:counter(uc,decimal-leading-zero);flex:none;color:var(--dim)}
+.prog-cases button:hover{background:rgba(var(--ph-rgb),.1)}
+.prog-cases button:focus-visible{outline:2px solid var(--ph);outline-offset:1px}
+.prog-cases button[aria-current="true"]{background:var(--ph);color:var(--bg);text-shadow:none}
+.prog-cases button[aria-current="true"]::before{color:inherit}
 .prog-notes h4{font:400 var(--fs-2)/1 var(--display);margin:0 0 10px;letter-spacing:.03em}
 .prog-notes p{font-size:var(--fs-small);color:var(--ph)}
 .prog-notes .ctx{color:var(--dim);font-size:var(--fs-small);letter-spacing:var(--track);text-transform:uppercase;margin-bottom:6px}
@@ -17,7 +27,7 @@
   #prog{padding:10px;overflow:auto}
   .prog-body{grid-template-columns:1fr;flex:none}
   .prog-win{overflow:visible}
-  .prog-notes{border-left:0;border-top:1px dashed var(--faint);padding:14px 2px 0}
+  .prog-side{border-left:0;border-top:1px dashed var(--faint);padding:14px 2px 0}
 }
 
 /* ===== Demo app shell (neutral, swap in real tokens) ===== */

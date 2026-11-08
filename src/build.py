@@ -45,7 +45,7 @@ TRY = {
   ],
   "tournaments": [
     ("card", "Introduce a bulk registration cart", "cart", "Register several teams in one checkout"),
-    ("card", "Dynamic payment plan entry", "plan", "Build a payment plan"),
+    ("card", "Dynamic payment plan entry", "plan", "Build a payment plan and apply discount codes"),
     ("quote", "Registrants were entering parent information", "copy", "Compare the original and updated labels"),
   ],
   "fieldhouse": [
@@ -175,7 +175,10 @@ PROG = '''<div id="prog" role="dialog" aria-modal="true" aria-labelledby="prog-t
   <div class="prog-hint" id="prog-hint"></div>
   <div class="prog-body">
     <div class="prog-win" id="prog-win"></div>
-    <aside class="prog-notes" id="prog-notes" aria-label="Design notes"></aside>
+    <aside class="prog-side">
+      <nav class="prog-cases" id="prog-cases" aria-label="Use cases"></nav>
+      <div class="prog-notes" id="prog-notes" aria-label="Design notes"></div>
+    </aside>
   </div>
 </div>
 '''
