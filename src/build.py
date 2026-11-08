@@ -126,7 +126,7 @@ def chrome_top(screen):
   <header class="bar top">
     <span><a href="index.html" title="Home">BLACKWELL/OS 2.6</a></span>
     <span id="where" class="hide-sm">{screen}</span>
-    <span id="clock" aria-hidden="true"></span>
+    <span class="top-r"><span id="clock" aria-hidden="true"></span><span class="theme"><a id="theme-btn" href="display.html">THEME</a></span></span>
   </header>
   <!-- /chrome:top -->'''
 
@@ -183,7 +183,7 @@ def page(path, title, desc, screen, parent, body, extra="", kind="menu", fonts="
 <meta property="og:url" content="{canon}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;family=VT323{fonts}&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;family=VT323&amp;family=Inter:wght@400;500;600{fonts}&amp;display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/terminal.css">
 <script>document.documentElement.classList.add("js");try{{var p=localStorage.getItem("bos-ph"),s=localStorage.getItem("bos-scan");if(p)document.documentElement.dataset.phosphor=p;if(s)document.documentElement.dataset.scanlines=s}}catch(e){{}}</script>
 </head>
@@ -231,7 +231,6 @@ pages["index.html"] = page("index.html", "Emily Blackwell | Product Designer",
   opt("L","Lab","Side projects","lab.html"),
   opt("R","Resume","Experience","resume.html"),
   opt("C","Contact","Open channel","contact.html"),
-  opt("D","Display settings","Phosphor, scanlines","display.html"),
 ])}''', extra=BOOT)
 
 # ---- work index
@@ -370,14 +369,15 @@ pages["contact.html"] = page("contact.html", "Contact | Emily Blackwell",
 
 # ---- display
 pages["display.html"] = page("display.html", "Display Settings | Emily Blackwell",
-  "Adjust the terminal's phosphor color and scanlines.",
+  "Change the theme: four terminal phosphors or a calm, minimal reading view.",
   "SYS.DISPLAY", "index.html", f'''    <h2 class="screen-title">DISPLAY</h2>
-    <p class="sub">ADJUST THE TERMINAL. SETTINGS PERSIST ON THIS DEVICE.</p>
+    <p class="sub">CHANGE THE THEME HERE OR FROM THEME AT THE TOP RIGHT OF ANY PAGE. SETTINGS PERSIST ON THIS DEVICE.</p>
 {menu([
   opt("G","Green phosphor",'<span data-state="ph:green"></span>',act="ph:green"),
   opt("A","Amber phosphor",'<span data-state="ph:amber"></span>',act="ph:amber"),
   opt("W","White phosphor",'<span data-state="ph:white"></span>',act="ph:white"),
   opt("C","Weather Channel",'<span data-state="ph:weather"></span>',act="ph:weather"),
+  opt("M","Minimal",'<span data-state="ph:minimal"></span>',act="ph:minimal"),
   opt("S","Scanlines and flicker",'<span data-state="scan"></span>',act="scan"),
 ])}
     <noscript><p class="dim">Display settings need JavaScript.</p></noscript>''')
@@ -401,7 +401,7 @@ pages["help.html"] = page("help.html", "Help | Emily Blackwell",
       <dt>WORK, ABOUT, RESUME, LAB, CONTACT</dt><dd>Go to a section</dd>
       <dt>OPEN &lt;NAME&gt;</dt><dd>Open a case, e.g. OPEN FIELDHOUSE</dd>
       <dt>RUN &lt;NAME&gt;</dt><dd>Launch a live prototype, e.g. RUN FIELDHOUSE</dd>
-      <dt>GREEN, AMBER, WHITE, WEATHER</dt><dd>Change the display theme</dd>
+      <dt>GREEN, AMBER, WHITE, WEATHER, MINIMAL</dt><dd>Change the theme (or select THEME at the top right)</dd>
       <dt>SCANLINES</dt><dd>Toggle the CRT effect</dd>
       <dt>HOME, BACK, HELP</dt><dd>Navigate</dd>
     </dl>

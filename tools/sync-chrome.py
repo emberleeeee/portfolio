@@ -17,7 +17,7 @@ TOP = '''<!-- chrome:top -->
   <header class="bar top">
     <span><a href="index.html" title="Home">BLACKWELL/OS 2.6</a></span>
     <span id="where" class="hide-sm">{screen}</span>
-    <span id="clock" aria-hidden="true"></span>
+    <span class="top-r"><span id="clock" aria-hidden="true"></span><span class="theme"><a id="theme-btn" href="display.html">THEME</a></span></span>
   </header>
   <!-- /chrome:top -->'''
 

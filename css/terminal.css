@@ -246,6 +246,63 @@ html:not(.js) .cmd,html:not(.js) .msg,html:not(.js) .keys-only{display:none}
 }
 .screen-title + .jobs{margin-top:26px}
 
+/* ---------- theme menu: top right of every page ---------- */
+.top-r{display:inline-flex;align-items:center;gap:18px}
+.theme{position:relative}
+.theme-menu{position:absolute;right:-12px;top:calc(100% + 10px);z-index:30;min-width:230px;padding:6px 0;background:var(--bg);border:1px solid var(--ph);
+  box-shadow:0 10px 30px rgba(0,0,0,.45);font:400 var(--fs-small)/1.4 var(--mono);letter-spacing:var(--track);text-shadow:var(--glow)}
+.theme-menu[hidden]{display:none}
+.theme-menu button{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:10px;width:100%;min-height:40px;padding:8px 14px;cursor:pointer;
+  color:var(--ph);text-transform:uppercase;white-space:nowrap}
+.theme-menu button[hidden]{display:none}
+.theme-menu button::before{content:"[ ]";flex:none;color:var(--dim)}
+.theme-menu button[aria-checked="true"]::before{content:"[*]";color:inherit}
+.theme-menu button:hover,.theme-menu button:focus-visible{background:var(--ph);color:var(--bg);text-shadow:none}
+.theme-menu button:hover::before,.theme-menu button:focus-visible::before{color:inherit}
+.theme-menu .theme-sep{border-top:1px dashed var(--faint);margin-top:6px}
+html[data-phosphor="weather"] .theme-menu{border:2px solid var(--wx-edge);background:#1f2a86}
+
+/* ---------- Minimal: a calm reading theme. No CRT, one quiet typeface (Inter), paper and ink ---------- */
+html[data-phosphor="minimal"]{--ph:#1e2226;--ph-rgb:30,34,38;--bg:#f7f6f2;--dim:#5a6068;--faint:rgba(30,34,38,.16);--glow:none;
+  --display:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --fs-1:clamp(34px,4.2vw,48px);--fs-2:24px;--fs-3:14px;--track:.05em;--wash:rgba(30,34,38,.06)}
+html[data-phosphor="minimal"] body{font-feature-settings:"calt" 0}
+html[data-phosphor="minimal"] .crt::before,html[data-phosphor="minimal"] .crt::after{display:none}
+html[data-phosphor="minimal"] .crt .frame{animation:none}
+html[data-phosphor="minimal"] ::selection{background:#dfe5ea;color:var(--ph)}
+html[data-phosphor="minimal"] .name,html[data-phosphor="minimal"] .screen-title{font-weight:600;letter-spacing:-.02em;line-height:1.08}
+html[data-phosphor="minimal"] .name{max-width:22ch}
+html[data-phosphor="minimal"] h3,html[data-phosphor="minimal"] .lede,html[data-phosphor="minimal"] .stat b{font-weight:500;letter-spacing:-.01em;line-height:1.2}
+html[data-phosphor="minimal"] .sub-h,html[data-phosphor="minimal"] .card h5{font-weight:600;font-size:var(--fs-small)}
+html[data-phosphor="minimal"] .bar{background:var(--bg);color:var(--ph);font:500 var(--fs-3)/1.2 var(--display);letter-spacing:var(--track);padding:16px 12px}
+html[data-phosphor="minimal"] .top{border-bottom:1px solid var(--faint)}
+html[data-phosphor="minimal"] .bottom{border-top:1px solid var(--faint)}
+html[data-phosphor="minimal"] .bar a:hover,html[data-phosphor="minimal"] .bar a:focus-visible,html[data-phosphor="minimal"] .bar button:hover,html[data-phosphor="minimal"] .bar button:focus-visible{background:var(--wash);color:var(--ph);border-radius:4px}
+html[data-phosphor="minimal"] .bar a:focus-visible,html[data-phosphor="minimal"] .bar button:focus-visible{outline:2px solid var(--ph);outline-offset:2px}
+html[data-phosphor="minimal"] .cmd{border-top-color:var(--faint)}
+html[data-phosphor="minimal"] .cmd .cursor{width:2px;margin-left:-8px;box-shadow:none}
+html[data-phosphor="minimal"] a:hover{background:none;color:var(--ph);text-decoration-thickness:2px}
+html[data-phosphor="minimal"] .opt{border-radius:6px}
+html[data-phosphor="minimal"] .opt .label{text-transform:none;letter-spacing:0;font-weight:500}
+html[data-phosphor="minimal"] .opt .key{font-weight:500;color:var(--dim)}
+html[data-phosphor="minimal"] .opt.sel,html[data-phosphor="minimal"] .opt.sel:hover,html[data-phosphor="minimal"]:not(.js) .opt:hover{background:var(--wash);color:var(--ph)}
+html[data-phosphor="minimal"] .opt.sel .meta,html[data-phosphor="minimal"] .opt.sel .lead{color:var(--dim)}
+html[data-phosphor="minimal"] .opt.sel .lead{color:var(--faint)}
+html[data-phosphor="minimal"] .rule,html[data-phosphor="minimal"] .jobs th,html[data-phosphor="minimal"] .jobs td{border-style:solid}
+html[data-phosphor="minimal"] .card,html[data-phosphor="minimal"] .callout{border:1px solid var(--faint);border-radius:8px;background:#fff}
+html[data-phosphor="minimal"] .lines li::before{content:"\2013  "}
+html[data-phosphor="minimal"] .run-link{border-radius:6px}
+html[data-phosphor="minimal"] .run-link:hover,html[data-phosphor="minimal"] .run-link:focus-visible{background:var(--ph);color:var(--bg)}
+html[data-phosphor="minimal"] .case-sec:focus-visible > h3{box-shadow:none;background:none;color:var(--ph);text-decoration:underline}
+html[data-phosphor="minimal"] .theme-menu{border:1px solid var(--faint);border-radius:8px;background:#fff;box-shadow:0 10px 30px rgba(30,34,38,.12);padding:6px}
+html[data-phosphor="minimal"] .theme-menu button{text-transform:none;letter-spacing:0;font-size:14px;border-radius:4px}
+html[data-phosphor="minimal"] .theme-menu button::before{content:"";width:8px;height:8px;border-radius:50%;border:1px solid var(--dim)}
+html[data-phosphor="minimal"] .theme-menu button[aria-checked="true"]::before{background:var(--ph);border-color:var(--ph)}
+html[data-phosphor="minimal"] .theme-menu button:hover,html[data-phosphor="minimal"] .theme-menu button:focus-visible{background:var(--wash);color:var(--ph)}
+html[data-phosphor="minimal"] .theme-menu .theme-sep{border-top:1px solid var(--faint)}
+html[data-phosphor="minimal"] .prog-hint{color:var(--dim)}
+html[data-phosphor="minimal"] .prog-win{box-shadow:0 0 0 1px var(--faint),0 8px 30px rgba(30,34,38,.08)}
+
 /* ===== Program layer: real work runs here, in its own colors ===== */
 #prog{position:fixed;inset:0;z-index:25;background:var(--bg);display:flex;flex-direction:column;padding:16px 20px 18px;gap:10px}
 #prog[hidden]{display:none}

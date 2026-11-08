@@ -4,15 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Display Settings | Emily Blackwell</title>
-<meta name="description" content="Adjust the terminal&#x27;s phosphor color and scanlines.">
+<meta name="description" content="Change the theme: four terminal phosphors or a calm, minimal reading view.">
 <link rel="canonical" href="https://design.emilyblackwell.com/display.html">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Display Settings | Emily Blackwell">
-<meta property="og:description" content="Adjust the terminal&#x27;s phosphor color and scanlines.">
+<meta property="og:description" content="Change the theme: four terminal phosphors or a calm, minimal reading view.">
 <meta property="og:url" content="https://design.emilyblackwell.com/display.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;family=VT323&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;family=VT323&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/terminal.css">
 <script>document.documentElement.classList.add("js");try{var p=localStorage.getItem("bos-ph"),s=localStorage.getItem("bos-scan");if(p)document.documentElement.dataset.phosphor=p;if(s)document.documentElement.dataset.scanlines=s}catch(e){}</script>
 </head>
@@ -23,18 +23,19 @@
   <header class="bar top">
     <span><a href="index.html" title="Home">BLACKWELL/OS 2.6</a></span>
     <span id="where" class="hide-sm">SYS.DISPLAY</span>
-    <span id="clock" aria-hidden="true"></span>
+    <span class="top-r"><span id="clock" aria-hidden="true"></span><span class="theme"><a id="theme-btn" href="display.html">THEME</a></span></span>
   </header>
   <!-- /chrome:top -->
 
   <main id="screen" tabindex="-1">
     <h2 class="screen-title">DISPLAY</h2>
-    <p class="sub">ADJUST THE TERMINAL. SETTINGS PERSIST ON THIS DEVICE.</p>
+    <p class="sub">CHANGE THE THEME HERE OR FROM THEME AT THE TOP RIGHT OF ANY PAGE. SETTINGS PERSIST ON THIS DEVICE.</p>
     <ul class="menu">
       <li><button class="opt" type="button" data-key="G" data-act="ph:green"><span class="key">[G]</span><span class="label">Green phosphor</span><span class="lead" aria-hidden="true"></span><span class="meta"><span data-state="ph:green"></span></span></button></li>
       <li><button class="opt" type="button" data-key="A" data-act="ph:amber"><span class="key">[A]</span><span class="label">Amber phosphor</span><span class="lead" aria-hidden="true"></span><span class="meta"><span data-state="ph:amber"></span></span></button></li>
       <li><button class="opt" type="button" data-key="W" data-act="ph:white"><span class="key">[W]</span><span class="label">White phosphor</span><span class="lead" aria-hidden="true"></span><span class="meta"><span data-state="ph:white"></span></span></button></li>
       <li><button class="opt" type="button" data-key="C" data-act="ph:weather"><span class="key">[C]</span><span class="label">Weather Channel</span><span class="lead" aria-hidden="true"></span><span class="meta"><span data-state="ph:weather"></span></span></button></li>
+      <li><button class="opt" type="button" data-key="M" data-act="ph:minimal"><span class="key">[M]</span><span class="label">Minimal</span><span class="lead" aria-hidden="true"></span><span class="meta"><span data-state="ph:minimal"></span></span></button></li>
       <li><button class="opt" type="button" data-key="S" data-act="scan"><span class="key">[S]</span><span class="label">Scanlines and flicker</span><span class="lead" aria-hidden="true"></span><span class="meta"><span data-state="scan"></span></span></button></li>
     </ul>
     <noscript><p class="dim">Display settings need JavaScript.</p></noscript>
