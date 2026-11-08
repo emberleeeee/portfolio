@@ -76,14 +76,13 @@ main{flex:1;padding:34px 12px 24px;outline:none}
 /* ---------- display type ---------- */
 h1,h2,h3,h4,h5{margin:0;font-weight:400}
 .name,.screen-title{font:400 var(--fs-1)/.95 var(--display);letter-spacing:.02em}
-.name{margin:0 0 22px;max-width:24ch}
+.name{margin:0 0 22px}
 /* terminal themes set headings in caps; the text itself is written in normal case */
 .name,.screen-title,.lede,.caps{text-transform:uppercase}
 .screen-title{margin:0 0 8px}
 h3,.lede{font:400 var(--fs-2)/1.05 var(--display);letter-spacing:.03em}
 h3{margin:34px 0 12px}
 .lede{margin:0 0 18px}
-.case-lede{max-width:32ch}
 @media (min-width:641px){.lede:not(.case-lede){white-space:nowrap}}
 .sub-h{font:400 var(--fs-3)/1.1 var(--display);letter-spacing:.04em;text-transform:uppercase;margin:28px 0 10px}
 
@@ -284,7 +283,6 @@ html[data-phosphor="minimal"] .crt::before,html[data-phosphor="minimal"] .crt::a
 html[data-phosphor="minimal"] .crt .frame{animation:none}
 html[data-phosphor="minimal"] ::selection{background:#dfe5ea;color:var(--ph)}
 html[data-phosphor="minimal"] .name,html[data-phosphor="minimal"] .screen-title{font-weight:600;letter-spacing:-.02em;line-height:1.08}
-html[data-phosphor="minimal"] .name{max-width:22ch}
 html[data-phosphor="minimal"] h3,html[data-phosphor="minimal"] .lede,html[data-phosphor="minimal"] .stat b{font-weight:500;letter-spacing:-.01em;line-height:1.2}
 html[data-phosphor="minimal"] .sub-h,html[data-phosphor="minimal"] .card h5{font-weight:600;font-size:var(--fs-small)}
 html[data-phosphor="minimal"] .bar{background:var(--bg);color:var(--ph);font:500 var(--fs-3)/1.2 var(--display);letter-spacing:var(--track);padding:16px 12px}
