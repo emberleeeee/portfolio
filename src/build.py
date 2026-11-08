@@ -295,11 +295,20 @@ for i,(cid,key,label,meta,url,desc) in enumerate(WORK):
     m["Focus"] = " / ".join(t for t in c["tags"] if t not in years)
     m.setdefault("Timeline", years[0] if years else "")
     rows = [(k, m[k]) for k in ("Role", "Company", "Timeline", "Focus", "Methods") if m.get(k)]
-    rec = "".join(f"<dt>{k}</dt><dd>{v}</dd>" for k,v in rows)
+    # Case facts, laid out to scan: Role, Company, Timeline and Focus side by side, label over
+    # value; Focus areas one per line; Methods on its own row as a list of chips.
+    def fact(k, v):
+        if k == "Methods":
+            chips = "".join(f"<li>{m.strip()}</li>" for m in v.split(",") if m.strip())
+            return f'<div class="facts-wide"><dt>{k}</dt><dd><ul class="chips">{chips}</ul></dd></div>'
+        if k == "Focus":
+            v = "<br>".join(x.strip() for x in v.split(" / "))
+        return f"<div><dt>{k}</dt><dd>{v}</dd></div>"
+    rec = "".join(fact(k, v) for k,v in rows)
     toc = [opt(str(n+1), s["title"], "", u, mark="&gt;") for n,(s,u) in enumerate(subs)]
     body = f'''    <h2 class="screen-title">{label}</h2>
     <p class="lede case-lede">{BRIEF[cid]}</p>
-    <dl class="record">{rec}</dl>
+    <dl class="facts">{rec}</dl>
 {menu([opt("R","Run interactive demo","Live",act=f"run:{cid}")], "margin-top:26px")}
     <hr class="rule">
 {menu(toc)}

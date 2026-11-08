@@ -118,7 +118,7 @@ a.opt{text-decoration:none}
 .opt .key{font-weight:600;flex:none;width:var(--key)}
 .opt .label{flex:none;letter-spacing:var(--track);text-transform:uppercase}
 .opt .lead{flex:1;overflow:hidden;white-space:nowrap;color:var(--faint);min-width:2ch}
-.opt .lead::before{content:"........................................................................................................................................"}
+.opt .lead::before{content:"................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................"}
 .opt .meta{flex:none}
 .opt .meta.raw{text-transform:none;letter-spacing:0}
 .opt:focus{outline:none}
@@ -335,3 +335,17 @@ html[data-phosphor="minimal"] .prog-win{box-shadow:0 0 0 1px var(--faint),0 8px 
   @view-transition{navigation:none}
   ::view-transition-old(root),::view-transition-new(root),main{animation:none}
 }
+
+/* ---------- case facts: a scannable row of labelled values, methods as chips ---------- */
+.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px 28px;margin:6px 0 10px;padding:18px 0;border-top:1px dashed var(--faint);border-bottom:1px dashed var(--faint)}
+.facts>div{min-width:0}
+.facts dt{font-size:var(--fs-small);letter-spacing:var(--track);text-transform:uppercase;color:var(--dim);margin:0 0 6px}
+.facts dd{margin:0;line-height:1.45}
+.facts-wide{grid-column:1/-1}
+.chips{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.chips li{border:1px solid var(--faint);padding:3px 10px;font-size:var(--fs-small);line-height:1.5}
+@media (max-width:820px){.facts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+html[data-phosphor="minimal"] .facts{border-top-style:solid;border-bottom-style:solid}
+html[data-phosphor="minimal"] .facts dt{text-transform:none;letter-spacing:0}
+html[data-phosphor="minimal"] .chips li{border-radius:999px;background:#fff}
+html[data-phosphor="weather"] .chips li{border-color:var(--wx-edge)}
