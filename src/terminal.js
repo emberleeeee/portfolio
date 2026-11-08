@@ -12,6 +12,9 @@
     set(k,v){ try{ localStorage.setItem(k,v) }catch(e){} }
   };
   const say = t => { if(msg) msg.textContent = t; };
+  // The command line is hidden for now (see .cmd in the stylesheet). Set to true to bring it back.
+  const CMD = false;
+  if(!CMD && msg) msg.textContent = "";
   const go = url => { location.href = url; };
 
   const EMAIL = "accounts@emilyblackwell.com";
@@ -77,58 +80,17 @@
     store.set("bos-scan", root.dataset.scanlines); refreshDisplay(); themeSync(); say("SCANLINES "+root.dataset.scanlines.toUpperCase()+".");
   }
 
-  // ---------- theme menu (top right of every page; links to display.html without JS) ----------
+  // ---------- theme dropdown (top right of every page; a link to display.html without JS) ----------
   const THEMES = [["green","Green"],["amber","Amber"],["white","White"],["weather","Weather Channel"],["minimal","Minimal"]];
-  const themeBtn = $("#theme-btn");
-  let themeMenu = null;
+  let themeSel = null;
   const themeNow = () => root.dataset.phosphor || "green";
-  function themeSync(){
-    if(themeBtn) themeBtn.textContent = "THEME: " + THEMES.find(t => t[0] === themeNow())[1].toUpperCase();
-    if(!themeMenu) return;
-    themeMenu.querySelectorAll("[data-theme]").forEach(b => b.setAttribute("aria-checked", String(b.dataset.theme === themeNow())));
-    const s = themeMenu.querySelector("[data-scan]");
-    s.setAttribute("aria-checked", String(root.dataset.scanlines !== "off"));
-    s.hidden = themeNow() === "minimal";
-  }
-  const themeItems = () => [...themeMenu.querySelectorAll("button:not([hidden])")];
-  function themeOpen(){
-    themeMenu.hidden = false; themeBtn.setAttribute("aria-expanded", "true");
-    (themeMenu.querySelector('[aria-checked="true"]') || themeItems()[0]).focus();
-  }
-  function themeClose(focus){
-    if(!themeMenu || themeMenu.hidden) return;
-    themeMenu.hidden = true; themeBtn.setAttribute("aria-expanded", "false");
-    if(focus) themeBtn.focus();
-  }
-  if(themeBtn){
-    themeBtn.setAttribute("role", "button");
-    themeBtn.setAttribute("aria-haspopup", "menu");
-    themeBtn.setAttribute("aria-expanded", "false");
-    themeBtn.setAttribute("aria-controls", "theme-menu");
-    themeMenu = document.createElement("div");
-    themeMenu.id = "theme-menu"; themeMenu.className = "theme-menu"; themeMenu.hidden = true;
-    themeMenu.setAttribute("role", "menu"); themeMenu.setAttribute("aria-label", "Theme");
-    themeMenu.innerHTML = THEMES.map(([k, l]) => `<button type="button" role="menuitemradio" data-theme="${k}" tabindex="-1">${l}</button>`).join("") +
-      `<button type="button" role="menuitemcheckbox" data-scan tabindex="-1" class="theme-sep">Scanlines and flicker</button>`;
-    themeBtn.parentNode.appendChild(themeMenu);
-    themeBtn.addEventListener("click", e => { e.preventDefault(); themeMenu.hidden ? themeOpen() : themeClose(true); });
-    themeBtn.addEventListener("keydown", e => { if(e.key === "ArrowDown" || e.key === " "){ e.preventDefault(); themeOpen(); } });
-    themeMenu.addEventListener("click", e => {
-      const b = e.target.closest("button"); if(!b) return;
-      if(b.dataset.theme){ setPhosphor(b.dataset.theme); themeClose(true); }
-      else { toggleScan(); b.focus(); }
-    });
-    themeMenu.addEventListener("keydown", e => {
-      const it = themeItems(), i = it.indexOf(document.activeElement);
-      if(e.key === "ArrowDown"){ e.preventDefault(); it[(i + 1) % it.length].focus(); }
-      else if(e.key === "ArrowUp"){ e.preventDefault(); it[(i - 1 + it.length) % it.length].focus(); }
-      else if(e.key === "Home"){ e.preventDefault(); it[0].focus(); }
-      else if(e.key === "End"){ e.preventDefault(); it[it.length - 1].focus(); }
-      else if(e.key === "Escape"){ e.preventDefault(); themeClose(true); }
-      else if(e.key === "Tab") themeClose(false);
-      e.stopPropagation();
-    });
-    document.addEventListener("click", e => { if(!e.target.closest(".theme")) themeClose(false); });
+  function themeSync(){ if(themeSel) themeSel.value = themeNow(); }
+  const themeLink = $("#theme-btn");
+  if(themeLink){
+    const wrap = themeLink.parentNode;
+    wrap.innerHTML = `<label for="theme-select">THEME</label><select id="theme-select">${THEMES.map(([k, l]) => `<option value="${k}">${l}</option>`).join("")}</select>`;
+    themeSel = wrap.querySelector("select");
+    themeSel.addEventListener("change", () => setPhosphor(themeSel.value));
   }
   refreshDisplay(); themeSync();
 
@@ -268,7 +230,7 @@
     const t = e.target;
     if(t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
     const k = e.key;
-    if((k === "/" || k === ":") && cmd){ e.preventDefault(); cmd.focus(); say("ENTER COMMAND. ESC TO CANCEL."); return; }
+    if((k === "/" || k === ":") && cmd && CMD){ e.preventDefault(); cmd.focus(); say("ENTER COMMAND. ESC TO CANCEL."); return; }
     // Arrows move the menu selection on menu pages, or anywhere a menu row has focus.
     // On reading pages (case studies, about, resume) they scroll as usual.
     const ae = document.activeElement;

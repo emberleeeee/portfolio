@@ -10,10 +10,27 @@ import json, os, html, re
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.dirname(HERE)          # the Website folder (src/ lives inside it)
 SITE = "https://design.emilyblackwell.com/"
+# Asset version: a hash of everything that goes into the shared CSS and JS. Pages ask for
+# css/terminal.css?v=<hash>, so browsers fetch new styles and scripts after every change
+# (the server sends no cache rules, so without this they can keep an old copy for hours).
+import hashlib, glob as _glob
+_h = hashlib.sha1()
+for _f in sorted(_glob.glob(os.path.join(HERE, "css", "*.css")) + _glob.glob(os.path.join(HERE, "demos", "*.js")) + [os.path.join(HERE, "terminal.js"), os.path.join(OUT, "js", "merit-demo.js")]):
+    if os.path.exists(_f): _h.update(open(_f, "rb").read())
+VER = _h.hexdigest()[:10]
 CASES = json.load(open(os.path.join(HERE, "cases.json"), encoding="utf-8"))
 import sys; sys.path.insert(0, HERE)
 from arc_case import ARC
 CASES["arc"] = ARC   # rewritten from the ARC project artifacts, kept generic
+# One brief subhead per case file, shown under its title. It replaces the old title-plus-
+# description pair on the page; the longer "sub" in cases.json stays as the meta description.
+BRIEF = {
+  "team-builder": "Faster, clearer team building for youth sports clubs and rec leagues",
+  "tournaments": "Bulk registration, checkout and payments for youth sports tournaments",
+  "fieldhouse": "One accessible, themeable design system for every LeagueApps product",
+  "arc": "Faster, more accurate ticket settlement for 200+ airlines and agencies",
+  "merit-america": "A mobile-first learner portal that scaled from 15 learners to 1,000+",
+}
 
 # ---- Images are out; demos open in context instead -------------------------
 from bs4 import BeautifulSoup
@@ -184,7 +201,7 @@ def page(path, title, desc, screen, parent, body, extra="", kind="menu", fonts="
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;family=VT323&amp;family=Inter:wght@400;500;600{fonts}&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/terminal.css">
+<link rel="stylesheet" href="css/terminal.css?v={VER}">
 <script>document.documentElement.classList.add("js");try{{var p=localStorage.getItem("bos-ph"),s=localStorage.getItem("bos-scan");if(p)document.documentElement.dataset.phosphor=p;if(s)document.documentElement.dataset.scanlines=s}}catch(e){{}}</script>
 </head>
 <body class="crt" data-screen="{screen}" data-parent="{parent}" data-kind="{kind}"{f' data-program="{program}"' if program else ""}{battrs}>
@@ -198,7 +215,7 @@ def page(path, title, desc, screen, parent, body, extra="", kind="menu", fonts="
 
   {chrome_bottom(parent)}
 </div>
-{'<script src="js/merit-demo.js"></script>' + chr(10) if program == "merit-america" else ""}{'<script src="js/demos.js"></script>' + chr(10) if program else ""}<script src="js/terminal.js"></script>
+{f'<script src="js/merit-demo.js?v={VER}"></script>' + chr(10) if program == "merit-america" else ""}{f'<script src="js/demos.js?v={VER}"></script>' + chr(10) if program else ""}<script src="js/terminal.js?v={VER}"></script>
 </body>
 </html>
 '''
@@ -224,7 +241,7 @@ pages = {}
 # ---- home
 pages["index.html"] = page("index.html", "Emily Blackwell | Product Designer",
   "Emily Blackwell is a lead product designer specializing in complex B2B SaaS, design systems and embedded finance.",
-  "MAIN.MENU", "", f'''    <h1 class="name">HELLO, I&rsquo;M EMILY, A LEAD PRODUCT DESIGNER FOR DATA-HEAVY B2B SAAS.</h1>
+  "MAIN.MENU", "", f'''    <h1 class="name">Hello, I&rsquo;m Emily, a lead product designer for data-heavy B2B SaaS.</h1>
 {menu([
   opt("W","Selected work",f"{len(WORK)} records","work.html"),
   opt("A","About","Profile","about.html"),
@@ -236,8 +253,8 @@ pages["index.html"] = page("index.html", "Emily Blackwell | Product Designer",
 # ---- work index
 pages["work.html"] = page("work.html", "Selected Work | Emily Blackwell",
   "Case studies: Team Builder, Tournament Engine, Fieldhouse Design System, ARC Settlement and Merit America Portal.",
-  "WORK.INDEX", "index.html", f'''    <h2 class="screen-title">SELECTED WORK</h2>
-    <p class="sub">SELECT A RECORD TO OPEN THE CASE FILE.</p>
+  "WORK.INDEX", "index.html", f'''    <h2 class="screen-title">Selected work</h2>
+    <p class="sub caps">Select a record to open the case file.</p>
 {menu([opt(k,l,m,u,desc=d) for (_,k,l,m,u,d) in WORK])}''')
 
 # Case metadata is the same five rows everywhere: Role, Company, Timeline, Focus, Methods.
@@ -280,9 +297,8 @@ for i,(cid,key,label,meta,url,desc) in enumerate(WORK):
     rows = [(k, m[k]) for k in ("Role", "Company", "Timeline", "Focus", "Methods") if m.get(k)]
     rec = "".join(f"<dt>{k}</dt><dd>{v}</dd>" for k,v in rows)
     toc = [opt(str(n+1), s["title"], "", u, mark="&gt;") for n,(s,u) in enumerate(subs)]
-    body = f'''    <h2 class="screen-title">{label.upper()}</h2>
-    <p class="lede case-lede">{c["title"].upper()}</p>
-    <p class="sub">{c["sub"]}</p>
+    body = f'''    <h2 class="screen-title">{label}</h2>
+    <p class="lede case-lede">{BRIEF[cid]}</p>
     <dl class="record">{rec}</dl>
 {menu([opt("R","Run interactive demo","Live",act=f"run:{cid}")], "margin-top:26px")}
     <hr class="rule">
@@ -301,9 +317,9 @@ for i,(cid,key,label,meta,url,desc) in enumerate(WORK):
         if pv: nav.append(opt("P", f"Previous: {pv[0]['title']}", f"{n:02}/{total:02}", pv[1]))
         nav.append(opt("C", "Back to case file", label, url))
         nav.append(opt("R", "Run interactive demo", "Live", act=f"run:{cid}"))
-        sbody = f'''    <p class="crumb"><a href="{url}">{label.upper()}</a> / SECTION {n+1:02} OF {total:02}</p>
+        sbody = f'''    <p class="crumb"><a href="{url}">{label}</a> / Section {n+1:02} of {total:02}</p>
     <section class="case-sec solo" id="{sid}" aria-labelledby="{sid}-h">
-      <h2 class="screen-title" id="{sid}-h">{s["title"].upper()}</h2>
+      <h2 class="screen-title" id="{sid}-h">{s["title"]}</h2>
       {s["html"]}
     </section>
     <hr class="rule">
@@ -315,8 +331,8 @@ for i,(cid,key,label,meta,url,desc) in enumerate(WORK):
 # ---- about
 pages["about.html"] = page("about.html", "About | Emily Blackwell",
   "Emily Blackwell, lead product designer at LeagueApps, based in Washington, D.C.",
-  "USER.PROFILE", "index.html", kind="doc", body=f'''    <h2 class="screen-title">ABOUT</h2>
-    <p class="lede">I DESIGN FOR COMPLEXITY AND CLARITY AT ONCE.</p>
+  "USER.PROFILE", "index.html", kind="doc", body=f'''    <h2 class="screen-title">About</h2>
+    <p class="lede">I design for complexity and clarity at once.</p>
     <p>I'm a Lead Product Designer with 8+ years of experience building enterprise SaaS products that serve real operational needs. I specialize in systems thinking: designing experiences where the stakes are high and the edge cases are many.</p>
     <p>Currently at LeagueApps, I lead design across two product teams, own the Fieldhouse Design System, and partner with multiple disciplines on AI-assisted tooling that's cut handoff time by 1 to 2 sprints.</p>
     <hr class="rule">
@@ -338,7 +354,7 @@ pages["about.html"] = page("about.html", "About | Emily Blackwell",
 rows = "\n".join(f'        <tr><td><b>{r}</b><span class="org">{o}</span></td><td class="dates">{d}</td></tr>' for r,o,d in RESUME)
 pages["resume.html"] = page("resume.html", "Resume | Emily Blackwell",
   "Experience: LeagueApps, Airlines Reporting Corporation, Merit America and Ralula Design.",
-  "USER.RESUME", "index.html", kind="doc", body=f'''    <h2 class="screen-title">RESUME</h2>
+  "USER.RESUME", "index.html", kind="doc", body=f'''    <h2 class="screen-title">Resume</h2>
     <table class="jobs">
       <caption class="sr">Work history</caption>
       <thead><tr><th scope="col">Role</th><th scope="col">Dates</th></tr></thead>
@@ -346,21 +362,21 @@ pages["resume.html"] = page("resume.html", "Resume | Emily Blackwell",
 {rows}
       </tbody>
     </table>
-    <h3>EDUCATION</h3>
+    <h3 class="caps">Education</h3>
     <dl class="record"><dt>BA</dt><dd>Studio Art + Graphic Design, minor in Art History<br>Indiana University. {IU}</dd></dl>''')
 
 # ---- lab
 pages["lab.html"] = page("lab.html", "Lab | Emily Blackwell",
   "Self-initiated projects: L'Expedition and We Build the City.",
-  "LAB.INDEX", "index.html", f'''    <h2 class="screen-title">LAB</h2>
-    <p class="sub">SELF-INITIATED PROJECTS.</p>
+  "LAB.INDEX", "index.html", f'''    <h2 class="screen-title">Lab</h2>
+    <p class="sub caps">Self-initiated projects.</p>
 {menu([opt(k,l,m,u,desc=d,ext=True) for (k,l,m,u,d) in LAB])}''')
 
 # ---- contact
 pages["contact.html"] = page("contact.html", "Contact | Emily Blackwell",
   "Get in touch with Emily Blackwell by email or LinkedIn.",
-  "COMM.CHANNEL", "index.html", f'''    <h2 class="screen-title">CONTACT</h2>
-    <p class="sub">CHANNEL OPEN. RESPONSES WITHIN 48 HOURS.</p>
+  "COMM.CHANNEL", "index.html", f'''    <h2 class="screen-title">Contact</h2>
+    <p class="sub caps">Channel open. Responses within 48 hours.</p>
 {menu([
   opt("E","Email",EMAIL,f"mailto:{EMAIL}",act="email",raw=True),
   opt("L","LinkedIn","linkedin.com/in/emilyblackwell",LINKEDIN,raw=True,ext=True),
@@ -370,8 +386,8 @@ pages["contact.html"] = page("contact.html", "Contact | Emily Blackwell",
 # ---- display
 pages["display.html"] = page("display.html", "Display Settings | Emily Blackwell",
   "Change the theme: four terminal phosphors or a calm, minimal reading view.",
-  "SYS.DISPLAY", "index.html", f'''    <h2 class="screen-title">DISPLAY</h2>
-    <p class="sub">CHANGE THE THEME HERE OR FROM THEME AT THE TOP RIGHT OF ANY PAGE. SETTINGS PERSIST ON THIS DEVICE.</p>
+  "SYS.DISPLAY", "index.html", f'''    <h2 class="screen-title">Display</h2>
+    <p class="sub caps">Change the theme here or from the Theme dropdown at the top right of any page. Settings persist on this device.</p>
 {menu([
   opt("G","Green phosphor",'<span data-state="ph:green"></span>',act="ph:green"),
   opt("A","Amber phosphor",'<span data-state="ph:amber"></span>',act="ph:amber"),
@@ -383,9 +399,23 @@ pages["display.html"] = page("display.html", "Display Settings | Emily Blackwell
     <noscript><p class="dim">Display settings need JavaScript.</p></noscript>''')
 
 # ---- help
+# The command line is hidden for now (see .cmd in css_terminal.css and CMD in terminal.js).
+# Set CMD = True to bring its help back along with it.
+CMD = False
+HELP_CMD = '''
+    <hr class="rule">
+    <h3 class="caps">Commands</h3>
+    <dl class="record">
+      <dt>WORK, ABOUT, RESUME, LAB, CONTACT</dt><dd>Go to a section</dd>
+      <dt>OPEN &lt;NAME&gt;</dt><dd>Open a case, e.g. OPEN FIELDHOUSE</dd>
+      <dt>RUN &lt;NAME&gt;</dt><dd>Launch a live prototype, e.g. RUN FIELDHOUSE</dd>
+      <dt>GREEN, AMBER, WHITE, WEATHER, MINIMAL</dt><dd>Change the theme (or use the Theme dropdown at the top right)</dd>
+      <dt>SCANLINES</dt><dd>Toggle the CRT effect</dd>
+      <dt>HOME, BACK, HELP</dt><dd>Navigate</dd>
+    </dl>'''
 pages["help.html"] = page("help.html", "Help | Emily Blackwell",
-  "Keyboard shortcuts and commands for this portfolio.",
-  "SYS.HELP", "index.html", kind="doc", body='''    <h2 class="screen-title">HELP</h2>
+  "Keyboard shortcuts for this portfolio.",
+  "SYS.HELP", "index.html", kind="doc", body=f'''    <h2 class="screen-title">Help</h2>
     <dl class="record">
       <dt>Letter and number keys</dt><dd>Jump to the bracketed option, e.g. [W] or [3]</dd>
       <dt>&uarr; &darr;</dt><dd>Move the selection</dd>
@@ -393,18 +423,8 @@ pages["help.html"] = page("help.html", "Help | Emily Blackwell",
       <dt>&larr; &rarr;</dt><dd>Previous or next section, inside a case study</dd>
       <dt>Esc</dt><dd>Back one level (or select ESC=BACK)</dd>
       <dt>H</dt><dd>Main menu</dd>
-      <dt>/</dt><dd>Type a command</dd>
-    </dl>
-    <hr class="rule">
-    <h3>COMMANDS</h3>
-    <dl class="record">
-      <dt>WORK, ABOUT, RESUME, LAB, CONTACT</dt><dd>Go to a section</dd>
-      <dt>OPEN &lt;NAME&gt;</dt><dd>Open a case, e.g. OPEN FIELDHOUSE</dd>
-      <dt>RUN &lt;NAME&gt;</dt><dd>Launch a live prototype, e.g. RUN FIELDHOUSE</dd>
-      <dt>GREEN, AMBER, WHITE, WEATHER, MINIMAL</dt><dd>Change the theme (or select THEME at the top right)</dd>
-      <dt>SCANLINES</dt><dd>Toggle the CRT effect</dd>
-      <dt>HOME, BACK, HELP</dt><dd>Navigate</dd>
-    </dl>
+      {"<dt>/</dt><dd>Type a command</dd>" if CMD else "<dt>Theme</dt><dd>Change the look from the dropdown at the top right</dd>"}
+    </dl>{HELP_CMD if CMD else ""}
     <p class="dim">Everything is also clickable and tappable.</p>''')
 
 # ---- redirects for retired-only addresses

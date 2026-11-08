@@ -75,6 +75,8 @@ main{flex:1;padding:34px 12px 24px;outline:none}
 h1,h2,h3,h4,h5{margin:0;font-weight:400}
 .name,.screen-title{font:400 var(--fs-1)/.95 var(--display);letter-spacing:.02em}
 .name{margin:0 0 22px;max-width:24ch}
+/* terminal themes set headings in caps; the text itself is written in normal case */
+.name,.screen-title,.lede,.caps{text-transform:uppercase}
 .screen-title{margin:0 0 8px}
 h3,.lede{font:400 var(--fs-2)/1.05 var(--display);letter-spacing:.03em}
 h3{margin:34px 0 12px}
@@ -246,21 +248,20 @@ html:not(.js) .cmd,html:not(.js) .msg,html:not(.js) .keys-only{display:none}
 }
 .screen-title + .jobs{margin-top:26px}
 
-/* ---------- theme menu: top right of every page ---------- */
+/* ---------- theme dropdown: top right of every page ---------- */
 .top-r{display:inline-flex;align-items:center;gap:18px}
-.theme{position:relative}
-.theme-menu{position:absolute;right:-12px;top:calc(100% + 10px);z-index:30;min-width:230px;padding:6px 0;background:var(--bg);border:1px solid var(--ph);
-  box-shadow:0 10px 30px rgba(0,0,0,.45);font:400 var(--fs-small)/1.4 var(--mono);letter-spacing:var(--track);text-shadow:var(--glow)}
-.theme-menu[hidden]{display:none}
-.theme-menu button{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:10px;width:100%;min-height:40px;padding:8px 14px;cursor:pointer;
-  color:var(--ph);text-transform:uppercase;white-space:nowrap}
-.theme-menu button[hidden]{display:none}
-.theme-menu button::before{content:"[ ]";flex:none;color:var(--dim)}
-.theme-menu button[aria-checked="true"]::before{content:"[*]";color:inherit}
-.theme-menu button:hover,.theme-menu button:focus-visible{background:var(--ph);color:var(--bg);text-shadow:none}
-.theme-menu button:hover::before,.theme-menu button:focus-visible::before{color:inherit}
-.theme-menu .theme-sep{border-top:1px dashed var(--faint);margin-top:6px}
-html[data-phosphor="weather"] .theme-menu{border:2px solid var(--wx-edge);background:#1f2a86}
+.theme{position:relative;display:inline-flex;align-items:center;gap:8px}
+.theme select{appearance:none;-webkit-appearance:none;font:inherit;letter-spacing:inherit;text-transform:uppercase;color:inherit;background:transparent;
+  border:1px solid currentColor;border-radius:0;padding:2px 26px 1px 8px;margin:-3px 0;cursor:pointer;line-height:1}
+.theme::after{content:"";position:absolute;right:9px;top:50%;width:0;height:0;margin-top:-2px;border:5px solid transparent;border-top-color:currentColor;border-bottom:0;pointer-events:none}
+.theme select:hover,.theme select:focus-visible{background:var(--bg);color:var(--ph);outline:none}
+.theme:has(select:hover)::after,.theme:has(select:focus-visible)::after{border-top-color:var(--ph)}
+.theme option{color:#111;background:#fff;text-transform:none}
+
+/* ---------- command line: hidden for now. Turn back on by deleting this rule and setting CMD = true in terminal.js ---------- */
+.cmd{display:none}
+.msg{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;padding:0;min-height:0}
+.foot .bottom{margin-top:0}
 
 /* ---------- Minimal: a calm reading theme. No CRT, one quiet typeface (Inter), paper and ink ---------- */
 html[data-phosphor="minimal"]{--ph:#1e2226;--ph-rgb:30,34,38;--bg:#f7f6f2;--dim:#5a6068;--faint:rgba(30,34,38,.16);--glow:none;
@@ -294,13 +295,18 @@ html[data-phosphor="minimal"] .lines li::before{content:"\2013  "}
 html[data-phosphor="minimal"] .run-link{border-radius:6px}
 html[data-phosphor="minimal"] .run-link:hover,html[data-phosphor="minimal"] .run-link:focus-visible{background:var(--ph);color:var(--bg)}
 html[data-phosphor="minimal"] .case-sec:focus-visible > h3{box-shadow:none;background:none;color:var(--ph);text-decoration:underline}
-html[data-phosphor="minimal"] .theme-menu{border:1px solid var(--faint);border-radius:8px;background:#fff;box-shadow:0 10px 30px rgba(30,34,38,.12);padding:6px}
-html[data-phosphor="minimal"] .theme-menu button{text-transform:none;letter-spacing:0;font-size:14px;border-radius:4px}
-html[data-phosphor="minimal"] .theme-menu button::before{content:"";width:8px;height:8px;border-radius:50%;border:1px solid var(--dim)}
-html[data-phosphor="minimal"] .theme-menu button[aria-checked="true"]::before{background:var(--ph);border-color:var(--ph)}
-html[data-phosphor="minimal"] .theme-menu button:hover,html[data-phosphor="minimal"] .theme-menu button:focus-visible{background:var(--wash);color:var(--ph)}
-html[data-phosphor="minimal"] .theme-menu .theme-sep{border-top:1px solid var(--faint)}
 html[data-phosphor="minimal"] .prog-hint{color:var(--dim)}
+/* Minimal keeps capitals for the status bars only */
+html[data-phosphor="minimal"] .name,html[data-phosphor="minimal"] .screen-title,html[data-phosphor="minimal"] .lede,html[data-phosphor="minimal"] .caps,
+html[data-phosphor="minimal"] .lbl,html[data-phosphor="minimal"] .crumb,html[data-phosphor="minimal"] .case-tags,html[data-phosphor="minimal"] .record dt,
+html[data-phosphor="minimal"] .jobs th,html[data-phosphor="minimal"] .jobs .org,html[data-phosphor="minimal"] .quote figcaption,html[data-phosphor="minimal"] .hint,
+html[data-phosphor="minimal"] .opt .meta,html[data-phosphor="minimal"] .sub-h,html[data-phosphor="minimal"] .card h5,html[data-phosphor="minimal"] .run-link,
+html[data-phosphor="minimal"] .prog-hint,html[data-phosphor="minimal"] .prog-notes .ctx{text-transform:none;letter-spacing:0}
+html[data-phosphor="minimal"] .sub-h,html[data-phosphor="minimal"] .card h5{font-size:var(--fs-body)}
+html[data-phosphor="minimal"] .lede{font-size:22px}
+html[data-phosphor="minimal"] .theme select{border-color:var(--faint);border-radius:6px;text-transform:none;letter-spacing:0;padding:5px 28px 5px 10px;background:#fff}
+html[data-phosphor="minimal"] .theme select:hover,html[data-phosphor="minimal"] .theme select:focus-visible{background:#fff;color:var(--ph);border-color:var(--ph)}
+html[data-phosphor="minimal"] .theme:has(select:hover)::after{border-top-color:var(--ph)}
 html[data-phosphor="minimal"] .prog-win{box-shadow:0 0 0 1px var(--faint),0 8px 30px rgba(30,34,38,.08)}
 
 /* ===== Program layer: real work runs here, in its own colors ===== */
