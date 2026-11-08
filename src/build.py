@@ -201,7 +201,7 @@ def page(path, title, desc, screen, parent, body, extra="", kind="menu", fonts="
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;family=VT323&amp;family=Inter:wght@400;500;600{fonts}&amp;display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/terminal.css?v={VER}">
-<script>document.documentElement.classList.add("js");try{{var p=localStorage.getItem("bos-ph"),s=localStorage.getItem("bos-scan");if(p)document.documentElement.dataset.phosphor=p;if(s)document.documentElement.dataset.scanlines=s}}catch(e){{}}</script>
+<script>document.documentElement.classList.add("js");try{{var p=localStorage.getItem("bos-ph");if(p)document.documentElement.dataset.phosphor=p;localStorage.removeItem("bos-scan")}}catch(e){{}}</script>
 </head>
 <body class="crt" data-screen="{screen}" data-parent="{parent}" data-kind="{kind}"{f' data-program="{program}"' if program else ""}{battrs}>
 <a class="skip" href="#screen">Skip to content</a>
@@ -402,7 +402,6 @@ pages["display.html"] = page("display.html", "Display Settings | Emily Blackwell
   opt("W","White phosphor",'<span data-state="ph:white"></span>',act="ph:white"),
   opt("C","Weather Channel",'<span data-state="ph:weather"></span>',act="ph:weather"),
   opt("M","Minimal",'<span data-state="ph:minimal"></span>',act="ph:minimal"),
-  opt("S","Scanlines and flicker",'<span data-state="scan"></span>',act="scan"),
 ])}
     <noscript><p class="dim">Display settings need JavaScript.</p></noscript>''')
 
@@ -418,7 +417,6 @@ HELP_CMD = '''
       <dt>OPEN &lt;NAME&gt;</dt><dd>Open a case, e.g. OPEN FIELDHOUSE</dd>
       <dt>RUN &lt;NAME&gt;</dt><dd>Launch a live prototype, e.g. RUN FIELDHOUSE</dd>
       <dt>GREEN, AMBER, WHITE, WEATHER, MINIMAL</dt><dd>Change the theme (or use the Theme dropdown at the top right)</dd>
-      <dt>SCANLINES</dt><dd>Toggle the CRT effect</dd>
       <dt>HOME, BACK, HELP</dt><dd>Navigate</dd>
     </dl>'''
 pages["help.html"] = page("help.html", "Help | Emily Blackwell",

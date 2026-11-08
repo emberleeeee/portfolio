@@ -13,8 +13,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;family=VT323&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/terminal.css?v=ad4e5e1533">
-<script>document.documentElement.classList.add("js");try{var p=localStorage.getItem("bos-ph"),s=localStorage.getItem("bos-scan");if(p)document.documentElement.dataset.phosphor=p;if(s)document.documentElement.dataset.scanlines=s}catch(e){}</script>
+<link rel="stylesheet" href="css/terminal.css?v=880f827468">
+<script>document.documentElement.classList.add("js");try{var p=localStorage.getItem("bos-ph");if(p)document.documentElement.dataset.phosphor=p;localStorage.removeItem("bos-scan")}catch(e){}</script>
 </head>
 <body class="crt" data-screen="SYS.DISPLAY" data-parent="index.html" data-kind="menu">
 <a class="skip" href="#screen">Skip to content</a>
@@ -36,7 +36,6 @@
       <li><button class="opt" type="button" data-key="W" data-act="ph:white"><span class="key">[W]</span><span class="label">White phosphor</span><span class="lead" aria-hidden="true"></span><span class="meta"><span data-state="ph:white"></span></span></button></li>
       <li><button class="opt" type="button" data-key="C" data-act="ph:weather"><span class="key">[C]</span><span class="label">Weather Channel</span><span class="lead" aria-hidden="true"></span><span class="meta"><span data-state="ph:weather"></span></span></button></li>
       <li><button class="opt" type="button" data-key="M" data-act="ph:minimal"><span class="key">[M]</span><span class="label">Minimal</span><span class="lead" aria-hidden="true"></span><span class="meta"><span data-state="ph:minimal"></span></span></button></li>
-      <li><button class="opt" type="button" data-key="S" data-act="scan"><span class="key">[S]</span><span class="label">Scanlines and flicker</span><span class="lead" aria-hidden="true"></span><span class="meta"><span data-state="scan"></span></span></button></li>
     </ul>
     <noscript><p class="dim">Display settings need JavaScript.</p></noscript>
   </main>
@@ -58,6 +57,6 @@
   </div>
   <!-- /chrome:bottom -->
 </div>
-<script src="js/terminal.js?v=ad4e5e1533"></script>
+<script src="js/terminal.js?v=880f827468"></script>
 </body>
 </html>
