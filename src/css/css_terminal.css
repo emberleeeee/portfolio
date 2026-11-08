@@ -23,6 +23,8 @@
   --fs-small:13px;
   --track:.08em;
   --measure:none;
+  /* width of the [K] key column, set from the title size so smaller text below a title still lines up with it */
+  --key:calc(var(--fs-body) * 2.1);
 }
 html[data-phosphor="amber"]{--ph:#ffb22e;--ph-rgb:255,178,46;--bg:#0a0602}
 html[data-phosphor="white"]{--ph:#e4efe7;--ph-rgb:228,239,231;--bg:#07090a}
@@ -114,7 +116,7 @@ code{font-family:var(--mono);background:rgba(var(--ph-rgb),.12);padding:0 4px}
 .opt{all:unset;box-sizing:border-box;display:flex;align-items:baseline;gap:14px;width:100%;padding:9px 12px;min-height:44px;cursor:pointer;
   font:400 var(--fs-body)/1.5 var(--mono);color:var(--ph);text-shadow:var(--glow)}
 a.opt{text-decoration:none}
-.opt .key{font-weight:600;flex:none;width:3.2ch}
+.opt .key{font-weight:600;flex:none;width:var(--key)}
 .opt .label{flex:none;letter-spacing:var(--track);text-transform:uppercase}
 .opt .lead{flex:1;overflow:hidden;white-space:nowrap;color:var(--faint);min-width:2ch}
 .opt .lead::before{content:"........................................................................................................................................"}
@@ -124,7 +126,7 @@ a.opt{text-decoration:none}
 .opt:hover{background:transparent;color:var(--ph);text-shadow:var(--glow)}
 .opt.sel,.opt.sel:hover,html:not(.js) .opt:hover{background:var(--ph);color:var(--bg);text-shadow:none}
 .opt.sel .meta,.opt.sel .lead,html:not(.js) .opt:hover .meta,html:not(.js) .opt:hover .lead{color:var(--bg)}
-.opt-desc{display:block;padding:0 12px 10px calc(12px + 3.2ch + 14px)}
+.opt-desc{display:block;padding:0 12px 10px calc(12px + var(--key) + 14px)}
 /* a row with a description: title and description sit close, each project gets room */
 .opt:has(+ .opt-desc){padding-bottom:3px;min-height:0}
 .menu li:has(> .opt-desc) + li{margin-top:26px}
@@ -229,8 +231,8 @@ html:not(.js) .cmd,html:not(.js) .msg,html:not(.js) .keys-only{display:none}
   .bar .hide-sm{display:none}
   .opt{flex-wrap:wrap;gap:4px 10px}
   .opt .lead{display:none}
-  .opt .meta{width:100%;padding-left:calc(3.2ch + 10px)}
-  .opt-desc{padding-left:12px}
+  .opt .meta{width:100%;padding-left:calc(var(--key) + 10px)}
+  .opt-desc{padding-left:calc(12px + var(--key) + 10px)}
   .record{grid-template-columns:1fr;gap:0}
   .record dd{margin-bottom:10px}
   .fig-grid{grid-template-columns:1fr}
@@ -299,7 +301,9 @@ html[data-phosphor="minimal"] .opt .key{font-weight:500;color:var(--dim)}
 html[data-phosphor="minimal"] .opt.sel,html[data-phosphor="minimal"] .opt.sel:hover,html[data-phosphor="minimal"]:not(.js) .opt:hover{background:var(--wash);color:var(--ph)}
 html[data-phosphor="minimal"] .opt.sel .meta,html[data-phosphor="minimal"] .opt.sel .lead{color:var(--dim)}
 html[data-phosphor="minimal"] .opt.sel .lead{color:var(--faint)}
-html[data-phosphor="minimal"] .rule,html[data-phosphor="minimal"] .jobs th,html[data-phosphor="minimal"] .jobs td{border-style:solid}
+html[data-phosphor="minimal"] .rule{border-top-style:solid}
+html[data-phosphor="minimal"] .jobs th,html[data-phosphor="minimal"] .jobs td{border:0}
+html[data-phosphor="minimal"] .jobs td{padding:10px 0 14px}
 html[data-phosphor="minimal"] .card,html[data-phosphor="minimal"] .callout{border:1px solid var(--faint);border-radius:8px;background:#fff}
 html[data-phosphor="minimal"] .lines li::before{content:"\2013  "}
 html[data-phosphor="minimal"] .run-link{border-radius:6px}
@@ -318,3 +322,18 @@ html[data-phosphor="minimal"] .theme select{border-color:var(--faint);border-rad
 html[data-phosphor="minimal"] .theme select:hover,html[data-phosphor="minimal"] .theme select:focus-visible{background:#fff;color:var(--ph);border-color:var(--ph)}
 html[data-phosphor="minimal"] .theme:has(select:hover)::after{border-top-color:var(--ph)}
 html[data-phosphor="minimal"] .prog-win{box-shadow:0 0 0 1px var(--faint),0 8px 30px rgba(30,34,38,.08)}
+
+/* ---------- page transitions: the body fades between pages, the status bars stay put ---------- */
+@view-transition{navigation:auto}
+.top{view-transition-name:status-top}
+.foot{view-transition-name:status-foot}
+::view-transition-old(root){animation:220ms ease-in both page-out}
+::view-transition-new(root){animation:280ms ease-out both page-in}
+@keyframes page-out{to{opacity:0}}
+@keyframes page-in{from{opacity:0}}
+/* browsers without cross-page transitions still get a gentle fade in */
+@supports not (view-transition-name:none){main{animation:280ms ease-out both page-in}}
+@media (prefers-reduced-motion:reduce){
+  @view-transition{navigation:none}
+  ::view-transition-old(root),::view-transition-new(root),main{animation:none}
+}
