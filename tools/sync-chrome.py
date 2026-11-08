@@ -15,7 +15,7 @@ import pathlib, re, sys
 
 TOP = '''<!-- chrome:top -->
   <header class="bar top">
-    <span>BLACKWELL/OS 2.6</span>
+    <span><a href="index.html" title="Home">BLACKWELL/OS 2.6</a></span>
     <span id="where" class="hide-sm">{screen}</span>
     <span id="clock" aria-hidden="true"></span>
   </header>

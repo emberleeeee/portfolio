@@ -124,7 +124,7 @@ IU = '<a href="https://www.google.com/search?q=Indiana+University+National+Champ
 def chrome_top(screen):
     return f'''<!-- chrome:top -->
   <header class="bar top">
-    <span>BLACKWELL/OS 2.6</span>
+    <span><a href="index.html" title="Home">BLACKWELL/OS 2.6</a></span>
     <span id="where" class="hide-sm">{screen}</span>
     <span id="clock" aria-hidden="true"></span>
   </header>
@@ -224,8 +224,7 @@ pages = {}
 # ---- home
 pages["index.html"] = page("index.html", "Emily Blackwell | Product Designer",
   "Emily Blackwell is a lead product designer specializing in complex B2B SaaS, design systems and embedded finance.",
-  "MAIN.MENU", "", f'''    <h1 class="name">HELLO, I&rsquo;M EMILY, A DIGITAL PRODUCT DESIGNER.</h1>
-    <p class="sub">LEAD PRODUCT DESIGNER. 20+ YEARS IN COMPLEX, DATA-HEAVY B2B SAAS. DESIGN SYSTEMS, EMBEDDED FINANCE, AND LEADING THROUGH INFLUENCE. WASHINGTON, D.C.</p>
+  "MAIN.MENU", "", f'''    <h1 class="name">HELLO, I&rsquo;M EMILY, A LEAD PRODUCT DESIGNER FOR DATA-HEAVY B2B SAAS.</h1>
 {menu([
   opt("W","Selected work",f"{len(WORK)} records","work.html"),
   opt("A","About","Profile","about.html"),
